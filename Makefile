@@ -1,6 +1,7 @@
+.DELETE_ON_ERROR:
 .PHONY: all clean
 
-all: contour
+all:
 
 clean:
 	git clean -fdx
@@ -12,9 +13,9 @@ NODATA_VALUE=-999
 dem2016-zero: moi-2016/.unzip
 moi-2016/dem_20m-zero.tif:
 	cd moi-2016/ && \
-		7za x dem_20m.7z.001 && \
-		mv dem_20m-wgs84v3.tif dem_20m-zero.tif && \
-		mv Penghu_20m-wgs84-v2.tif penghu_20m-zero.tif
+	7za x dem_20m.7z.001 && \
+	mv dem_20m-wgs84v3.tif dem_20m-zero.tif && \
+	mv Penghu_20m-wgs84-v2.tif penghu_20m-zero.tif
 	touch $@
 
 
@@ -31,19 +32,19 @@ moi-2016/penghu-contour.pbf: moi-2016/penghu_20m-zero.tif
 		--start-node-id=0 \
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=0 \
+		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00002 \
 		--void-range-max=-500 \
 		--pbf \
-		moi-2016/penghu_20m-zero.tif
-	mv penghu_contour* moi-2016/penghu-contour.pbf
+		$^
+	mv penghu_contour* $@
 
 
 .POHNY: dem2018-orig
 dem2018-orig: moi-2018/.unzip
 moi-2018/DEM_20m.tif:
 	cd moi-2018/ && \
-		7za x DEM_20m.7z.001
+	7za x DEM_20m.7z.001
 	touch $@
 
 
@@ -52,54 +53,59 @@ dem2018-wgs84: moi-2018/DEM_20m-wgs84.tif
 moi-2018/DEM_20m-wgs84.tif: moi-2018/DEM_20m.tif
 	rm -f $@
 	gdalwarp \
-		 $(OUTPUTS) \
+		$(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
 		-r bilinear \
 		-t_srs 'EPSG:4326' \
-	  moi-2018/DEM_20m.tif \
+	  $^ \
 	  $@
 
 
-.PHONY: dem2018-nodata
-dem2018-nodata: moi-2018/DEM_20m-nodata.tif
-moi-2018/DEM_20m-nodata.tif: moi-2016/dem_20m-zero.tif moi-2018/DEM_20m-wgs84.tif
-	rm -f moi-2018/from2016.tif && \
+moi-2018/from2016.tif: moi-2016/dem_20m-zero.tif
+	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
 		-crop_to_cutline \
 		-cutline moi-2018/void_area.shp \
-		moi-2016/dem_20m-zero.tif \
-		moi-2018/from2016.tif
-	rm -f $@ && \
+		$^ \
+		$@
+
+
+.PHONY: dem2018-nodata
+dem2018-nodata: moi-2018/DEM_20m-nodata.tif
+moi-2018/DEM_20m-nodata.tif: moi-2018/from2016.tif moi-2018/DEM_20m-wgs84.tif
+	rm -f $@
 	gdal_merge.py \
 		$(OUTPUTS) \
 		-n $(NODATA_VALUE) -a_nodata $(NODATA_VALUE) \
-		moi-2018/DEM_20m-wgs84.tif \
-		moi-2018/from2016.tif \
+		$^ \
 		-o $@
+
+
+moi-2018/DEM_20m-nodata0.tif: moi-2018/DEM_20m-nodata.tif
+	rm -f $@
+	gdal_calc.py \
+		--NoDataValue=0 \
+		--calc="(A > 0) * A" \
+		-A $^ \
+		--outfile=$@
 
 
 .PHONY: dem2018-zero
 dem2018-zero: moi-2018/DEM_20m-zero.tif
-moi-2018/DEM_20m-zero.tif: moi-2018/DEM_20m-nodata.tif
-	rm -f moi-2018/DEM_20m-nodata0.tif && \
-	gdal_calc.py \
-		--NoDataValue=0 \
-		--calc="(A > 0) * A" \
-		-A moi-2018/DEM_20m-nodata.tif \
-		--outfile=moi-2018/DEM_20m-nodata0.tif
-	rm -f $@ && \
+moi-2018/DEM_20m-zero.tif: moi-2018/DEM_20m-nodata0.tif
+	rm -f $@
 	gdal_translate \
 		$(OUTPUTS) \
 		-a_nodata none \
-		moi-2018/DEM_20m-nodata0.tif \
-		moi-2018/DEM_20m-zero.tif
+		$^ \
+		$@
 
 
-.PHONY: dem-contour
-dem-contour: moi-2018/dem-contour.pbf
-moi-2018/dem-contour.pbf: moi-2018/DEM_20m-zero.tif
+.PHONY: dem2018-contour
+dem2018-contour: moi-2018/dem2018-contour.pbf
+moi-2018/dem2018-contour.pbf: moi-2018/DEM_20m-zero.tif
 	phyghtmap \
 		--step=10 \
 		--no-zero-contour \
@@ -110,38 +116,41 @@ moi-2018/dem-contour.pbf: moi-2018/DEM_20m-zero.tif
 		--start-node-id=0 \
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=0 \
+		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00002 \
 		--void-range-max=-500 \
 		--pbf \
-		moi-2018/DEM_20m-zero.tif
-	mv dem_contour* moi-2018/dem-contour.pbf
+		$^
+	mv dem_contour* $@
 
 
 .PHONY: aw3d-orig
 aw3d-orig: aw3d30-2.1/.unzip
 aw3d30-2.1/.unzip:
 	cd aw3d30-2.1/ && \
-		7za x aw3d30.7z.001
+	7za x aw3d30.7z.001
 	touch $@
 
 
-.PHONY: n3islets-zero
-n3islets-zero: aw3d30-2.1/n3islets-zero.tif
-aw3d30-2.1/n3islets-zero.tif: aw3d-orig
-	rm -f aw3d30-2.1/n3islets-data0.tif && \
+aw3d30-2.1/n3islets-data0.tif: aw3d30-2.1/.unzip
+	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
 		-cutline aw3d30-2.1/n3islets.shp \
 		-dstnodata 0 \
 		aw3d30-2.1/N025E122_AVE_DSM.tif \
-		aw3d30-2.1/n3islets-data0.tif
-	rm -f $@ && \
+		$@
+
+
+.PHONY: n3islets-zero
+n3islets-zero: aw3d30-2.1/n3islets-zero.tif
+aw3d30-2.1/n3islets-zero.tif: aw3d30-2.1/n3islets-data0.tif
+	rm -f $@
 	gdal_translate \
 		$(OUTPUTS) \
 		-a_nodata none \
-		aw3d30-2.1/n3islets-data0.tif \
+		$^ \
 		$@
 
 
@@ -158,18 +167,16 @@ aw3d30-2.1/n3islets-contour.pbf: aw3d30-2.1/n3islets-zero.tif
 		--start-node-id=0 \
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=0 \
-		--simplifyContoursEpsilon=0.000005 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.00005 \
 		--void-range-max=-500 \
 		--pbf \
-		aw3d30-2.1/n3islets-zero.tif
-	mv n3islets_contour* aw3d30-2.1/n3islets-contour.pbf
+		$^
+	mv n3islets_contour* $@
 
 
-.PHONY: matsu-zero
-matsu-zero: aw3d30-2.1/matsu-zero.tif
-aw3d30-2.1/matsu-zero.tif: aw3d-orig
-	rm -f aw3d30-2.1/matsu-data0.tif && \
+aw3d30-2.1/matsu-data0.tif: aw3d30-2.1/.unzip
+	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
@@ -178,12 +185,17 @@ aw3d30-2.1/matsu-zero.tif: aw3d-orig
 		aw3d30-2.1/N026E119_AVE_DSM.tif \
 		aw3d30-2.1/N026E120_AVE_DSM.tif \
 		aw3d30-2.1/N025E119_AVE_DSM.tif \
-		aw3d30-2.1/matsu-data0.tif
-	rm -f $@ && \
+		$@
+
+
+.PHONY: matsu-zero
+matsu-zero: aw3d30-2.1/matsu-zero.tif
+aw3d30-2.1/matsu-zero.tif: aw3d30-2.1/matsu-data0.tif
+	rm -f $@
 	gdal_translate \
 		$(OUTPUTS) \
 		-a_nodata none \
-		aw3d30-2.1/matsu-data0.tif \
+		$^ \
 		$@
 
 
@@ -200,26 +212,29 @@ aw3d30-2.1/matsu-contour.pbf: aw3d30-2.1/matsu-zero.tif
 		--start-node-id=0 \
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=0 \
+		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
 		--void-range-max=-500 \
 		--pbf \
-		aw3d30-2.1/matsu-zero.tif
-	mv matsu_contour* aw3d30-2.1/matsu-contour.pbf
+		$^
+	mv matsu_contour* $@
 
 
-.PHONY: wuqiu-zero
-wuqiu-zero: aw3d30-2.1/wuqiu-zero.tif
-aw3d30-2.1/wuqiu-zero.tif: aw3d-orig
-	rm -f aw3d30-2.1/wuqiu-data0.tif && \
+aw3d30-2.1/wuqiu-data0.tif: aw3d30-2.1/.unzip
+	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
 		-cutline aw3d30-2.1/wuqiu.shp \
 		-dstnodata 0 \
 		aw3d30-2.1/N024E119_AVE_DSM.tif \
-		aw3d30-2.1/wuqiu-data0.tif
-	rm -f $@ && \
+		$@
+
+
+.PHONY: wuqiu-zero
+wuqiu-zero: aw3d30-2.1/wuqiu-zero.tif
+aw3d30-2.1/wuqiu-zero.tif: aw3d30-2.1/wuqiu-data0.tif
+	rm -f $@
 	gdal_translate \
 		$(OUTPUTS) \
 		-a_nodata none \
@@ -240,26 +255,29 @@ aw3d30-2.1/wuqiu-contour.pbf: aw3d30-2.1/wuqiu-zero.tif
 		--start-node-id=0 \
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=0 \
-		--simplifyContoursEpsilon=0.000005 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.00005 \
 		--void-range-max=-500 \
 		--pbf \
-		aw3d30-2.1/wuqiu-zero.tif
-	mv wuqiu_contour* aw3d30-2.1/wuqiu-contour.pbf
+		$^
+	mv wuqiu_contour* $@
 
 
-.PHONY: kinmen-zero
-kinmen-zero: aw3d30-2.1/kinmen-zero.tif
-aw3d30-2.1/kinmen-zero.tif:
-	rm -f aw3d30-2.1/kinmen-data0.tif && \
+aw3d30-2.1/kinmen-data0.tif: aw3d30-2.1/.unzip
+	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
 		-cutline aw3d30-2.1/kinmen.shp \
 		-dstnodata 0 \
 		aw3d30-2.1/N024E118_AVE_DSM.tif \
-		aw3d30-2.1/kinmen-data0.tif
-	rm -f $@ && \
+		$@
+
+
+.PHONY: kinmen-zero
+kinmen-zero: aw3d30-2.1/kinmen-zero.tif
+aw3d30-2.1/kinmen-zero.tif: aw3d30-2.1/kinmen-data0.tif
+	rm -f $@
 	gdal_translate \
 		$(OUTPUTS) \
 		-a_nodata none \
@@ -280,35 +298,351 @@ aw3d30-2.1/kinmen-contour.pbf: aw3d30-2.1/kinmen-zero.tif
 		--start-node-id=0 \
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=0 \
+		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
 		--void-range-max=-500 \
 		--pbf \
-		aw3d30-2.1/kinmen-zero.tif
-	mv kinmen_contour* aw3d30-2.1/kinmen-contour.pbf
+		$^
+	mv kinmen_contour* $@
+
+
+moi-2018/DEM_40m-zero.tif: moi-2018/DEM_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 5414 0 \
+		-r bilinear \
+	  $^ \
+	  $@
+
+moi-2018/DEM_80m-zero.tif: moi-2018/DEM_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 2707 0 \
+		-r bilinear \
+	  $^ \
+	  $@
+
+moi-2018/DEM_160m-zero.tif: moi-2018/DEM_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 1353 0 \
+		-r bilinear \
+	  $^ \
+	  $@
+
+moi-2018/DEM_320m-zero.tif: moi-2018/DEM_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 677 0 \
+		-r bilinear \
+	  $^ \
+	  $@
+
+moi-2018/DEM_640m-zero.tif: moi-2018/DEM_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 338 0 \
+		-r bilinear \
+	  $^ \
+	  $@
+
+
+.PHONY: dem2018_40m-contour
+dem2018_40m-contour: moi-2018/dem2018_40m-contour.pbf
+moi-2018/dem2018_40m-contour.pbf: moi-2018/DEM_40m-zero.tif
+	phyghtmap \
+		--step=100 \
+		--no-zero-contour \
+		--output-prefix=dem_40m_contour \
+		--line-cat=1000,500 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.00005 \
+		--void-range-max=-500 \
+		$^
+	mv dem_40m_contour* $(@:.pbf=.osm)
+	gsed -e 's/contour_ext/contour_40m/g' -i $(@:.pbf=.osm)
+	osmconvert \
+		--out-pbf \
+		$(@:.pbf=.osm) \
+		-o=$@
+
+
+.PHONY: dem2018_80m-contour
+dem2018_80m-contour: moi-2018/dem2018_80m-contour.pbf
+moi-2018/dem2018_80m-contour.pbf: moi-2018/DEM_80m-zero.tif
+	phyghtmap \
+		--step=100 \
+		--no-zero-contour \
+		--output-prefix=dem_80m_contour \
+		--line-cat=1000,500 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.00005 \
+		--void-range-max=-500 \
+		$^
+	mv dem_80m_contour* $(@:.pbf=.osm)
+	gsed -e 's/contour_ext/contour_80m/g' -i $(@:.pbf=.osm)
+	osmconvert \
+		--out-pbf \
+		$(@:.pbf=.osm) \
+		-o=$@
+
+
+.PHONY: dem2018_160m-contour
+dem2018_160m-contour: moi-2018/dem2018_160m-contour.pbf
+moi-2018/dem2018_160m-contour.pbf: moi-2018/DEM_160m-zero.tif Makefile
+	phyghtmap \
+		--step=100 \
+		--no-zero-contour \
+		--output-prefix=dem_160m_contour \
+		--line-cat=1000,500 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.00005 \
+		--void-range-max=-500 \
+		$^
+	mv dem_160m_contour* $(@:.pbf=.osm)
+	gsed -e 's/contour_ext/contour_160m/g' -i $(@:.pbf=.osm)
+	osmconvert \
+		--out-pbf \
+		$(@:.pbf=.osm) \
+		-o=$@
+
+
+.PHONY: dem2018_320m-contour
+dem2018_320m-contour: moi-2018/dem2018_320m-contour.pbf
+moi-2018/dem2018_320m-contour.pbf: moi-2018/DEM_320m-zero.tif Makefile
+	phyghtmap \
+		--step=100 \
+		--no-zero-contour \
+		--output-prefix=dem_320m_contour \
+		--line-cat=1000,500 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.00005 \
+		--void-range-max=-500 \
+		$^
+	mv dem_320m_contour* $(@:.pbf=.osm)
+	gsed -e 's/contour_ext/contour_320m/g' -i $(@:.pbf=.osm)
+	osmconvert \
+		--out-pbf \
+		$(@:.pbf=.osm) \
+		-o=$@
+
+
+.PHONY: dem2018_640m-contour
+dem2018_640m-contour: moi-2018/dem2018_640m-contour.pbf
+moi-2018/dem2018_640m-contour.pbf: moi-2018/DEM_640m-zero.tif Makefile
+	phyghtmap \
+		--step=100 \
+		--no-zero-contour \
+		--output-prefix=dem_640m_contour \
+		--line-cat=1000,500 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.00005 \
+		--void-range-max=-500 \
+		$^
+	mv dem_640m_contour* $(@:.pbf=.osm)
+	gsed -e 's/contour_ext/contour_640m/g' -i $(@:.pbf=.osm)
+	osmconvert \
+		--out-pbf \
+		$(@:.pbf=.osm) \
+		-o=$@
 
 
 .PHONY: taiwan-contour
 taiwan-contour: taiwan-contour.pbf
-taiwan-contour.pbf: moi-2018/DEM_20m-zero.tif moi-2016/penghu_20m-zero.tif aw3d30-2.1/kinmen-zero.tif aw3d30-2.1/matsu-zero.tif aw3d30-2.1/n3islets-zero.tif aw3d30-2.1/wuqiu-zero.tif
-	phyghtmap \
-		--step=10 \
-		--no-zero-contour \
-		--output-prefix=taiwan_contour \
-		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=7500000000 \
-		--start-way-id=4700000000 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=0 \
-		--simplifyContoursEpsilon=0.00002 \
-		--void-range-max=-500 \
-		--pbf \
-		moi-2018/DEM_20m-zero.tif \
-		moi-2016/penghu_20m-zero.tif \
-		aw3d30-2.1/kinmen-zero.tif \
-		aw3d30-2.1/matsu-zero.tif \
-		aw3d30-2.1/n3islets-zero.tif \
-		aw3d30-2.1/wuqiu-zero.tif
-	mv taiwan_contour* taiwan-contour.pbf
+taiwan-contour.pbf: moi-2018/dem2018-contour.pbf
+	## taiwan main island
+	let LNID=0 LWID=0 && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2018/dem2018-contour.pbf \
+		-Oo renumbered.pbf
+	mv renumbered.pbf $@
+
+	## penghu
+	let $$(osmium fileinfo -e $@ | \
+		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2016/penghu-contour.pbf \
+		-Oo renumbered.pbf
+	osmium merge \
+		$@ \
+		renumbered.pbf \
+		-Oo merged.pbf
+	mv merged.pbf $@
+
+	## kinmen
+	let $$(osmium fileinfo -e $@ | \
+		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		aw3d30-2.1/kinmen-contour.pbf \
+		-Oo renumbered.pbf
+	osmium merge \
+		$@ \
+		renumbered.pbf \
+		-Oo merged.pbf
+	mv merged.pbf $@
+
+	## matsu
+	let $$(osmium fileinfo -e $@ | \
+		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		aw3d30-2.1/matsu-contour.pbf \
+		-Oo renumbered.pbf
+	osmium merge \
+		$@ \
+		renumbered.pbf \
+		-Oo merged.pbf
+	mv merged.pbf $@
+
+	## n3islets
+	let $$(osmium fileinfo -e $@ | \
+		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		aw3d30-2.1/n3islets-contour.pbf \
+		-Oo renumbered.pbf
+	osmium merge \
+		$@ \
+		renumbered.pbf \
+		-Oo merged.pbf
+	mv merged.pbf $@
+
+	## wuqiu
+	let $$(osmium fileinfo -e $@ | \
+		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2016/wuqiu-contour.pbf \
+		-Oo renumbered.pbf
+	osmium merge \
+		$@ \
+		renumbered.pbf \
+		-Oo merged.pbf
+	mv merged.pbf $@
+
+	## for 40m
+	let $$(osmium fileinfo -e $@ | \
+		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2018/dem2018_40m-contour.pbf \
+		-Oo renumbered.pbf
+	osmium merge \
+		$@ \
+		renumbered.pbf \
+		-Oo merged.pbf
+	mv merged.pbf $@
+
+	## for 80m
+	let $$(osmium fileinfo -e $@ | \
+		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2018/dem2018_80m-contour.pbf \
+		-Oo renumbered.pbf
+	osmium merge \
+		$@ \
+		renumbered.pbf \
+		-Oo merged.pbf
+	mv merged.pbf $@
+
+	## for 160m
+	let $$(osmium fileinfo -e $@ | \
+		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2018/dem2018_160m-contour.pbf \
+		-Oo renumbered.pbf
+	osmium merge \
+		$@ \
+		renumbered.pbf \
+		-Oo merged.pbf
+	mv merged.pbf $@
+
+	## for 320m
+	let $$(osmium fileinfo -e $@ | \
+		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2018/dem2018_320m-contour.pbf \
+		-Oo renumbered.pbf
+	osmium merge \
+		$@ \
+		renumbered.pbf \
+		-Oo merged.pbf
+	mv merged.pbf $@
+
+	## for 640m
+	let $$(osmium fileinfo -e $@ | \
+		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2018/dem2018_640m-contour.pbf \
+		-Oo renumbered.pbf
+	osmium merge \
+		$@ \
+		renumbered.pbf \
+		-Oo merged.pbf
+
+	## done
+	rm renumbered.pbf
+	mv merged.pbf $@
+
