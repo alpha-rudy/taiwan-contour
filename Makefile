@@ -409,7 +409,7 @@ moi-2018/dem2018_80m-contour.pbf: moi-2018/DEM_80m-zero.tif
 
 .PHONY: dem2018_160m-contour
 dem2018_160m-contour: moi-2018/dem2018_160m-contour.pbf
-moi-2018/dem2018_160m-contour.pbf: moi-2018/DEM_160m-zero.tif Makefile
+moi-2018/dem2018_160m-contour.pbf: moi-2018/DEM_160m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--no-zero-contour \
@@ -434,7 +434,7 @@ moi-2018/dem2018_160m-contour.pbf: moi-2018/DEM_160m-zero.tif Makefile
 
 .PHONY: dem2018_320m-contour
 dem2018_320m-contour: moi-2018/dem2018_320m-contour.pbf
-moi-2018/dem2018_320m-contour.pbf: moi-2018/DEM_320m-zero.tif Makefile
+moi-2018/dem2018_320m-contour.pbf: moi-2018/DEM_320m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--no-zero-contour \
@@ -459,7 +459,7 @@ moi-2018/dem2018_320m-contour.pbf: moi-2018/DEM_320m-zero.tif Makefile
 
 .PHONY: dem2018_640m-contour
 dem2018_640m-contour: moi-2018/dem2018_640m-contour.pbf
-moi-2018/dem2018_640m-contour.pbf: moi-2018/DEM_640m-zero.tif Makefile
+moi-2018/dem2018_640m-contour.pbf: moi-2018/DEM_640m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--no-zero-contour \
