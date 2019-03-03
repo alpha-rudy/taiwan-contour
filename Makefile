@@ -11,7 +11,7 @@ NODATA_VALUE=-999
 
 .PHONY: dem2016-zero
 dem2016-zero: moi-2016/.unzip
-moi-2016/dem_20m-zero.tif:
+moi-2016/.unzip: 
 	cd moi-2016/ && \
 	7za x dem_20m.7z.001 && \
 	mv dem_20m-wgs84v3.tif dem_20m-zero.tif && \
@@ -21,7 +21,7 @@ moi-2016/dem_20m-zero.tif:
 
 .PHONY: penghu-contour
 penghu-contour: moi-2016/penghu-contour.pbf
-moi-2016/penghu-contour.pbf: moi-2016/penghu_20m-zero.tif
+moi-2016/penghu-contour.pbf: moi-2016/.unzip
 	phyghtmap \
 		--step=10 \
 		--no-zero-contour \
@@ -36,7 +36,7 @@ moi-2016/penghu-contour.pbf: moi-2016/penghu_20m-zero.tif
 		--simplifyContoursEpsilon=0.00002 \
 		--void-range-max=-500 \
 		--pbf \
-		$^
+		moi-2016/penghu_20m-zero.tif
 	mv penghu_contour* $@
 
 
@@ -61,14 +61,14 @@ moi-2018/DEM_20m-wgs84.tif: moi-2018/DEM_20m.tif
 	  $@
 
 
-moi-2018/from2016.tif: moi-2016/dem_20m-zero.tif
+moi-2018/from2016.tif: moi-2016/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
 		-crop_to_cutline \
 		-cutline moi-2018/void_area.shp \
-		$^ \
+		moi-2016/dem_20m-zero.tif \
 		$@
 
 
@@ -484,7 +484,19 @@ moi-2018/dem2018_640m-contour.pbf: moi-2018/DEM_640m-zero.tif Makefile
 
 .PHONY: taiwan-contour
 taiwan-contour: taiwan-contour.pbf
-taiwan-contour.pbf: moi-2018/dem2018-contour.pbf
+taiwan-contour.pbf: \
+  moi-2018/dem2018-contour.pbf \
+  moi-2016/penghu-contour.pbf \
+  aw3d30-2.1/kinmen-contour.pbf \
+  aw3d30-2.1/matsu-contour.pbf \
+  aw3d30-2.1/n3islets-contour.pbf \
+  aw3d30-2.1/wuqiu-contour.pbf \
+  moi-2018/dem2018_40m-contour.pbf \
+  moi-2018/dem2018_80m-contour.pbf \
+  moi-2018/dem2018_160m-contour.pbf \
+  moi-2018/dem2018_320m-contour.pbf \
+  moi-2018/dem2018_640m-contour.pbf
+
 	## taiwan main island
 	let LNID=0 LWID=0 && \
 	osmium renumber \
@@ -560,7 +572,7 @@ taiwan-contour.pbf: moi-2018/dem2018-contour.pbf
 	let LNID++ LWID++ && \
 	osmium renumber \
 		-s $${LNID},$${LWID},0 \
-		moi-2016/wuqiu-contour.pbf \
+		aw3d30-2.1/wuqiu-contour.pbf \
 		-Oo renumbered.pbf
 	osmium merge \
 		$@ \
