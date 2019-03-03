@@ -1,7 +1,17 @@
 .DELETE_ON_ERROR:
-.PHONY: all clean
 
-all:
+ifeq ($(shell uname),Darwin)
+MD5_CMD := md5 -q $$EXAM_FILE
+JMC_CMD := jmc/osx/jmc_cli
+SED_CMD := gsed
+else
+MD5_CMD := md5sum $$EXAM_FILE | cut -d' ' -f1
+JMC_CMD := jmc/linux/jmc_cli
+SED_CMD := sed
+endif
+
+.PHONY: all clean
+all: taiwan-contour
 
 clean:
 	git clean -fdx
@@ -375,7 +385,7 @@ moi-2018/dem2018_40m-contour.pbf: moi-2018/DEM_40m-zero.tif
 		--void-range-max=-500 \
 		$^
 	mv dem_40m_contour* $(@:.pbf=.osm)
-	gsed -e 's/contour_ext/contour_40m/g' -i $(@:.pbf=.osm)
+	$(SED_CMD) -e 's/contour_ext/contour_40m/g' -i $(@:.pbf=.osm)
 	osmconvert \
 		--out-pbf \
 		$(@:.pbf=.osm) \
@@ -400,7 +410,7 @@ moi-2018/dem2018_80m-contour.pbf: moi-2018/DEM_80m-zero.tif
 		--void-range-max=-500 \
 		$^
 	mv dem_80m_contour* $(@:.pbf=.osm)
-	gsed -e 's/contour_ext/contour_80m/g' -i $(@:.pbf=.osm)
+	$(SED_CMD) -e 's/contour_ext/contour_80m/g' -i $(@:.pbf=.osm)
 	osmconvert \
 		--out-pbf \
 		$(@:.pbf=.osm) \
@@ -425,7 +435,7 @@ moi-2018/dem2018_160m-contour.pbf: moi-2018/DEM_160m-zero.tif
 		--void-range-max=-500 \
 		$^
 	mv dem_160m_contour* $(@:.pbf=.osm)
-	gsed -e 's/contour_ext/contour_160m/g' -i $(@:.pbf=.osm)
+	$(SED_CMD) -e 's/contour_ext/contour_160m/g' -i $(@:.pbf=.osm)
 	osmconvert \
 		--out-pbf \
 		$(@:.pbf=.osm) \
@@ -450,7 +460,7 @@ moi-2018/dem2018_320m-contour.pbf: moi-2018/DEM_320m-zero.tif
 		--void-range-max=-500 \
 		$^
 	mv dem_320m_contour* $(@:.pbf=.osm)
-	gsed -e 's/contour_ext/contour_320m/g' -i $(@:.pbf=.osm)
+	$(SED_CMD) -e 's/contour_ext/contour_320m/g' -i $(@:.pbf=.osm)
 	osmconvert \
 		--out-pbf \
 		$(@:.pbf=.osm) \
@@ -475,7 +485,7 @@ moi-2018/dem2018_640m-contour.pbf: moi-2018/DEM_640m-zero.tif
 		--void-range-max=-500 \
 		$^
 	mv dem_640m_contour* $(@:.pbf=.osm)
-	gsed -e 's/contour_ext/contour_640m/g' -i $(@:.pbf=.osm)
+	$(SED_CMD) -e 's/contour_ext/contour_640m/g' -i $(@:.pbf=.osm)
 	osmconvert \
 		--out-pbf \
 		$(@:.pbf=.osm) \
@@ -507,7 +517,7 @@ taiwan-contour.pbf: \
 
 	## penghu
 	let $$(osmium fileinfo -e $@ | \
-		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
 		grep ID=) && \
 	let LNID++ LWID++ && \
 	osmium renumber \
@@ -522,7 +532,7 @@ taiwan-contour.pbf: \
 
 	## kinmen
 	let $$(osmium fileinfo -e $@ | \
-		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
 		grep ID=) && \
 	let LNID++ LWID++ && \
 	osmium renumber \
@@ -537,7 +547,7 @@ taiwan-contour.pbf: \
 
 	## matsu
 	let $$(osmium fileinfo -e $@ | \
-		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
 		grep ID=) && \
 	let LNID++ LWID++ && \
 	osmium renumber \
@@ -552,7 +562,7 @@ taiwan-contour.pbf: \
 
 	## n3islets
 	let $$(osmium fileinfo -e $@ | \
-		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
 		grep ID=) && \
 	let LNID++ LWID++ && \
 	osmium renumber \
@@ -567,7 +577,7 @@ taiwan-contour.pbf: \
 
 	## wuqiu
 	let $$(osmium fileinfo -e $@ | \
-		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
 		grep ID=) && \
 	let LNID++ LWID++ && \
 	osmium renumber \
@@ -582,7 +592,7 @@ taiwan-contour.pbf: \
 
 	## for 40m
 	let $$(osmium fileinfo -e $@ | \
-		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
 		grep ID=) && \
 	let LNID++ LWID++ && \
 	osmium renumber \
@@ -597,7 +607,7 @@ taiwan-contour.pbf: \
 
 	## for 80m
 	let $$(osmium fileinfo -e $@ | \
-		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
 		grep ID=) && \
 	let LNID++ LWID++ && \
 	osmium renumber \
@@ -612,7 +622,7 @@ taiwan-contour.pbf: \
 
 	## for 160m
 	let $$(osmium fileinfo -e $@ | \
-		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
 		grep ID=) && \
 	let LNID++ LWID++ && \
 	osmium renumber \
@@ -627,7 +637,7 @@ taiwan-contour.pbf: \
 
 	## for 320m
 	let $$(osmium fileinfo -e $@ | \
-		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
 		grep ID=) && \
 	let LNID++ LWID++ && \
 	osmium renumber \
@@ -642,7 +652,7 @@ taiwan-contour.pbf: \
 
 	## for 640m
 	let $$(osmium fileinfo -e $@ | \
-		gsed -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
 		grep ID=) && \
 	let LNID++ LWID++ && \
 	osmium renumber \
