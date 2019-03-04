@@ -50,6 +50,27 @@ moi-2016/penghu-contour.pbf: moi-2016/.unzip
 	mv penghu_contour* $@
 
 
+.PHONY: penghu-lite-contour
+penghu-lite-contour: moi-2016/penghu-lite-contour.pbf
+moi-2016/penghu-lite-contour.pbf: moi-2016/.unzip
+	phyghtmap \
+		--step=20 \
+		--no-zero-contour \
+		--output-prefix=penghu_lite_contour \
+		--line-cat=500,100 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.0002 \
+		--void-range-max=-500 \
+		--pbf \
+		moi-2016/penghu_20m-zero.tif
+	mv penghu_lite_contour* $@
+
+
 .POHNY: dem2018-orig
 dem2018-orig: moi-2018/.unzip
 moi-2018/DEM_20m.tif:
@@ -134,6 +155,27 @@ moi-2018/dem2018-contour.pbf: moi-2018/DEM_20m-zero.tif
 	mv dem_contour* $@
 
 
+.PHONY: dem2018-lite-contour
+dem2018-lite-contour: moi-2018/dem2018-lite-contour.pbf
+moi-2018/dem2018-lite-contour.pbf: moi-2018/DEM_20m-zero.tif
+	phyghtmap \
+		--step=20 \
+		--no-zero-contour \
+		--output-prefix=dem_lite_contour \
+		--line-cat=500,100 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.0002 \
+		--void-range-max=-500 \
+		--pbf \
+		$^
+	mv dem_lite_contour* $@
+
+
 .PHONY: aw3d-orig
 aw3d-orig: aw3d30-2.1/.unzip
 aw3d30-2.1/.unzip:
@@ -185,6 +227,27 @@ aw3d30-2.1/n3islets-contour.pbf: aw3d30-2.1/n3islets-zero.tif
 	mv n3islets_contour* $@
 
 
+.PHONY: n3islets-lite-contour
+n3islets-lite-contour: aw3d30-2.1/n3islets-lite-contour.pbf
+aw3d30-2.1/n3islets-lite-contour.pbf: aw3d30-2.1/n3islets-zero.tif
+	phyghtmap \
+		--step=20 \
+		--no-zero-contour \
+		--output-prefix=n3islets_lite_contour \
+		--line-cat=500,100 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.0005 \
+		--void-range-max=-500 \
+		--pbf \
+		$^
+	mv n3islets_lite_contour* $@
+
+
 aw3d30-2.1/matsu-data0.tif: aw3d30-2.1/.unzip
 	rm -f $@
 	gdalwarp \
@@ -230,6 +293,27 @@ aw3d30-2.1/matsu-contour.pbf: aw3d30-2.1/matsu-zero.tif
 	mv matsu_contour* $@
 
 
+.PHONY: matsu-lite-contour
+matsu-lite-contour: aw3d30-2.1/matsu-lite-contour.pbf
+aw3d30-2.1/matsu-lite-contour.pbf: aw3d30-2.1/matsu-zero.tif
+	phyghtmap \
+		--step=20 \
+		--no-zero-contour \
+		--output-prefix=matsu_lite_contour \
+		--line-cat=500,100 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.0005 \
+		--void-range-max=-500 \
+		--pbf \
+		$^
+	mv matsu_lite_contour* $@
+
+
 aw3d30-2.1/wuqiu-data0.tif: aw3d30-2.1/.unzip
 	rm -f $@
 	gdalwarp \
@@ -273,6 +357,27 @@ aw3d30-2.1/wuqiu-contour.pbf: aw3d30-2.1/wuqiu-zero.tif
 	mv wuqiu_contour* $@
 
 
+.PHONY: wuqiu-lite-contour
+wuqiu-lite-contour: aw3d30-2.1/wuqiu-lite-contour.pbf
+aw3d30-2.1/wuqiu-lite-contour.pbf: aw3d30-2.1/wuqiu-zero.tif
+	phyghtmap \
+		--step=20 \
+		--no-zero-contour \
+		--output-prefix=wuqiu_lite_contour \
+		--line-cat=500,100 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.0005 \
+		--void-range-max=-500 \
+		--pbf \
+		$^
+	mv wuqiu_lite_contour* $@
+
+
 aw3d30-2.1/kinmen-data0.tif: aw3d30-2.1/.unzip
 	rm -f $@
 	gdalwarp \
@@ -314,6 +419,27 @@ aw3d30-2.1/kinmen-contour.pbf: aw3d30-2.1/kinmen-zero.tif
 		--pbf \
 		$^
 	mv kinmen_contour* $@
+
+
+.PHONY: kinmen-lite-contour
+kinmen-lite-contour: aw3d30-2.1/kinmen-lite-contour.pbf
+aw3d30-2.1/kinmen-lite-contour.pbf: aw3d30-2.1/kinmen-zero.tif
+	phyghtmap \
+		--step=20 \
+		--no-zero-contour \
+		--output-prefix=kinmen_lite_contour \
+		--line-cat=500,100 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.0005 \
+		--void-range-max=-500 \
+		--pbf \
+		$^
+	mv kinmen_lite_contour* $@
 
 
 moi-2018/DEM_40m-zero.tif: moi-2018/DEM_20m-zero.tif
@@ -668,3 +794,179 @@ taiwan-contour.pbf: \
 	rm renumbered.pbf
 	mv merged.pbf $@
 
+
+.PHONY: taiwan-lite-contour
+taiwan-lite-contour: taiwan-lite-contour.pbf
+taiwan-lite-contour.pbf: \
+  moi-2018/dem2018-lite-contour.pbf \
+  moi-2016/penghu-lite-contour.pbf \
+  aw3d30-2.1/kinmen-lite-contour.pbf \
+  aw3d30-2.1/matsu-lite-contour.pbf \
+  aw3d30-2.1/n3islets-lite-contour.pbf \
+  aw3d30-2.1/wuqiu-lite-contour.pbf \
+  moi-2018/dem2018_40m-contour.pbf \
+  moi-2018/dem2018_80m-contour.pbf \
+  moi-2018/dem2018_160m-contour.pbf \
+  moi-2018/dem2018_320m-contour.pbf \
+  moi-2018/dem2018_640m-contour.pbf
+
+	## taiwan main island
+	let LNID=0 LWID=0 && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2018/dem2018-lite-contour.pbf \
+		-Oo renumbered-lite.pbf
+	mv renumbered-lite.pbf $@
+
+	## penghu
+	let $$(osmium fileinfo -e $@ | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2016/penghu-lite-contour.pbf \
+		-Oo renumbered-lite.pbf
+	osmium merge \
+		$@ \
+		renumbered-lite.pbf \
+		-Oo merged-lite.pbf
+	mv merged-lite.pbf $@
+
+	## kinmen
+	let $$(osmium fileinfo -e $@ | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		aw3d30-2.1/kinmen-lite-contour.pbf \
+		-Oo renumbered-lite.pbf
+	osmium merge \
+		$@ \
+		renumbered-lite.pbf \
+		-Oo merged-lite.pbf
+	mv merged-lite.pbf $@
+
+	## matsu
+	let $$(osmium fileinfo -e $@ | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		aw3d30-2.1/matsu-lite-contour.pbf \
+		-Oo renumbered-lite.pbf
+	osmium merge \
+		$@ \
+		renumbered-lite.pbf \
+		-Oo merged-lite.pbf
+	mv merged-lite.pbf $@
+
+	## n3islets
+	let $$(osmium fileinfo -e $@ | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		aw3d30-2.1/n3islets-lite-contour.pbf \
+		-Oo renumbered-lite.pbf
+	osmium merge \
+		$@ \
+		renumbered-lite.pbf \
+		-Oo merged-lite.pbf
+	mv merged-lite.pbf $@
+
+	## wuqiu
+	let $$(osmium fileinfo -e $@ | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		aw3d30-2.1/wuqiu-lite-contour.pbf \
+		-Oo renumbered-lite.pbf
+	osmium merge \
+		$@ \
+		renumbered-lite.pbf \
+		-Oo merged-lite.pbf
+	mv merged-lite.pbf $@
+
+	## for 40m
+	let $$(osmium fileinfo -e $@ | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2018/dem2018_40m-contour.pbf \
+		-Oo renumbered-lite.pbf
+	osmium merge \
+		$@ \
+		renumbered-lite.pbf \
+		-Oo merged-lite.pbf
+	mv merged-lite.pbf $@
+
+	## for 80m
+	let $$(osmium fileinfo -e $@ | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2018/dem2018_80m-contour.pbf \
+		-Oo renumbered-lite.pbf
+	osmium merge \
+		$@ \
+		renumbered-lite.pbf \
+		-Oo merged-lite.pbf
+	mv merged-lite.pbf $@
+
+	## for 160m
+	let $$(osmium fileinfo -e $@ | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2018/dem2018_160m-contour.pbf \
+		-Oo renumbered-lite.pbf
+	osmium merge \
+		$@ \
+		renumbered-lite.pbf \
+		-Oo merged-lite.pbf
+	mv merged-lite.pbf $@
+
+	## for 320m
+	let $$(osmium fileinfo -e $@ | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2018/dem2018_320m-contour.pbf \
+		-Oo renumbered-lite.pbf
+	osmium merge \
+		$@ \
+		renumbered-lite.pbf \
+		-Oo merged-lite.pbf
+	mv merged-lite.pbf $@
+
+	## for 640m
+	let $$(osmium fileinfo -e $@ | \
+		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
+		grep ID=) && \
+	let LNID++ LWID++ && \
+	osmium renumber \
+		-s $${LNID},$${LWID},0 \
+		moi-2018/dem2018_640m-contour.pbf \
+		-Oo renumbered-lite.pbf
+	osmium merge \
+		$@ \
+		renumbered-lite.pbf \
+		-Oo merged-lite.pbf
+
+	## done
+	rm renumbered-lite.pbf
+	mv merged-lite.pbf $@
