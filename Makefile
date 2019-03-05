@@ -634,7 +634,7 @@ taiwan-contour.pbf: \
   moi-2018/dem2018_640m-contour.pbf
 
 	## taiwan main island
-	let LNID=0 LWID=0 && \
+	let LNID=1 LWID=1 && \
 	osmium renumber \
 		-s $${LNID},$${LWID},0 \
 		moi-2018/dem2018-contour.pbf \
@@ -811,7 +811,7 @@ taiwan-lite-contour.pbf: \
   moi-2018/dem2018_640m-contour.pbf
 
 	## taiwan main island
-	let LNID=0 LWID=0 && \
+	let LNID=1 LWID=1 && \
 	osmium renumber \
 		-s $${LNID},$${LWID},0 \
 		moi-2018/dem2018-lite-contour.pbf \
