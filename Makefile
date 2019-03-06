@@ -155,6 +155,10 @@ moi-2018/dem2018-contour.pbf: moi-2018/DEM_20m-zero.tif
 	mv dem_contour* $@
 
 
+moi-2018/dem2018-contour-sub.pbf: moi-2018/dem2018-contour.pbf
+	python3 tools/elevation_sub.py $< $@
+
+
 .PHONY: dem2018-lite-contour
 dem2018-lite-contour: moi-2018/dem2018-lite-contour.pbf
 moi-2018/dem2018-lite-contour.pbf: moi-2018/DEM_20m-zero.tif
@@ -493,6 +497,17 @@ moi-2018/DEM_640m-zero.tif: moi-2018/DEM_20m-zero.tif
 	  $@
 
 
+moi-2018/DEM_1280m-zero.tif: moi-2018/DEM_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 169 0 \
+		-r bilinear \
+	  $^ \
+	  $@
+
+
 .PHONY: dem2018_40m-contour
 dem2018_40m-contour: moi-2018/dem2018_40m-contour.pbf
 moi-2018/dem2018_40m-contour.pbf: moi-2018/DEM_40m-zero.tif
@@ -617,6 +632,32 @@ moi-2018/dem2018_640m-contour.pbf: moi-2018/DEM_640m-zero.tif
 		$(@:.pbf=.osm) \
 		-o=$@
 
+
+.PHONY: dem2018_1280m-contour
+dem2018_1280m-contour: moi-2018/dem2018_1280m-contour.pbf
+moi-2018/dem2018_1280m-contour.pbf: moi-2018/DEM_1280m-zero.tif
+	phyghtmap \
+		--step=100 \
+		--no-zero-contour \
+		--output-prefix=dem_1280m_contour \
+		--line-cat=1000,500 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.00005 \
+		--void-range-max=-500 \
+		$^
+	mv dem_1280m_contour* $(@:.pbf=.osm)
+	$(SED_CMD) -e 's/contour_ext/contour_1280m/g' -i $(@:.pbf=.osm)
+	osmconvert \
+		--out-pbf \
+		$(@:.pbf=.osm) \
+		-o=$@
+
+
 aw3d30-2.1/islands-contour.pbf: \
   aw3d30-2.1/kinmen-contour.pbf \
   aw3d30-2.1/matsu-contour.pbf \
@@ -658,7 +699,8 @@ moi-2018/marker-contour.pbf: \
   moi-2018/dem2018_80m-contour.pbf \
   moi-2018/dem2018_160m-contour.pbf \
   moi-2018/dem2018_320m-contour.pbf \
-  moi-2018/dem2018_640m-contour.pbf
+  moi-2018/dem2018_640m-contour.pbf \
+  moi-2018/dem2018_1280m-contour.pbf
 	## 40m
 	osmium renumber \
 		-s 1,1,0 \
@@ -672,6 +714,8 @@ moi-2018/marker-contour.pbf: \
 	tools/osium-append.sh $@ moi-2018/dem2018_320m-contour.pbf
 	## 640m
 	tools/osium-append.sh $@ moi-2018/dem2018_640m-contour.pbf
+	## 1280m
+	tools/osium-append.sh $@ moi-2018/dem2018_1280m-contour.pbf
 
 
 .PHONY: taiwan-contour
@@ -694,14 +738,14 @@ ele_taiwan_10_100_500.pbf: \
 .PHONY: taiwan-contour-mix
 taiwan-contour-mix: ele_taiwan_10_100_500_mix.pbf
 ele_taiwan_10_100_500_mix.pbf: \
-  moi-2018/dem2018-contour.pbf \
+  moi-2018/dem2018-contour-sub.pbf \
   moi-2016/penghu-contour.pbf \
   aw3d30-2.1/islands-contour.pbf \
   moi-2018/marker-contour.pbf
 	## taiwan main island
 	osmium renumber \
 		-s 7000000000,4000000000,0 \
-		moi-2018/dem2018-contour.pbf \
+		moi-2018/dem2018-contour-sub.pbf \
 		-Oo $@
 	## penghu
 	tools/osium-append.sh $@ moi-2016/penghu-contour.pbf
