@@ -617,182 +617,81 @@ moi-2018/dem2018_640m-contour.pbf: moi-2018/DEM_640m-zero.tif
 		$(@:.pbf=.osm) \
 		-o=$@
 
+aw3d30-2.1/islands-contour.pbf: \
+  aw3d30-2.1/kinmen-contour.pbf \
+  aw3d30-2.1/matsu-contour.pbf \
+  aw3d30-2.1/n3islets-contour.pbf \
+  aw3d30-2.1/wuqiu-contour.pbf
+	## kinmen
+	osmium renumber \
+		-s 1,1,0 \
+		aw3d30-2.1/kinmen-contour.pbf \
+		-Oo $@
+	## matsu
+	tools/osium-append.sh $@ aw3d30-2.1/matsu-contour.pbf
+	## n3islets
+	tools/osium-append.sh $@ aw3d30-2.1/n3islets-contour.pbf
+	## wuqiu
+	tools/osium-append.sh $@ aw3d30-2.1/wuqiu-contour.pbf
+
+
+aw3d30-2.1/islands-lite-contour.pbf: \
+  aw3d30-2.1/kinmen-lite-contour.pbf \
+  aw3d30-2.1/matsu-lite-contour.pbf \
+  aw3d30-2.1/n3islets-lite-contour.pbf \
+  aw3d30-2.1/wuqiu-lite-contour.pbf
+	## kinmen
+	osmium renumber \
+		-s 1,1,0 \
+		aw3d30-2.1/kinmen-lite-contour.pbf \
+		-Oo $@
+	## matsu
+	tools/osium-append.sh $@ aw3d30-2.1/matsu-lite-contour.pbf
+	## n3islets
+	tools/osium-append.sh $@ aw3d30-2.1/n3islets-lite-contour.pbf
+	## wuqiu
+	tools/osium-append.sh $@ aw3d30-2.1/wuqiu-lite-contour.pbf
+
+
+moi-2018/marker-contour.pbf: \
+  moi-2018/dem2018_40m-contour.pbf \
+  moi-2018/dem2018_80m-contour.pbf \
+  moi-2018/dem2018_160m-contour.pbf \
+  moi-2018/dem2018_320m-contour.pbf \
+  moi-2018/dem2018_640m-contour.pbf
+	## 40m
+	osmium renumber \
+		-s 1,1,0 \
+		moi-2018/dem2018_40m-contour.pbf \
+		-Oo $@
+	## 80m
+	tools/osium-append.sh $@ moi-2018/dem2018_80m-contour.pbf
+	## 160m
+	tools/osium-append.sh $@ moi-2018/dem2018_160m-contour.pbf
+	## 320m
+	tools/osium-append.sh $@ moi-2018/dem2018_320m-contour.pbf
+	## 640m
+	tools/osium-append.sh $@ moi-2018/dem2018_640m-contour.pbf
+
 
 .PHONY: taiwan-contour
 taiwan-contour: taiwan-contour.pbf
 taiwan-contour.pbf: \
   moi-2018/dem2018-contour.pbf \
   moi-2016/penghu-contour.pbf \
-  aw3d30-2.1/kinmen-contour.pbf \
-  aw3d30-2.1/matsu-contour.pbf \
-  aw3d30-2.1/n3islets-contour.pbf \
-  aw3d30-2.1/wuqiu-contour.pbf \
-  moi-2018/dem2018_40m-contour.pbf \
-  moi-2018/dem2018_80m-contour.pbf \
-  moi-2018/dem2018_160m-contour.pbf \
-  moi-2018/dem2018_320m-contour.pbf \
-  moi-2018/dem2018_640m-contour.pbf
-
+  aw3d30-2.1/islands-contour.pbf \
+  moi-2018/marker-contour.pbf
 	## taiwan main island
-	let LNID=1 LWID=1 && \
 	osmium renumber \
-		-s $${LNID},$${LWID},0 \
+		-s 7000000000,4000000000,0 \
 		moi-2018/dem2018-contour.pbf \
-		-Oo renumbered.pbf
-	mv renumbered.pbf $@
-
+		-Oo $@
 	## penghu
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		moi-2016/penghu-contour.pbf \
-		-Oo renumbered.pbf
-	osmium merge \
-		$@ \
-		renumbered.pbf \
-		-Oo merged.pbf
-	mv merged.pbf $@
-
-	## kinmen
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		aw3d30-2.1/kinmen-contour.pbf \
-		-Oo renumbered.pbf
-	osmium merge \
-		$@ \
-		renumbered.pbf \
-		-Oo merged.pbf
-	mv merged.pbf $@
-
-	## matsu
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		aw3d30-2.1/matsu-contour.pbf \
-		-Oo renumbered.pbf
-	osmium merge \
-		$@ \
-		renumbered.pbf \
-		-Oo merged.pbf
-	mv merged.pbf $@
-
-	## n3islets
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		aw3d30-2.1/n3islets-contour.pbf \
-		-Oo renumbered.pbf
-	osmium merge \
-		$@ \
-		renumbered.pbf \
-		-Oo merged.pbf
-	mv merged.pbf $@
-
-	## wuqiu
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		aw3d30-2.1/wuqiu-contour.pbf \
-		-Oo renumbered.pbf
-	osmium merge \
-		$@ \
-		renumbered.pbf \
-		-Oo merged.pbf
-	mv merged.pbf $@
-
-	## for 40m
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		moi-2018/dem2018_40m-contour.pbf \
-		-Oo renumbered.pbf
-	osmium merge \
-		$@ \
-		renumbered.pbf \
-		-Oo merged.pbf
-	mv merged.pbf $@
-
-	## for 80m
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		moi-2018/dem2018_80m-contour.pbf \
-		-Oo renumbered.pbf
-	osmium merge \
-		$@ \
-		renumbered.pbf \
-		-Oo merged.pbf
-	mv merged.pbf $@
-
-	## for 160m
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		moi-2018/dem2018_160m-contour.pbf \
-		-Oo renumbered.pbf
-	osmium merge \
-		$@ \
-		renumbered.pbf \
-		-Oo merged.pbf
-	mv merged.pbf $@
-
-	## for 320m
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		moi-2018/dem2018_320m-contour.pbf \
-		-Oo renumbered.pbf
-	osmium merge \
-		$@ \
-		renumbered.pbf \
-		-Oo merged.pbf
-	mv merged.pbf $@
-
-	## for 640m
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		moi-2018/dem2018_640m-contour.pbf \
-		-Oo renumbered.pbf
-	osmium merge \
-		$@ \
-		renumbered.pbf \
-		-Oo merged.pbf
-
-	## done
-	rm renumbered.pbf
-	mv merged.pbf $@
+	tools/osium-append.sh $@ moi-2016/penghu-contour.pbf
+	## islands: kinmen, matsu, n3islets, wuqiu
+	tools/osium-append.sh $@ aw3d30-2.1/islands-contour.pbf
+	## marker
+	tools/osium-append.sh $@ moi-2018/marker-contour.pbf
 
 
 .PHONY: taiwan-lite-contour
@@ -800,173 +699,16 @@ taiwan-lite-contour: taiwan-lite-contour.pbf
 taiwan-lite-contour.pbf: \
   moi-2018/dem2018-lite-contour.pbf \
   moi-2016/penghu-lite-contour.pbf \
-  aw3d30-2.1/kinmen-lite-contour.pbf \
-  aw3d30-2.1/matsu-lite-contour.pbf \
-  aw3d30-2.1/n3islets-lite-contour.pbf \
-  aw3d30-2.1/wuqiu-lite-contour.pbf \
-  moi-2018/dem2018_40m-contour.pbf \
-  moi-2018/dem2018_80m-contour.pbf \
-  moi-2018/dem2018_160m-contour.pbf \
-  moi-2018/dem2018_320m-contour.pbf \
-  moi-2018/dem2018_640m-contour.pbf
-
+  aw3d30-2.1/islands-lite-contour.pbf \
+  moi-2018/marker-contour.pbf
 	## taiwan main island
-	let LNID=1 LWID=1 && \
 	osmium renumber \
-		-s $${LNID},$${LWID},0 \
+		-s 7000000000,4000000000,0 \
 		moi-2018/dem2018-lite-contour.pbf \
-		-Oo renumbered-lite.pbf
-	mv renumbered-lite.pbf $@
-
+		-Oo $@
 	## penghu
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		moi-2016/penghu-lite-contour.pbf \
-		-Oo renumbered-lite.pbf
-	osmium merge \
-		$@ \
-		renumbered-lite.pbf \
-		-Oo merged-lite.pbf
-	mv merged-lite.pbf $@
-
-	## kinmen
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		aw3d30-2.1/kinmen-lite-contour.pbf \
-		-Oo renumbered-lite.pbf
-	osmium merge \
-		$@ \
-		renumbered-lite.pbf \
-		-Oo merged-lite.pbf
-	mv merged-lite.pbf $@
-
-	## matsu
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		aw3d30-2.1/matsu-lite-contour.pbf \
-		-Oo renumbered-lite.pbf
-	osmium merge \
-		$@ \
-		renumbered-lite.pbf \
-		-Oo merged-lite.pbf
-	mv merged-lite.pbf $@
-
-	## n3islets
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		aw3d30-2.1/n3islets-lite-contour.pbf \
-		-Oo renumbered-lite.pbf
-	osmium merge \
-		$@ \
-		renumbered-lite.pbf \
-		-Oo merged-lite.pbf
-	mv merged-lite.pbf $@
-
-	## wuqiu
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		aw3d30-2.1/wuqiu-lite-contour.pbf \
-		-Oo renumbered-lite.pbf
-	osmium merge \
-		$@ \
-		renumbered-lite.pbf \
-		-Oo merged-lite.pbf
-	mv merged-lite.pbf $@
-
-	## for 40m
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		moi-2018/dem2018_40m-contour.pbf \
-		-Oo renumbered-lite.pbf
-	osmium merge \
-		$@ \
-		renumbered-lite.pbf \
-		-Oo merged-lite.pbf
-	mv merged-lite.pbf $@
-
-	## for 80m
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		moi-2018/dem2018_80m-contour.pbf \
-		-Oo renumbered-lite.pbf
-	osmium merge \
-		$@ \
-		renumbered-lite.pbf \
-		-Oo merged-lite.pbf
-	mv merged-lite.pbf $@
-
-	## for 160m
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		moi-2018/dem2018_160m-contour.pbf \
-		-Oo renumbered-lite.pbf
-	osmium merge \
-		$@ \
-		renumbered-lite.pbf \
-		-Oo merged-lite.pbf
-	mv merged-lite.pbf $@
-
-	## for 320m
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		moi-2018/dem2018_320m-contour.pbf \
-		-Oo renumbered-lite.pbf
-	osmium merge \
-		$@ \
-		renumbered-lite.pbf \
-		-Oo merged-lite.pbf
-	mv merged-lite.pbf $@
-
-	## for 640m
-	let $$(osmium fileinfo -e $@ | \
-		$(SED_CMD) -e 's/Largest node ID: /LNID=/' -e 's/Largest way ID: /LWID=/' | \
-		grep ID=) && \
-	let LNID++ LWID++ && \
-	osmium renumber \
-		-s $${LNID},$${LWID},0 \
-		moi-2018/dem2018_640m-contour.pbf \
-		-Oo renumbered-lite.pbf
-	osmium merge \
-		$@ \
-		renumbered-lite.pbf \
-		-Oo merged-lite.pbf
-
-	## done
-	rm renumbered-lite.pbf
-	mv merged-lite.pbf $@
+	tools/osium-append.sh $@ moi-2016/penghu-lite-contour.pbf
+	## islands: kinmen, matsu, n3islets, wuqiu
+	tools/osium-append.sh $@ aw3d30-2.1/islands-lite-contour.pbf
+	## marker
+	tools/osium-append.sh $@ moi-2018/marker-contour.pbf
