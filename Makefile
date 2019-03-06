@@ -11,7 +11,7 @@ SED_CMD := sed
 endif
 
 .PHONY: all clean
-all: taiwan-contour
+all: taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
 
 clean:
 	git clean -fdx
@@ -675,8 +675,25 @@ moi-2018/marker-contour.pbf: \
 
 
 .PHONY: taiwan-contour
-taiwan-contour: taiwan-contour.pbf
-taiwan-contour.pbf: \
+taiwan-contour: ele_taiwan_10_100_500.pbf
+ele_taiwan_10_100_500.pbf: \
+  moi-2018/dem2018-contour.pbf \
+  moi-2016/penghu-contour.pbf \
+  aw3d30-2.1/islands-contour.pbf
+	## taiwan main island
+	osmium renumber \
+		-s 7000000000,4000000000,0 \
+		moi-2018/dem2018-contour.pbf \
+		-Oo $@
+	## penghu
+	tools/osium-append.sh $@ moi-2016/penghu-contour.pbf
+	## islands: kinmen, matsu, n3islets, wuqiu
+	tools/osium-append.sh $@ aw3d30-2.1/islands-contour.pbf
+
+
+.PHONY: taiwan-contour-mix
+taiwan-contour-mix: ele_taiwan_10_100_500_mix.pbf
+ele_taiwan_10_100_500_mix.pbf: \
   moi-2018/dem2018-contour.pbf \
   moi-2016/penghu-contour.pbf \
   aw3d30-2.1/islands-contour.pbf \
@@ -694,9 +711,9 @@ taiwan-contour.pbf: \
 	tools/osium-append.sh $@ moi-2018/marker-contour.pbf
 
 
-.PHONY: taiwan-lite-contour
-taiwan-lite-contour: taiwan-lite-contour.pbf
-taiwan-lite-contour.pbf: \
+.PHONY: taiwan-lite-contour-mix
+taiwan-lite-contour-mix: ele_taiwan_20_100_500_mix.pbf
+ele_taiwan_20_100_500_mix.pbf: \
   moi-2018/dem2018-lite-contour.pbf \
   moi-2016/penghu-lite-contour.pbf \
   aw3d30-2.1/islands-lite-contour.pbf \
