@@ -29,6 +29,25 @@ moi-2016/.unzip:
 	touch $@
 
 
+moi-2019/penghu-contour.pbf: moi-2019/phDEM_20m-zero.tif
+	phyghtmap \
+		--step=10 \
+		--no-zero-contour \
+		--output-prefix=penghu_contour \
+		--line-cat=500,100 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.00002 \
+		--void-range-max=-500 \
+		--pbf \
+		moi-2019/phDEM_20m-zero.tif
+	mv penghu_contour* $@
+
+
 .PHONY: penghu-contour
 penghu-contour: moi-2016/penghu-contour.pbf
 moi-2016/penghu-contour.pbf: moi-2016/.unzip
@@ -72,6 +91,7 @@ moi-2016/penghu-lite-contour.pbf: moi-2016/.unzip
 
 
 moi-2019/dem_20m.tif: moi-2019/.unzip
+moi-2019/phDEM_20m_119.tif: moi-2019/.unzip
 moi-2019/.unzip: moi-2019/dem_20m.7z.001
 	cd moi-2019/ && \
 	7za x dem_20m.7z.001
@@ -84,6 +104,17 @@ moi-2018/DEM_20m.tif:
 	cd moi-2018/ && \
 	7za x DEM_20m.7z.001
 	touch $@
+
+
+moi-2019/phDEM_20m-wgs84.tif: moi-2019/phDEM_20m_119.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-r bilinear \
+		-t_srs 'EPSG:4326' \
+	  $^ \
+	  $@
 
 
 moi-2019/dem_20m-wgs84.tif: moi-2019/dem_20m.tif
@@ -121,6 +152,15 @@ moi-2018/from2016.tif: moi-2016/.unzip
 		$@
 
 
+moi-2019/phDEM_20m-nodata.tif: moi-2019/phDEM_20m-wgs84.tif
+	rm -f $@
+	gdal_merge.py \
+		$(OUTPUTS) \
+		-n $(NODATA_VALUE) -a_nodata $(NODATA_VALUE) \
+		$^ \
+		-o $@
+
+
 moi-2019/dem_20m-nodata.tif: moi-2019/dem_20m-wgs84.tif
 	rm -f $@
 	gdal_merge.py \
@@ -141,6 +181,15 @@ moi-2018/DEM_20m-nodata.tif: moi-2018/from2016.tif moi-2018/DEM_20m-wgs84.tif
 		-o $@
 
 
+moi-2019/phDEM_20m-nodata0.tif: moi-2019/phDEM_20m-nodata.tif
+	rm -f $@
+	gdal_calc.py \
+		--NoDataValue=0 \
+		--calc="(A > 0) * A" \
+		-A $^ \
+		--outfile=$@
+
+
 moi-2019/dem_20m-nodata0.tif: moi-2019/dem_20m-nodata.tif
 	rm -f $@
 	gdal_calc.py \
@@ -157,6 +206,15 @@ moi-2018/DEM_20m-nodata0.tif: moi-2018/DEM_20m-nodata.tif
 		--calc="(A > 0) * A" \
 		-A $^ \
 		--outfile=$@
+
+
+moi-2019/phDEM_20m-zero.tif: moi-2019/phDEM_20m-nodata0.tif
+	rm -f $@
+	gdal_translate \
+		$(OUTPUTS) \
+		-a_nodata none \
+		$^ \
+		$@
 
 
 moi-2019/dem_20m-zero.tif: moi-2019/dem_20m-nodata0.tif
