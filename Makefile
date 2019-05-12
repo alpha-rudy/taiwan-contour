@@ -156,6 +156,7 @@ moi-2018/dem2018-contour.pbf: moi-2018/DEM_20m-zero.tif
 
 
 moi-2018/dem2018-contour-sub.pbf: moi-2018/dem2018-contour.pbf
+	rm $@
 	python3 tools/elevation_sub.py $< $@
 
 
