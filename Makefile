@@ -266,7 +266,7 @@ moi-2019/taiwan-10_100_500-contour.pbf: moi-2019/dem_20m-zero.tif
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
 		--max-nodes-per-way=2000 \
-		--simplifyContoursEpsilon=0.00002 \
+		--simplifyContoursEpsilon=0.000002 \
 		--void-range-max=-500 \
 		--pbf \
 		$^
@@ -321,7 +321,7 @@ moi-2019/taiwan-20_100_500-contour.pbf: moi-2019/dem_20m-zero.tif
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
 		--max-nodes-per-way=2000 \
-		--simplifyContoursEpsilon=0.00005 \
+		--simplifyContoursEpsilon=0.000005 \
 		--void-range-max=-500 \
 		--pbf \
 		$^
