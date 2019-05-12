@@ -71,12 +71,30 @@ moi-2016/penghu-lite-contour.pbf: moi-2016/.unzip
 	mv penghu_lite_contour* $@
 
 
+moi-2019/dem_20m.tif: moi-2019/.unzip
+moi-2019/.unzip: moi-2019/dem_20m.7z.001
+	cd moi-2019/ && \
+	7za x dem_20m.7z.001
+	touch $@
+
+
 .POHNY: dem2018-orig
 dem2018-orig: moi-2018/.unzip
 moi-2018/DEM_20m.tif:
 	cd moi-2018/ && \
 	7za x DEM_20m.7z.001
 	touch $@
+
+
+moi-2019/dem_20m-wgs84.tif: moi-2019/dem_20m.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-r bilinear \
+		-t_srs 'EPSG:4326' \
+	  $^ \
+	  $@
 
 
 .PHONY: dem2018-wgs84
@@ -103,6 +121,15 @@ moi-2018/from2016.tif: moi-2016/.unzip
 		$@
 
 
+moi-2019/dem_20m-nodata.tif: moi-2019/dem_20m-wgs84.tif
+	rm -f $@
+	gdal_merge.py \
+		$(OUTPUTS) \
+		-n $(NODATA_VALUE) -a_nodata $(NODATA_VALUE) \
+		$^ \
+		-o $@
+
+
 .PHONY: dem2018-nodata
 dem2018-nodata: moi-2018/DEM_20m-nodata.tif
 moi-2018/DEM_20m-nodata.tif: moi-2018/from2016.tif moi-2018/DEM_20m-wgs84.tif
@@ -114,6 +141,15 @@ moi-2018/DEM_20m-nodata.tif: moi-2018/from2016.tif moi-2018/DEM_20m-wgs84.tif
 		-o $@
 
 
+moi-2019/dem_20m-nodata0.tif: moi-2019/dem_20m-nodata.tif
+	rm -f $@
+	gdal_calc.py \
+		--NoDataValue=0 \
+		--calc="(A > 0) * A" \
+		-A $^ \
+		--outfile=$@
+
+
 moi-2018/DEM_20m-nodata0.tif: moi-2018/DEM_20m-nodata.tif
 	rm -f $@
 	gdal_calc.py \
@@ -121,6 +157,15 @@ moi-2018/DEM_20m-nodata0.tif: moi-2018/DEM_20m-nodata.tif
 		--calc="(A > 0) * A" \
 		-A $^ \
 		--outfile=$@
+
+
+moi-2019/dem_20m-zero.tif: moi-2019/dem_20m-nodata0.tif
+	rm -f $@
+	gdal_translate \
+		$(OUTPUTS) \
+		-a_nodata none \
+		$^ \
+		$@
 
 
 .PHONY: dem2018-zero
@@ -132,6 +177,25 @@ moi-2018/DEM_20m-zero.tif: moi-2018/DEM_20m-nodata0.tif
 		-a_nodata none \
 		$^ \
 		$@
+
+
+moi-2019/taiwan-10_100_500-contour.pbf: moi-2019/dem_20m-zero.tif
+	phyghtmap \
+		--step=10 \
+		--no-zero-contour \
+		--output-prefix=dem_contour \
+		--line-cat=500,100 \
+		--jobs=8 \
+		--osm-version=0.6 \
+		--start-node-id=0 \
+		--start-way-id=0 \
+		--max-nodes-per-tile=0 \
+		--max-nodes-per-way=2000 \
+		--simplifyContoursEpsilon=0.00002 \
+		--void-range-max=-500 \
+		--pbf \
+		$^
+	mv dem_contour* $@
 
 
 .PHONY: dem2018-contour
@@ -721,6 +785,23 @@ moi-2018/marker-contour.pbf: \
 
 .PHONY: taiwan-contour
 taiwan-contour: taiwan-contour-2018
+
+
+.PHONY: taiwan-contour-2019
+taiwan-contour-2019: ele_taiwan_10_100_500-2019.pbf
+ele_taiwan_10_100_500-2019.pbf: \
+  moi-2019/taiwan-10_100_500-contour.pbf \
+  moi-2019/penghu-10_100_500-contour.pbf \
+  aw3d30-2.1/islands-contour.pbf
+	## taiwan main island
+	osmium renumber \
+		-s 7000000000,4000000000,0 \
+		moi-2019/taiwan-10_100_500-contour.pbf \
+		-Oo $@
+	## penghu
+	tools/osium-append.sh $@ moi-2019/penghu-10_100_500-contour.pbf
+	## islands: kinmen, matsu, n3islets, wuqiu
+	tools/osium-append.sh $@ aw3d30-2.1/islands-contour.pbf
 
 .PHONY: taiwan-contour-2018
 taiwan-contour-2018: ele_taiwan_10_100_500-2018.pbf
