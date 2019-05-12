@@ -29,7 +29,7 @@ moi-2016/.unzip:
 	touch $@
 
 
-moi-2019/penghu-contour.pbf: moi-2019/phDEM_20m-zero.tif
+moi-2019/penghu-10_100_500-contour.pbf: moi-2019/phDEM_20m-zero.tif
 	phyghtmap \
 		--step=10 \
 		--no-zero-contour \
@@ -44,7 +44,7 @@ moi-2019/penghu-contour.pbf: moi-2019/phDEM_20m-zero.tif
 		--simplifyContoursEpsilon=0.00002 \
 		--void-range-max=-500 \
 		--pbf \
-		moi-2019/phDEM_20m-zero.tif
+		$^
 	mv penghu_contour* $@
 
 
@@ -842,7 +842,7 @@ moi-2018/marker-contour.pbf: \
 
 
 .PHONY: taiwan-contour
-taiwan-contour: taiwan-contour-2018
+taiwan-contour: taiwan-contour-2019
 
 
 .PHONY: taiwan-contour-2019
@@ -860,6 +860,7 @@ ele_taiwan_10_100_500-2019.pbf: \
 	tools/osium-append.sh $@ moi-2019/penghu-10_100_500-contour.pbf
 	## islands: kinmen, matsu, n3islets, wuqiu
 	tools/osium-append.sh $@ aw3d30-2.1/islands-contour.pbf
+
 
 .PHONY: taiwan-contour-2018
 taiwan-contour-2018: ele_taiwan_10_100_500-2018.pbf
