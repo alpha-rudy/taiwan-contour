@@ -720,8 +720,11 @@ moi-2018/marker-contour.pbf: \
 
 
 .PHONY: taiwan-contour
-taiwan-contour: ele_taiwan_10_100_500.pbf
-ele_taiwan_10_100_500.pbf: \
+taiwan-contour: taiwan-contour-2018
+
+.PHONY: taiwan-contour-2018
+taiwan-contour-2018: ele_taiwan_10_100_500-2018.pbf
+ele_taiwan_10_100_500-2018.pbf: \
   moi-2018/dem2018-contour.pbf \
   moi-2016/penghu-contour.pbf \
   aw3d30-2.1/islands-contour.pbf
@@ -737,8 +740,11 @@ ele_taiwan_10_100_500.pbf: \
 
 
 .PHONY: taiwan-contour-mix
-taiwan-contour-mix: ele_taiwan_10_100_500_mix.pbf
-ele_taiwan_10_100_500_mix.pbf: \
+taiwan-contour-mix: taiwan-contour-mix-2018
+
+.PHONY: taiwan-contour-mix-2018
+taiwan-contour-mix-2018: ele_taiwan_10_100_500_mix-2018.pbf
+ele_taiwan_10_100_500_mix-2018.pbf: \
   precompiled/taiwan-sealand.pbf \
   moi-2018/dem2018-contour-sub.pbf \
   moi-2016/penghu-contour.pbf \
@@ -760,8 +766,11 @@ ele_taiwan_10_100_500_mix.pbf: \
 
 
 .PHONY: taiwan-lite-contour-mix
-taiwan-lite-contour-mix: ele_taiwan_20_100_500_mix.pbf
-ele_taiwan_20_100_500_mix.pbf: \
+taiwan-lite-contour-mix: taiwan-lite-contour-mix-2018
+
+.PHONY: taiwan-lite-contour-mix-2018
+taiwan-lite-contour-mix-2018: ele_taiwan_20_100_500_mix-2018.pbf
+ele_taiwan_20_100_500_mix-2018.pbf: \
   precompiled/taiwan-sealand.pbf \
   moi-2018/dem2018-lite-contour.pbf \
   moi-2016/penghu-lite-contour.pbf \
