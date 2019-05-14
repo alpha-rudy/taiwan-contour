@@ -25,11 +25,11 @@ do
    ymin=`echo ${ymin}-${res} | bc`
    xmax=`echo ${xmax}+${res} | bc`
    ymax=`echo ${ymax}+${res} | bc`
-   gdalwarp   -te ${xmin} ${ymin} ${xmax} ${ymax} -ts 3601 3601 -r bilinear ${vrtfile} ${OUTPUT_DIR}/${srtm}.tif
-   gdal_translate -of SRTMHGT ${OUTPUT_DIR}/${srtm}.tif ${OUTPUT_DIR}/${srtm}
-   rm -f ${OUTPUT_DIR}/${srtm}.tif
+   gdalwarp -te ${xmin} ${ymin} ${xmax} ${ymax} -dstnodata -9999 -ts 3601 3601 -r bilinear ${vrtfile} ${OUTPUT_DIR}/${srtm}-nodata.tif
+   gdal_calc.py --NoDataValue=0 --calc="(A > 0) * A" -A ${OUTPUT_DIR}/${srtm}-nodata.tif --outfile=${OUTPUT_DIR}/${srtm}-nodata0.tif
+   gdal_translate ${OUTPUT_DIR}/${srtm}-nodata0.tif -a_nodata none -of SRTMHGT ${OUTPUT_DIR}/${srtm}
+   rm -f ${OUTPUT_DIR}/${srtm}.tif ${OUTPUT_DIR}/${srtm}-nodata.tif ${OUTPUT_DIR}/${srtm}-nodata0.tif
 
 done
 
 rm $vrtfile
-
