@@ -2,7 +2,7 @@
 
 ## Usage
 
-   $ make all   ### to make the default targets
+    $ make all   ### to make the default targets
 
 ## Target list
 
@@ -17,12 +17,12 @@
       * kinmen
       * matsu
 
-* `taiwan-contour-mix'
+* `taiwan-contour-mix`
   * use MOI Taiwan DTM 20m v2019
   * taiwan contour lines in 10/50/100/500 scale
   * marker line for the lable of elevation
 
-* `taiwan-lite-contour-mix'
+* `taiwan-lite-contour-mix`
   * use MOI Taiwan DTM 20m v2019
   * taiwan contour lines in 20/100/500 scale
   * marker line for the lable of elevation
@@ -44,12 +44,12 @@
       * kinmen
       * matsu
 
-* `taiwan-contour-mix-2018'
+* `taiwan-contour-mix-2018`
   * use MOI Taiwan DTM 20m v2018
   * taiwan contour lines in 10/50/100/500 scale
   * marker line for the lable of elevation
 
-* `taiwan-lite-contour-mix'
+* `taiwan-lite-contour-mix`
   * use MOI Taiwan DTM 20m v2018
   * taiwan contour lines in 20/100/500 scale
   * marker line for the lable of elevation
