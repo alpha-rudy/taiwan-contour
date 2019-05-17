@@ -1,14 +1,59 @@
-# *Not completed yet, don't use*
-
-## Taiwan Contour Making
+## Taiwan Contour Map Making
 
 ## Usage
 
-...
+   $ make all   ### to make the default targets
 
 ## Target list
 
-...
+* `taiwan-contour`
+  * use MOI Taiwan DTM 20m v2019
+  * taiwan contour lines in 10/100/500 scale
+  * Regions of DTM
+    * MOI Taiwan DTM 20m v2019
+      * taiwan island
+      * penghu island
+    * JAXA AW3D30
+      * kinmen
+      * matsu
+
+* `taiwan-contour-mix'
+  * use MOI Taiwan DTM 20m v2019
+  * taiwan contour lines in 10/50/100/500 scale
+  * marker line for the lable of elevation
+
+* `taiwan-lite-contour-mix'
+  * use MOI Taiwan DTM 20m v2019
+  * taiwan contour lines in 20/100/500 scale
+  * marker line for the lable of elevation
+
+* `all`
+  * all previous targets
+  
+* `taiwan-contour-2018`
+  * use MOI Taiwan DTM 20m v2018
+  * taiwan contour lines in 10/100/500 scale
+  * Regions of DTM
+    * MOI Taiwan DTM 20m v2018
+      * taiwan island
+    * MOI Taiwan DTM 20m v2016
+      * penghu island
+      * 樂山基地
+      * 台灣近海島嶼
+    * JAXA AW3D30
+      * kinmen
+      * matsu
+
+* `taiwan-contour-mix-2018'
+  * use MOI Taiwan DTM 20m v2018
+  * taiwan contour lines in 10/50/100/500 scale
+  * marker line for the lable of elevation
+
+* `taiwan-lite-contour-mix'
+  * use MOI Taiwan DTM 20m v2018
+  * taiwan contour lines in 20/100/500 scale
+  * marker line for the lable of elevation
+
 
 ## Copyright and Distribution
 <pre>
