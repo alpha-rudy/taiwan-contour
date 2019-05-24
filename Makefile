@@ -299,27 +299,27 @@ moi-2018/dem2018-lite-contour.pbf: moi-2018/DEM_20m-zero.tif
 
 
 .PHONY: aw3d-orig
-aw3d-orig: aw3d30-2.1/.unzip
-aw3d30-2.1/.unzip:
-	cd aw3d30-2.1/ && \
+aw3d-orig: aw3d30/.unzip
+aw3d30/.unzip:
+	cd aw3d30/ && \
 	7za x aw3d30.7z.001
 	touch $@
 
 
-aw3d30-2.1/n3islets-data0.tif: aw3d30-2.1/.unzip
+aw3d30/n3islets-data0.tif: aw3d30/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline aw3d30-2.1/n3islets.shp \
+		-cutline aw3d30/n3islets.shp \
 		-dstnodata 0 \
-		aw3d30-2.1/N025E122_AVE_DSM.tif \
+		aw3d30/N025E122_AVE_DSM.tif \
 		$@
 
 
 .PHONY: n3islets-zero
-n3islets-zero: aw3d30-2.1/n3islets-zero.tif
-aw3d30-2.1/n3islets-zero.tif: aw3d30-2.1/n3islets-data0.tif
+n3islets-zero: aw3d30/n3islets-zero.tif
+aw3d30/n3islets-zero.tif: aw3d30/n3islets-data0.tif
 	rm -f $@
 	gdal_translate \
 		$(OUTPUTS) \
@@ -329,8 +329,8 @@ aw3d30-2.1/n3islets-zero.tif: aw3d30-2.1/n3islets-data0.tif
 
 
 .PHONY: n3islets-contour
-n3islets-contour: aw3d30-2.1/n3islets-contour.pbf
-aw3d30-2.1/n3islets-contour.pbf: aw3d30-2.1/n3islets-zero.tif
+n3islets-contour: aw3d30/n3islets-contour.pbf
+aw3d30/n3islets-contour.pbf: aw3d30/n3islets-zero.tif
 	phyghtmap \
 		--step=10 \
 		--no-zero-contour \
@@ -350,8 +350,8 @@ aw3d30-2.1/n3islets-contour.pbf: aw3d30-2.1/n3islets-zero.tif
 
 
 .PHONY: n3islets-lite-contour
-n3islets-lite-contour: aw3d30-2.1/n3islets-lite-contour.pbf
-aw3d30-2.1/n3islets-lite-contour.pbf: aw3d30-2.1/n3islets-zero.tif
+n3islets-lite-contour: aw3d30/n3islets-lite-contour.pbf
+aw3d30/n3islets-lite-contour.pbf: aw3d30/n3islets-zero.tif
 	phyghtmap \
 		--step=20 \
 		--no-zero-contour \
@@ -370,22 +370,22 @@ aw3d30-2.1/n3islets-lite-contour.pbf: aw3d30-2.1/n3islets-zero.tif
 	mv n3islets_lite_contour* $@
 
 
-aw3d30-2.1/matsu-data0.tif: aw3d30-2.1/.unzip
+aw3d30/matsu-data0.tif: aw3d30/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline aw3d30-2.1/matsu.shp \
+		-cutline aw3d30/matsu.shp \
 		-dstnodata 0 \
-		aw3d30-2.1/N026E119_AVE_DSM.tif \
-		aw3d30-2.1/N026E120_AVE_DSM.tif \
-		aw3d30-2.1/N025E119_AVE_DSM.tif \
+		aw3d30/N026E119_AVE_DSM.tif \
+		aw3d30/N026E120_AVE_DSM.tif \
+		aw3d30/N025E119_AVE_DSM.tif \
 		$@
 
 
 .PHONY: matsu-zero
-matsu-zero: aw3d30-2.1/matsu-zero.tif
-aw3d30-2.1/matsu-zero.tif: aw3d30-2.1/matsu-data0.tif
+matsu-zero: aw3d30/matsu-zero.tif
+aw3d30/matsu-zero.tif: aw3d30/matsu-data0.tif
 	rm -f $@
 	gdal_translate \
 		$(OUTPUTS) \
@@ -395,8 +395,8 @@ aw3d30-2.1/matsu-zero.tif: aw3d30-2.1/matsu-data0.tif
 
 
 .PHONY: matsu-contour
-matsu-contour: aw3d30-2.1/matsu-contour.pbf
-aw3d30-2.1/matsu-contour.pbf: aw3d30-2.1/matsu-zero.tif
+matsu-contour: aw3d30/matsu-contour.pbf
+aw3d30/matsu-contour.pbf: aw3d30/matsu-zero.tif
 	phyghtmap \
 		--step=10 \
 		--no-zero-contour \
@@ -416,8 +416,8 @@ aw3d30-2.1/matsu-contour.pbf: aw3d30-2.1/matsu-zero.tif
 
 
 .PHONY: matsu-lite-contour
-matsu-lite-contour: aw3d30-2.1/matsu-lite-contour.pbf
-aw3d30-2.1/matsu-lite-contour.pbf: aw3d30-2.1/matsu-zero.tif
+matsu-lite-contour: aw3d30/matsu-lite-contour.pbf
+aw3d30/matsu-lite-contour.pbf: aw3d30/matsu-zero.tif
 	phyghtmap \
 		--step=20 \
 		--no-zero-contour \
@@ -436,31 +436,31 @@ aw3d30-2.1/matsu-lite-contour.pbf: aw3d30-2.1/matsu-zero.tif
 	mv matsu_lite_contour* $@
 
 
-aw3d30-2.1/wuqiu-data0.tif: aw3d30-2.1/.unzip
+aw3d30/wuqiu-data0.tif: aw3d30/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline aw3d30-2.1/wuqiu.shp \
+		-cutline aw3d30/wuqiu.shp \
 		-dstnodata 0 \
-		aw3d30-2.1/N024E119_AVE_DSM.tif \
+		aw3d30/N024E119_AVE_DSM.tif \
 		$@
 
 
 .PHONY: wuqiu-zero
-wuqiu-zero: aw3d30-2.1/wuqiu-zero.tif
-aw3d30-2.1/wuqiu-zero.tif: aw3d30-2.1/wuqiu-data0.tif
+wuqiu-zero: aw3d30/wuqiu-zero.tif
+aw3d30/wuqiu-zero.tif: aw3d30/wuqiu-data0.tif
 	rm -f $@
 	gdal_translate \
 		$(OUTPUTS) \
 		-a_nodata none \
-		aw3d30-2.1/wuqiu-data0.tif \
+		aw3d30/wuqiu-data0.tif \
 		$@
 
 
 .PHONY: wuqiu-contour
-wuqiu-contour: aw3d30-2.1/wuqiu-contour.pbf
-aw3d30-2.1/wuqiu-contour.pbf: aw3d30-2.1/wuqiu-zero.tif
+wuqiu-contour: aw3d30/wuqiu-contour.pbf
+aw3d30/wuqiu-contour.pbf: aw3d30/wuqiu-zero.tif
 	phyghtmap \
 		--step=10 \
 		--no-zero-contour \
@@ -480,8 +480,8 @@ aw3d30-2.1/wuqiu-contour.pbf: aw3d30-2.1/wuqiu-zero.tif
 
 
 .PHONY: wuqiu-lite-contour
-wuqiu-lite-contour: aw3d30-2.1/wuqiu-lite-contour.pbf
-aw3d30-2.1/wuqiu-lite-contour.pbf: aw3d30-2.1/wuqiu-zero.tif
+wuqiu-lite-contour: aw3d30/wuqiu-lite-contour.pbf
+aw3d30/wuqiu-lite-contour.pbf: aw3d30/wuqiu-zero.tif
 	phyghtmap \
 		--step=20 \
 		--no-zero-contour \
@@ -500,31 +500,31 @@ aw3d30-2.1/wuqiu-lite-contour.pbf: aw3d30-2.1/wuqiu-zero.tif
 	mv wuqiu_lite_contour* $@
 
 
-aw3d30-2.1/kinmen-data0.tif: aw3d30-2.1/.unzip
+aw3d30/kinmen-data0.tif: aw3d30/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline aw3d30-2.1/kinmen.shp \
+		-cutline aw3d30/kinmen.shp \
 		-dstnodata 0 \
-		aw3d30-2.1/N024E118_AVE_DSM.tif \
+		aw3d30/N024E118_AVE_DSM.tif \
 		$@
 
 
 .PHONY: kinmen-zero
-kinmen-zero: aw3d30-2.1/kinmen-zero.tif
-aw3d30-2.1/kinmen-zero.tif: aw3d30-2.1/kinmen-data0.tif
+kinmen-zero: aw3d30/kinmen-zero.tif
+aw3d30/kinmen-zero.tif: aw3d30/kinmen-data0.tif
 	rm -f $@
 	gdal_translate \
 		$(OUTPUTS) \
 		-a_nodata none \
-		aw3d30-2.1/kinmen-data0.tif \
+		aw3d30/kinmen-data0.tif \
 		$@
 
 
 .PHONY: kinmen-contour
-kinmen-contour: aw3d30-2.1/kinmen-contour.pbf
-aw3d30-2.1/kinmen-contour.pbf: aw3d30-2.1/kinmen-zero.tif
+kinmen-contour: aw3d30/kinmen-contour.pbf
+aw3d30/kinmen-contour.pbf: aw3d30/kinmen-zero.tif
 	phyghtmap \
 		--step=10 \
 		--no-zero-contour \
@@ -544,8 +544,8 @@ aw3d30-2.1/kinmen-contour.pbf: aw3d30-2.1/kinmen-zero.tif
 
 
 .PHONY: kinmen-lite-contour
-kinmen-lite-contour: aw3d30-2.1/kinmen-lite-contour.pbf
-aw3d30-2.1/kinmen-lite-contour.pbf: aw3d30-2.1/kinmen-zero.tif
+kinmen-lite-contour: aw3d30/kinmen-lite-contour.pbf
+aw3d30/kinmen-lite-contour.pbf: aw3d30/kinmen-zero.tif
 	phyghtmap \
 		--step=20 \
 		--no-zero-contour \
@@ -976,45 +976,45 @@ moi-2018/dem2018_1280m-contour.pbf: moi-2018/DEM_1280m-zero.tif
 		-o=$@
 
 
-aw3d30-2.1/islands-10_50_100_500-contour.pbf: aw3d30-2.1/islands-10_100_500-contour.pbf
+aw3d30/islands-10_50_100_500-contour.pbf: aw3d30/islands-10_100_500-contour.pbf
 	rm -f $@
 	python3 tools/elevation_sub.py $< $@
 
 
-aw3d30-2.1/islands-10_100_500-contour.pbf: \
-  aw3d30-2.1/kinmen-contour.pbf \
-  aw3d30-2.1/matsu-contour.pbf \
-  aw3d30-2.1/n3islets-contour.pbf \
-  aw3d30-2.1/wuqiu-contour.pbf
+aw3d30/islands-10_100_500-contour.pbf: \
+  aw3d30/kinmen-contour.pbf \
+  aw3d30/matsu-contour.pbf \
+  aw3d30/n3islets-contour.pbf \
+  aw3d30/wuqiu-contour.pbf
 	## kinmen
 	osmium renumber \
 		-s 1,1,0 \
-		aw3d30-2.1/kinmen-contour.pbf \
+		aw3d30/kinmen-contour.pbf \
 		-Oo $@
 	## matsu
-	tools/osium-append.sh $@ aw3d30-2.1/matsu-contour.pbf
+	tools/osium-append.sh $@ aw3d30/matsu-contour.pbf
 	## n3islets
-	tools/osium-append.sh $@ aw3d30-2.1/n3islets-contour.pbf
+	tools/osium-append.sh $@ aw3d30/n3islets-contour.pbf
 	## wuqiu
-	tools/osium-append.sh $@ aw3d30-2.1/wuqiu-contour.pbf
+	tools/osium-append.sh $@ aw3d30/wuqiu-contour.pbf
 
 
-aw3d30-2.1/islands-20_100_500-contour.pbf: \
-  aw3d30-2.1/kinmen-lite-contour.pbf \
-  aw3d30-2.1/matsu-lite-contour.pbf \
-  aw3d30-2.1/n3islets-lite-contour.pbf \
-  aw3d30-2.1/wuqiu-lite-contour.pbf
+aw3d30/islands-20_100_500-contour.pbf: \
+  aw3d30/kinmen-lite-contour.pbf \
+  aw3d30/matsu-lite-contour.pbf \
+  aw3d30/n3islets-lite-contour.pbf \
+  aw3d30/wuqiu-lite-contour.pbf
 	## kinmen
 	osmium renumber \
 		-s 1,1,0 \
-		aw3d30-2.1/kinmen-lite-contour.pbf \
+		aw3d30/kinmen-lite-contour.pbf \
 		-Oo $@
 	## matsu
-	tools/osium-append.sh $@ aw3d30-2.1/matsu-lite-contour.pbf
+	tools/osium-append.sh $@ aw3d30/matsu-lite-contour.pbf
 	## n3islets
-	tools/osium-append.sh $@ aw3d30-2.1/n3islets-lite-contour.pbf
+	tools/osium-append.sh $@ aw3d30/n3islets-lite-contour.pbf
 	## wuqiu
-	tools/osium-append.sh $@ aw3d30-2.1/wuqiu-lite-contour.pbf
+	tools/osium-append.sh $@ aw3d30/wuqiu-lite-contour.pbf
 
 
 moi-2016/marker-contour.pbf: \
@@ -1074,7 +1074,7 @@ taiwan-contour-2016: ele_taiwan_10_100_500-2016.pbf
 ele_taiwan_10_100_500-2016.pbf: \
   moi-2016/taiwan-10_100_500-contour.pbf \
   moi-2016/penghu-10_100_500-contour.pbf \
-  aw3d30-2.1/islands-10_100_500-contour.pbf
+  aw3d30/islands-10_100_500-contour.pbf
 	## taiwan main island
 	osmium renumber \
 		-s 7000000000,4000000000,0 \
@@ -1083,7 +1083,7 @@ ele_taiwan_10_100_500-2016.pbf: \
 	## penghu
 	tools/osium-append.sh $@ moi-2016/penghu-10_100_500-contour.pbf
 	## islands: kinmen, matsu, n3islets, wuqiu
-	tools/osium-append.sh $@ aw3d30-2.1/islands-10_100_500-contour.pbf
+	tools/osium-append.sh $@ aw3d30/islands-10_100_500-contour.pbf
 
 
 .PHONY: taiwan-contour-2018
@@ -1091,7 +1091,7 @@ taiwan-contour-2018: ele_taiwan_10_100_500-2018.pbf
 ele_taiwan_10_100_500-2018.pbf: \
   moi-2018/dem2018-contour.pbf \
   moi-2016/penghu-contour.pbf \
-  aw3d30-2.1/islands-10_100_500-contour.pbf
+  aw3d30/islands-10_100_500-contour.pbf
 	## taiwan main island
 	osmium renumber \
 		-s 7000000000,4000000000,0 \
@@ -1100,7 +1100,7 @@ ele_taiwan_10_100_500-2018.pbf: \
 	## penghu
 	tools/osium-append.sh $@ moi-2016/penghu-contour.pbf
 	## islands: kinmen, matsu, n3islets, wuqiu
-	tools/osium-append.sh $@ aw3d30-2.1/islands-10_100_500-contour.pbf
+	tools/osium-append.sh $@ aw3d30/islands-10_100_500-contour.pbf
 
 
 .PHONY: taiwan-contour-mix
@@ -1113,7 +1113,7 @@ ele_taiwan_10_50_100_500_mix-2016.pbf: \
   precompiled/taiwan-sealand.pbf \
   moi-2016/taiwan-10_50_100_500-contour.pbf \
   moi-2016/penghu-10_50_100_500-contour.pbf \
-  aw3d30-2.1/islands-10_50_100_500-contour.pbf \
+  aw3d30/islands-10_50_100_500-contour.pbf \
   moi-2016/marker-contour.pbf
 	## taiwan sea & land
 	osmium renumber \
@@ -1125,7 +1125,7 @@ ele_taiwan_10_50_100_500_mix-2016.pbf: \
 	## penghu
 	tools/osium-append.sh $@ moi-2016/penghu-10_50_100_500-contour.pbf
 	## islands: kinmen, matsu, n3islets, wuqiu
-	tools/osium-append.sh $@ aw3d30-2.1/islands-10_50_100_500-contour.pbf
+	tools/osium-append.sh $@ aw3d30/islands-10_50_100_500-contour.pbf
 	## marker
 	tools/osium-append.sh $@ moi-2016/marker-contour.pbf
 
@@ -1136,7 +1136,7 @@ ele_taiwan_10_100_500_mix-2018.pbf: \
   precompiled/taiwan-sealand.pbf \
   moi-2018/dem2018-contour-sub.pbf \
   moi-2016/penghu-contour.pbf \
-  aw3d30-2.1/islands-10_100_500-contour.pbf \
+  aw3d30/islands-10_100_500-contour.pbf \
   moi-2018/marker-contour.pbf
 	## taiwan sea & land
 	osmium renumber \
@@ -1148,7 +1148,7 @@ ele_taiwan_10_100_500_mix-2018.pbf: \
 	## penghu
 	tools/osium-append.sh $@ moi-2016/penghu-contour.pbf
 	## islands: kinmen, matsu, n3islets, wuqiu
-	tools/osium-append.sh $@ aw3d30-2.1/islands-10_100_500-contour.pbf
+	tools/osium-append.sh $@ aw3d30/islands-10_100_500-contour.pbf
 	## marker
 	tools/osium-append.sh $@ moi-2018/marker-contour.pbf
 
@@ -1163,7 +1163,7 @@ ele_taiwan_20_100_500_mix-2016.pbf: \
   precompiled/taiwan-sealand.pbf \
   moi-2016/taiwan-20_100_500-contour.pbf \
   moi-2016/penghu-20_100_500-contour.pbf \
-  aw3d30-2.1/islands-20_100_500-contour.pbf \
+  aw3d30/islands-20_100_500-contour.pbf \
   moi-2016/marker-contour.pbf
 	## taiwan sea & land
 	osmium renumber \
@@ -1175,7 +1175,7 @@ ele_taiwan_20_100_500_mix-2016.pbf: \
 	## penghu
 	tools/osium-append.sh $@ moi-2016/penghu-20_100_500-contour.pbf
 	## islands: kinmen, matsu, n3islets, wuqiu
-	tools/osium-append.sh $@ aw3d30-2.1/islands-20_100_500-contour.pbf
+	tools/osium-append.sh $@ aw3d30/islands-20_100_500-contour.pbf
 	## marker
 	tools/osium-append.sh $@ moi-2016/marker-contour.pbf
 
@@ -1186,7 +1186,7 @@ ele_taiwan_20_100_500_mix-2018.pbf: \
   precompiled/taiwan-sealand.pbf \
   moi-2018/dem2018-lite-contour.pbf \
   moi-2016/penghu-lite-contour.pbf \
-  aw3d30-2.1/islands-20_100_500-contour.pbf \
+  aw3d30/islands-20_100_500-contour.pbf \
   moi-2018/marker-contour.pbf
 	## taiwan sea & land
 	osmium renumber \
@@ -1198,6 +1198,6 @@ ele_taiwan_20_100_500_mix-2018.pbf: \
 	## penghu
 	tools/osium-append.sh $@ moi-2016/penghu-lite-contour.pbf
 	## islands: kinmen, matsu, n3islets, wuqiu
-	tools/osium-append.sh $@ aw3d30-2.1/islands-20_100_500-contour.pbf
+	tools/osium-append.sh $@ aw3d30/islands-20_100_500-contour.pbf
 	## marker
 	tools/osium-append.sh $@ moi-2018/marker-contour.pbf
