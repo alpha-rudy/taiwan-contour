@@ -32,7 +32,7 @@ moi-2016/penghu-10_100_500-contour.pbf: moi-2016/phDEM_20m-zero.tif
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
 		--max-nodes-per-way=2000 \
-		--simplifyContoursEpsilon=0.00002 \
+		--simplifyContoursEpsilon=0.00001 \
 		--void-range-max=-500 \
 		--pbf \
 		$^
@@ -238,7 +238,7 @@ moi-2018/dem2018-contour.pbf: moi-2018/DEM_20m-zero.tif
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
 		--max-nodes-per-way=2000 \
-		--simplifyContoursEpsilon=0.00002 \
+		--simplifyContoursEpsilon=0.00001 \
 		--void-range-max=-500 \
 		--pbf \
 		$^
@@ -342,7 +342,7 @@ aw3d30/n3islets-contour.pbf: aw3d30/n3islets-zero.tif
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
 		--max-nodes-per-way=2000 \
-		--simplifyContoursEpsilon=0.00005 \
+		--simplifyContoursEpsilon=0.000025 \
 		--void-range-max=-500 \
 		--pbf \
 		$^
@@ -408,7 +408,7 @@ aw3d30/matsu-contour.pbf: aw3d30/matsu-zero.tif
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
 		--max-nodes-per-way=2000 \
-		--simplifyContoursEpsilon=0.00005 \
+		--simplifyContoursEpsilon=0.000025 \
 		--void-range-max=-500 \
 		--pbf \
 		$^
@@ -472,7 +472,7 @@ aw3d30/wuqiu-contour.pbf: aw3d30/wuqiu-zero.tif
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
 		--max-nodes-per-way=2000 \
-		--simplifyContoursEpsilon=0.00005 \
+		--simplifyContoursEpsilon=0.000025 \
 		--void-range-max=-500 \
 		--pbf \
 		$^
@@ -536,7 +536,7 @@ aw3d30/kinmen-contour.pbf: aw3d30/kinmen-zero.tif
 		--start-way-id=0 \
 		--max-nodes-per-tile=0 \
 		--max-nodes-per-way=2000 \
-		--simplifyContoursEpsilon=0.00005 \
+		--simplifyContoursEpsilon=0.000025 \
 		--void-range-max=-500 \
 		--pbf \
 		$^
