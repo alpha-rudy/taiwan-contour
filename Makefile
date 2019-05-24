@@ -19,15 +19,6 @@ clean:
 OUTPUTS=-co compress=LZW -of GTiff
 NODATA_VALUE=-999
 
-.PHONY: dem2016-zero
-dem2016-zero: moi-2016/.unzip
-moi-2016/.unzip: 
-	cd moi-2016/ && \
-	7za x dem_20m.7z.001 && \
-	mv dem_20m-wgs84v3.tif dem_20m-zero.tif && \
-	mv Penghu_20m-wgs84-v2.tif penghu_20m-zero.tif
-	touch $@
-
 
 moi-2019/penghu-10_100_500-contour.pbf: moi-2019/phDEM_20m-zero.tif
 	phyghtmap \
@@ -48,27 +39,6 @@ moi-2019/penghu-10_100_500-contour.pbf: moi-2019/phDEM_20m-zero.tif
 	mv penghu_contour* $@
 
 
-.PHONY: penghu-contour
-penghu-contour: moi-2016/penghu-contour.pbf
-moi-2016/penghu-contour.pbf: moi-2016/.unzip
-	phyghtmap \
-		--step=10 \
-		--no-zero-contour \
-		--output-prefix=penghu_contour \
-		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
-		--simplifyContoursEpsilon=0.00002 \
-		--void-range-max=-500 \
-		--pbf \
-		moi-2016/penghu_20m-zero.tif
-	mv penghu_contour* $@
-
-
 moi-2019/penghu-20_100_500-contour.pbf: moi-2019/phDEM_20m-zero.tif
 	phyghtmap \
 		--step=20 \
@@ -85,25 +55,6 @@ moi-2019/penghu-20_100_500-contour.pbf: moi-2019/phDEM_20m-zero.tif
 		--void-range-max=-500 \
 		--pbf \
 		$^
-	mv penghu_lite_contour* $@
-
-
-moi-2016/penghu-lite-contour.pbf: moi-2016/.unzip
-	phyghtmap \
-		--step=20 \
-		--no-zero-contour \
-		--output-prefix=penghu_lite_contour \
-		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
-		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
-		--pbf \
-		moi-2016/penghu_20m-zero.tif
 	mv penghu_lite_contour* $@
 
 
@@ -158,14 +109,14 @@ moi-2018/DEM_20m-wgs84.tif: moi-2018/DEM_20m.tif
 	  $@
 
 
-moi-2018/from2016.tif: moi-2016/.unzip
+moi-2018/from2019.tif: moi-2019/dem_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
 		-crop_to_cutline \
 		-cutline moi-2018/void_area.shp \
-		moi-2016/dem_20m-zero.tif \
+		$^ \
 		$@
 
 
@@ -189,7 +140,7 @@ moi-2019/dem_20m-nodata.tif: moi-2019/dem_20m-wgs84.tif
 
 .PHONY: dem2018-nodata
 dem2018-nodata: moi-2018/DEM_20m-nodata.tif
-moi-2018/DEM_20m-nodata.tif: moi-2018/from2016.tif moi-2018/DEM_20m-wgs84.tif
+moi-2018/DEM_20m-nodata.tif: moi-2018/from2019.tif moi-2018/DEM_20m-wgs84.tif
 	rm -f $@
 	gdal_merge.py \
 		$(OUTPUTS) \
@@ -1139,7 +1090,7 @@ ele_taiwan_10_100_500-2019.pbf: \
 taiwan-contour-2018: ele_taiwan_10_100_500-2018.pbf
 ele_taiwan_10_100_500-2018.pbf: \
   moi-2018/dem2018-contour.pbf \
-  moi-2016/penghu-contour.pbf \
+  moi-2019/penghu-contour.pbf \
   aw3d30-2.1/islands-10_100_500-contour.pbf
 	## taiwan main island
 	osmium renumber \
@@ -1147,7 +1098,7 @@ ele_taiwan_10_100_500-2018.pbf: \
 		moi-2018/dem2018-contour.pbf \
 		-Oo $@
 	## penghu
-	tools/osium-append.sh $@ moi-2016/penghu-contour.pbf
+	tools/osium-append.sh $@ moi-2019/penghu-contour.pbf
 	## islands: kinmen, matsu, n3islets, wuqiu
 	tools/osium-append.sh $@ aw3d30-2.1/islands-10_100_500-contour.pbf
 
@@ -1184,7 +1135,7 @@ taiwan-contour-mix-2018: ele_taiwan_10_100_500_mix-2018.pbf
 ele_taiwan_10_100_500_mix-2018.pbf: \
   precompiled/taiwan-sealand.pbf \
   moi-2018/dem2018-contour-sub.pbf \
-  moi-2016/penghu-contour.pbf \
+  moi-2019/penghu-contour.pbf \
   aw3d30-2.1/islands-10_100_500-contour.pbf \
   moi-2018/marker-contour.pbf
 	## taiwan sea & land
@@ -1195,7 +1146,7 @@ ele_taiwan_10_100_500_mix-2018.pbf: \
 	## taiwan main island
 	tools/osium-append.sh $@ moi-2018/dem2018-contour-sub.pbf
 	## penghu
-	tools/osium-append.sh $@ moi-2016/penghu-contour.pbf
+	tools/osium-append.sh $@ moi-2019/penghu-contour.pbf
 	## islands: kinmen, matsu, n3islets, wuqiu
 	tools/osium-append.sh $@ aw3d30-2.1/islands-10_100_500-contour.pbf
 	## marker
@@ -1234,7 +1185,7 @@ taiwan-lite-contour-mix-2018: ele_taiwan_20_100_500_mix-2018.pbf
 ele_taiwan_20_100_500_mix-2018.pbf: \
   precompiled/taiwan-sealand.pbf \
   moi-2018/dem2018-lite-contour.pbf \
-  moi-2016/penghu-lite-contour.pbf \
+  moi-2019/penghu-lite-contour.pbf \
   aw3d30-2.1/islands-20_100_500-contour.pbf \
   moi-2018/marker-contour.pbf
 	## taiwan sea & land
@@ -1245,7 +1196,7 @@ ele_taiwan_20_100_500_mix-2018.pbf: \
 	## taiwan main island
 	tools/osium-append.sh $@ moi-2018/dem2018-lite-contour.pbf
 	## penghu
-	tools/osium-append.sh $@ moi-2016/penghu-lite-contour.pbf
+	tools/osium-append.sh $@ moi-2019/penghu-lite-contour.pbf
 	## islands: kinmen, matsu, n3islets, wuqiu
 	tools/osium-append.sh $@ aw3d30-2.1/islands-20_100_500-contour.pbf
 	## marker
