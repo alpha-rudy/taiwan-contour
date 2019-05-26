@@ -66,8 +66,6 @@ moi-2016/.unzip: moi-2016/dem_20m.7z.001
 	touch $@
 
 
-.POHNY: dem2018-orig
-dem2018-orig: moi-2018/.unzip
 moi-2018/DEM_20m.tif:
 	cd moi-2018/ && \
 	7za x DEM_20m.7z.001
@@ -96,8 +94,6 @@ moi-2016/dem_20m-wgs84.tif: moi-2016/dem_20m.tif
 	  $@
 
 
-.PHONY: dem2018-wgs84
-dem2018-wgs84: moi-2018/DEM_20m-wgs84.tif
 moi-2018/DEM_20m-wgs84.tif: moi-2018/DEM_20m.tif
 	rm -f $@
 	gdalwarp \
@@ -138,8 +134,6 @@ moi-2016/dem_20m-nodata.tif: moi-2016/dem_20m-wgs84.tif
 		-o $@
 
 
-.PHONY: dem2018-nodata
-dem2018-nodata: moi-2018/DEM_20m-nodata.tif
 moi-2018/DEM_20m-nodata.tif: moi-2018/from2016.tif moi-2018/DEM_20m-wgs84.tif
 	rm -f $@
 	gdal_merge.py \
@@ -194,8 +188,6 @@ moi-2016/dem_20m-zero.tif: moi-2016/dem_20m-nodata0.tif
 		$@
 
 
-.PHONY: dem2018-zero
-dem2018-zero: moi-2018/DEM_20m-zero.tif
 moi-2018/DEM_20m-zero.tif: moi-2018/DEM_20m-nodata0.tif
 	rm -f $@
 	gdal_translate \
@@ -224,8 +216,6 @@ moi-2016/taiwan-10_100_500-contour.pbf: moi-2016/dem_20m-zero.tif
 	mv dem_contour* $@
 
 
-.PHONY: dem2018-contour
-dem2018-contour: moi-2018/taiwan-10_100_500-contour.pbf
 moi-2018/taiwan-10_100_500-contour.pbf: moi-2018/DEM_20m-zero.tif
 	phyghtmap \
 		--step=10 \
@@ -279,7 +269,7 @@ moi-2016/taiwan-20_100_500-contour.pbf: moi-2016/dem_20m-zero.tif
 	mv dem_lite_contour* $@
 
 
-moi-2018/dem2018-20_100_500-contour.pbf: moi-2018/DEM_20m-zero.tif
+moi-2018/taiwan-20_100_500-contour.pbf: moi-2018/DEM_20m-zero.tif
 	phyghtmap \
 		--step=20 \
 		--no-zero-contour \
@@ -826,9 +816,7 @@ moi-2016/taiwan_1280m-contour.pbf: moi-2016/dem_1280m-zero.tif
 		-o=$@
 
 
-.PHONY: dem2018_40m-contour
-dem2018_40m-contour: moi-2018/dem2018_40m-contour.pbf
-moi-2018/dem2018_40m-contour.pbf: moi-2018/DEM_40m-zero.tif
+moi-2018/taiwan_40m-contour.pbf: moi-2018/DEM_40m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--no-zero-contour \
@@ -851,9 +839,7 @@ moi-2018/dem2018_40m-contour.pbf: moi-2018/DEM_40m-zero.tif
 		-o=$@
 
 
-.PHONY: dem2018_80m-contour
-dem2018_80m-contour: moi-2018/dem2018_80m-contour.pbf
-moi-2018/dem2018_80m-contour.pbf: moi-2018/DEM_80m-zero.tif
+moi-2018/taiwan_80m-contour.pbf: moi-2018/DEM_80m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--no-zero-contour \
@@ -876,9 +862,7 @@ moi-2018/dem2018_80m-contour.pbf: moi-2018/DEM_80m-zero.tif
 		-o=$@
 
 
-.PHONY: dem2018_160m-contour
-dem2018_160m-contour: moi-2018/dem2018_160m-contour.pbf
-moi-2018/dem2018_160m-contour.pbf: moi-2018/DEM_160m-zero.tif
+moi-2018/taiwan_160m-contour.pbf: moi-2018/DEM_160m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--no-zero-contour \
@@ -901,9 +885,7 @@ moi-2018/dem2018_160m-contour.pbf: moi-2018/DEM_160m-zero.tif
 		-o=$@
 
 
-.PHONY: dem2018_320m-contour
-dem2018_320m-contour: moi-2018/dem2018_320m-contour.pbf
-moi-2018/dem2018_320m-contour.pbf: moi-2018/DEM_320m-zero.tif
+moi-2018/taiwan_320m-contour.pbf: moi-2018/DEM_320m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--no-zero-contour \
@@ -926,9 +908,7 @@ moi-2018/dem2018_320m-contour.pbf: moi-2018/DEM_320m-zero.tif
 		-o=$@
 
 
-.PHONY: dem2018_640m-contour
-dem2018_640m-contour: moi-2018/dem2018_640m-contour.pbf
-moi-2018/dem2018_640m-contour.pbf: moi-2018/DEM_640m-zero.tif
+moi-2018/taiwan_640m-contour.pbf: moi-2018/DEM_640m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--no-zero-contour \
@@ -951,9 +931,7 @@ moi-2018/dem2018_640m-contour.pbf: moi-2018/DEM_640m-zero.tif
 		-o=$@
 
 
-.PHONY: dem2018_1280m-contour
-dem2018_1280m-contour: moi-2018/dem2018_1280m-contour.pbf
-moi-2018/dem2018_1280m-contour.pbf: moi-2018/DEM_1280m-zero.tif
+moi-2018/taiwan_1280m-contour.pbf: moi-2018/DEM_1280m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--no-zero-contour \
@@ -1042,27 +1020,27 @@ moi-2016/marker-contour.pbf: \
 
 
 moi-2018/marker-contour.pbf: \
-  moi-2018/dem2018_40m-contour.pbf \
-  moi-2018/dem2018_80m-contour.pbf \
-  moi-2018/dem2018_160m-contour.pbf \
-  moi-2018/dem2018_320m-contour.pbf \
-  moi-2018/dem2018_640m-contour.pbf \
-  moi-2018/dem2018_1280m-contour.pbf
+  moi-2018/taiwan_40m-contour.pbf \
+  moi-2018/taiwan_80m-contour.pbf \
+  moi-2018/taiwan_160m-contour.pbf \
+  moi-2018/taiwan_320m-contour.pbf \
+  moi-2018/taiwan_640m-contour.pbf \
+  moi-2018/taiwan_1280m-contour.pbf
 	## 40m
 	osmium renumber \
 		-s 1,1,0 \
-		moi-2018/dem2018_40m-contour.pbf \
+		moi-2018/taiwan_40m-contour.pbf \
 		-Oo $@
 	## 80m
-	tools/osium-append.sh $@ moi-2018/dem2018_80m-contour.pbf
+	tools/osium-append.sh $@ moi-2018/taiwan_80m-contour.pbf
 	## 160m
-	tools/osium-append.sh $@ moi-2018/dem2018_160m-contour.pbf
+	tools/osium-append.sh $@ moi-2018/taiwan_160m-contour.pbf
 	## 320m
-	tools/osium-append.sh $@ moi-2018/dem2018_320m-contour.pbf
+	tools/osium-append.sh $@ moi-2018/taiwan_320m-contour.pbf
 	## 640m
-	tools/osium-append.sh $@ moi-2018/dem2018_640m-contour.pbf
+	tools/osium-append.sh $@ moi-2018/taiwan_640m-contour.pbf
 	## 1280m
-	tools/osium-append.sh $@ moi-2018/dem2018_1280m-contour.pbf
+	tools/osium-append.sh $@ moi-2018/taiwan_1280m-contour.pbf
 
 
 .PHONY: taiwan-contour
@@ -1184,7 +1162,7 @@ ele_taiwan_20_100_500_mix-2016.pbf: \
 taiwan-lite-contour-mix-2018: ele_taiwan_20_100_500_mix-2018.pbf
 ele_taiwan_20_100_500_mix-2018.pbf: \
   precompiled/taiwan-sealand.pbf \
-  moi-2018/dem2018-20_100_500-contour.pbf \
+  moi-2018/taiwan-20_100_500-contour.pbf \
   moi-2016/penghu-20_100_500-contour.pbf \
   aw3d30/islands-20_100_500-contour.pbf \
   moi-2018/marker-contour.pbf
@@ -1194,7 +1172,7 @@ ele_taiwan_20_100_500_mix-2018.pbf: \
 	    precompiled/taiwan-sealand.pbf \
 	    -Oo $@
 	## taiwan main island
-	tools/osium-append.sh $@ moi-2018/dem2018-20_100_500-contour.pbf
+	tools/osium-append.sh $@ moi-2018/taiwan-20_100_500-contour.pbf
 	## penghu
 	tools/osium-append.sh $@ moi-2016/penghu-20_100_500-contour.pbf
 	## islands: kinmen, matsu, n3islets, wuqiu
