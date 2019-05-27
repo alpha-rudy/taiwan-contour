@@ -16,8 +16,9 @@ all: taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
 clean:
 	git clean -fdx
 
-OUTPUTS=-co compress=LZW -of GTiff
+OUTPUTS=-ot Float64 -co compress=LZW -of GTiff
 NODATA_VALUE=-999
+WORKING_TYPE=Float64
 
 
 moi-2016/penghu-10_100_500-contour.pbf: moi-2016/phDEM_20m-zero.tif
@@ -78,6 +79,7 @@ moi-2016/phDEM_20m-wgs84.tif: moi-2016/phDEM_20m_119.tif
 		$(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 		-t_srs 'EPSG:4326' \
 	  $^ \
 	  $@
@@ -89,6 +91,7 @@ moi-2016/dem_20m-wgs84.tif: moi-2016/dem_20m.tif
 		$(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 		-t_srs 'EPSG:4326' \
 	  $^ \
 	  $@
@@ -100,6 +103,7 @@ moi-2018/DEM_20m-wgs84.tif: moi-2018/DEM_20m.tif
 		$(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 		-t_srs 'EPSG:4326' \
 	  $^ \
 	  $@
@@ -561,6 +565,7 @@ moi-2016/dem_40m-zero.tif: moi-2016/dem_20m-zero.tif
 		-dstnodata $(NODATA_VALUE) \
 		-ts 5490 0 \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
@@ -571,6 +576,7 @@ moi-2016/dem_80m-zero.tif: moi-2016/dem_20m-zero.tif
 		-dstnodata $(NODATA_VALUE) \
 		-ts 2745 0 \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
@@ -581,6 +587,7 @@ moi-2016/dem_160m-zero.tif: moi-2016/dem_20m-zero.tif
 		-dstnodata $(NODATA_VALUE) \
 		-ts 1372 0 \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
@@ -591,6 +598,7 @@ moi-2016/dem_320m-zero.tif: moi-2016/dem_20m-zero.tif
 		-dstnodata $(NODATA_VALUE) \
 		-ts 686 0 \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
@@ -601,6 +609,7 @@ moi-2016/dem_640m-zero.tif: moi-2016/dem_20m-zero.tif
 		-dstnodata $(NODATA_VALUE) \
 		-ts 343 0 \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
@@ -612,6 +621,7 @@ moi-2016/dem_1280m-zero.tif: moi-2016/dem_20m-zero.tif
 		-dstnodata $(NODATA_VALUE) \
 		-ts 172 0 \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
@@ -623,6 +633,7 @@ moi-2018/DEM_40m-zero.tif: moi-2018/DEM_20m-zero.tif
 		-dstnodata $(NODATA_VALUE) \
 		-ts 5414 0 \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
@@ -633,6 +644,7 @@ moi-2018/DEM_80m-zero.tif: moi-2018/DEM_20m-zero.tif
 		-dstnodata $(NODATA_VALUE) \
 		-ts 2707 0 \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
@@ -643,6 +655,7 @@ moi-2018/DEM_160m-zero.tif: moi-2018/DEM_20m-zero.tif
 		-dstnodata $(NODATA_VALUE) \
 		-ts 1353 0 \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
@@ -653,6 +666,7 @@ moi-2018/DEM_320m-zero.tif: moi-2018/DEM_20m-zero.tif
 		-dstnodata $(NODATA_VALUE) \
 		-ts 677 0 \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
@@ -663,6 +677,7 @@ moi-2018/DEM_640m-zero.tif: moi-2018/DEM_20m-zero.tif
 		-dstnodata $(NODATA_VALUE) \
 		-ts 338 0 \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
@@ -674,6 +689,7 @@ moi-2018/DEM_1280m-zero.tif: moi-2018/DEM_20m-zero.tif
 		-dstnodata $(NODATA_VALUE) \
 		-ts 169 0 \
 		-r bilinear \
+		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
