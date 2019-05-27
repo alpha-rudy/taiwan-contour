@@ -245,7 +245,7 @@ moi-2016/taiwan-10_50_100_500-contour.pbf: moi-2016/taiwan-10_100_500-contour.pb
 	python3 tools/elevation_sub.py $< $@
 
 
-moi-2018/taiwan-10_50_100_500-contour.pbf.pbf: moi-2018/taiwan-10_100_500-contour.pbf
+moi-2018/taiwan-10_50_100_500-contour.pbf: moi-2018/taiwan-10_100_500-contour.pbf
 	rm -f $@
 	python3 tools/elevation_sub.py $< $@
 
@@ -1112,7 +1112,7 @@ ele_taiwan_10_50_100_500_mix-2016.pbf: \
 taiwan-contour-mix-2018: ele_taiwan_10_100_500_mix-2018.pbf
 ele_taiwan_10_100_500_mix-2018.pbf: \
   precompiled/taiwan-sealand.pbf \
-  moi-2018/taiwan-10_50_100_500-contour.pbf.pbf \
+  moi-2018/taiwan-10_50_100_500-contour.pbf \
   moi-2016/penghu-10_50_100_500-contour.pbf \
   aw3d30/islands-10_50_100_500-contour.pbf \
   moi-2018/marker-contour.pbf
@@ -1122,7 +1122,7 @@ ele_taiwan_10_100_500_mix-2018.pbf: \
 	    precompiled/taiwan-sealand.pbf \
 	    -Oo $@
 	## taiwan main island
-	tools/osium-append.sh $@ moi-2018/taiwan-10_50_100_500-contour.pbf.pbf
+	tools/osium-append.sh $@ moi-2018/taiwan-10_50_100_500-contour.pbf
 	## penghu
 	tools/osium-append.sh $@ moi-2016/penghu-10_50_100_500-contour.pbf
 	## islands: kinmen, matsu, n3islets, wuqiu
