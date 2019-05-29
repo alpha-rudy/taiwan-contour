@@ -10,7 +10,7 @@ vrtfile=./input.vrt
 
 gdalbuildvrt -overwrite -srcnodata -9999 -vrtnodata -9999 ${vrtfile} ${INPUT_DIR}/*_DSM.tif
 
-res=`echo 1/3600/2 |bc -l`
+res=`echo 1/1200/2 |bc -l`
 for aw3d30 in  ${INPUT_DIR}/*_DSM.tif
 do
    [ -f "${aw3d30}" ] || continue
@@ -25,7 +25,7 @@ do
    ymin=`echo ${ymin}-${res} | bc`
    xmax=`echo ${xmax}+${res} | bc`
    ymax=`echo ${ymax}+${res} | bc`
-   gdalwarp -te ${xmin} ${ymin} ${xmax} ${ymax} -dstnodata -9999 -ts 3601 3601 -r bilinear ${vrtfile} ${OUTPUT_DIR}/${srtm}-nodata.tif
+   gdalwarp -wt Float64 -ot Int16 -te ${xmin} ${ymin} ${xmax} ${ymax} -dstnodata -9999 -ts 1201 1201 -r bilinear ${vrtfile} ${OUTPUT_DIR}/${srtm}-nodata.tif
    gdal_calc.py --NoDataValue=0 --calc="(A > 0) * A" -A ${OUTPUT_DIR}/${srtm}-nodata.tif --outfile=${OUTPUT_DIR}/${srtm}-nodata0.tif
    gdal_translate ${OUTPUT_DIR}/${srtm}-nodata0.tif -a_nodata none -of SRTMHGT ${OUTPUT_DIR}/${srtm}
    rm -f ${OUTPUT_DIR}/${srtm}.tif ${OUTPUT_DIR}/${srtm}-nodata.tif ${OUTPUT_DIR}/${srtm}-nodata0.tif
