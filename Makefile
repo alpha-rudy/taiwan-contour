@@ -20,21 +20,24 @@ OUTPUTS=-ot Float64 -co compress=LZW -of GTiff
 NODATA_VALUE=-999
 WORKING_TYPE=Float64
 
+PHYGHT_OPTIONS = \
+	--no-zero-contour \
+	--jobs=8 \
+	--osm-version=0.6 \
+	--start-node-id=1 \
+	--start-way-id=1 \
+	--max-nodes-per-tile=0 \
+	--max-nodes-per-way=2000 \
+	--void-range-max=-50
+
 
 moi-2016/penghu-10_100_500-contour.pbf: moi-2016/phDEM_20m-zero.tif
 	phyghtmap \
 		--step=10 \
-		--no-zero-contour \
 		--output-prefix=penghu_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00001 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv penghu_contour* $@
@@ -43,17 +46,10 @@ moi-2016/penghu-10_100_500-contour.pbf: moi-2016/phDEM_20m-zero.tif
 moi-2016/penghu-20_100_500-contour.pbf: moi-2016/phDEM_20m-zero.tif
 	phyghtmap \
 		--step=20 \
-		--no-zero-contour \
 		--output-prefix=penghu_lite_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv penghu_lite_contour* $@
@@ -204,17 +200,10 @@ moi-2018/DEM_20m-zero.tif: moi-2018/DEM_20m-nodata0.tif
 moi-2016/taiwan-10_100_500-contour.pbf: moi-2016/dem_20m-zero.tif
 	phyghtmap \
 		--step=10 \
-		--no-zero-contour \
 		--output-prefix=dem_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.000002 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv dem_contour* $@
@@ -223,17 +212,10 @@ moi-2016/taiwan-10_100_500-contour.pbf: moi-2016/dem_20m-zero.tif
 moi-2018/taiwan-10_100_500-contour.pbf: moi-2018/DEM_20m-zero.tif
 	phyghtmap \
 		--step=10 \
-		--no-zero-contour \
 		--output-prefix=dem_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00001 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv dem_contour* $@
@@ -257,17 +239,10 @@ moi-2018/taiwan-10_50_100_500-contour.pbf: moi-2018/taiwan-10_100_500-contour.pb
 moi-2016/taiwan-20_100_500-contour.pbf: moi-2016/dem_20m-zero.tif
 	phyghtmap \
 		--step=20 \
-		--no-zero-contour \
 		--output-prefix=dem_lite_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.000005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv dem_lite_contour* $@
@@ -276,17 +251,10 @@ moi-2016/taiwan-20_100_500-contour.pbf: moi-2016/dem_20m-zero.tif
 moi-2018/taiwan-20_100_500-contour.pbf: moi-2018/DEM_20m-zero.tif
 	phyghtmap \
 		--step=20 \
-		--no-zero-contour \
 		--output-prefix=dem_lite_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv dem_lite_contour* $@
@@ -327,17 +295,10 @@ n3islets-contour: aw3d30/n3islets-10_50_100-contour.pbf
 aw3d30/n3islets-10_50_100-contour.pbf: aw3d30/n3islets-zero.tif
 	phyghtmap \
 		--step=10 \
-		--no-zero-contour \
 		--output-prefix=n3islets_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.000025 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv n3islets_contour* $@
@@ -348,17 +309,10 @@ n3islets-lite-contour: aw3d30/n3islets-20_50_100-contour.pbf
 aw3d30/n3islets-20_50_100-contour.pbf: aw3d30/n3islets-zero.tif
 	phyghtmap \
 		--step=20 \
-		--no-zero-contour \
 		--output-prefix=n3islets_lite_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.000125 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv n3islets_lite_contour* $@
@@ -393,17 +347,9 @@ matsu-contour: aw3d30/matsu-10_50_100-contour.pbf
 aw3d30/matsu-10_50_100-contour.pbf: aw3d30/matsu-zero.tif
 	phyghtmap \
 		--step=10 \
-		--no-zero-contour \
 		--output-prefix=matsu_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.000025 \
-		--void-range-max=-500 \
 		--pbf \
 		$^
 	mv matsu_contour* $@
@@ -414,17 +360,10 @@ matsu-lite-contour: aw3d30/matsu-20_50_100-contour.pbf
 aw3d30/matsu-20_50_100-contour.pbf: aw3d30/matsu-zero.tif
 	phyghtmap \
 		--step=20 \
-		--no-zero-contour \
 		--output-prefix=matsu_lite_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.000125 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv matsu_lite_contour* $@
@@ -457,17 +396,10 @@ wuqiu-contour: aw3d30/wuqiu-10_50_100-contour.pbf
 aw3d30/wuqiu-10_50_100-contour.pbf: aw3d30/wuqiu-zero.tif
 	phyghtmap \
 		--step=10 \
-		--no-zero-contour \
 		--output-prefix=wuqiu_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.000025 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv wuqiu_contour* $@
@@ -478,17 +410,10 @@ wuqiu-lite-contour: aw3d30/wuqiu-20_50_100-contour.pbf
 aw3d30/wuqiu-20_50_100-contour.pbf: aw3d30/wuqiu-zero.tif
 	phyghtmap \
 		--step=20 \
-		--no-zero-contour \
 		--output-prefix=wuqiu_lite_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.000125 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv wuqiu_lite_contour* $@
@@ -521,17 +446,10 @@ kinmen-contour: aw3d30/kinmen-10_50_100-contour.pbf
 aw3d30/kinmen-10_50_100-contour.pbf: aw3d30/kinmen-zero.tif
 	phyghtmap \
 		--step=10 \
-		--no-zero-contour \
 		--output-prefix=kinmen_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.000025 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv kinmen_contour* $@
@@ -542,17 +460,10 @@ kinmen-lite-contour: aw3d30/kinmen-20_50_100-contour.pbf
 aw3d30/kinmen-20_50_100-contour.pbf: aw3d30/kinmen-zero.tif
 	phyghtmap \
 		--step=20 \
-		--no-zero-contour \
 		--output-prefix=kinmen_lite_contour \
 		--line-cat=500,100 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.000125 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
 	mv kinmen_lite_contour* $@
@@ -697,17 +608,10 @@ moi-2018/DEM_1280m-zero.tif: moi-2018/DEM_20m-zero.tif
 moi-2016/taiwan_40m-contour.pbf: moi-2016/dem_40m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--no-zero-contour \
 		--output-prefix=dem_40m_contour \
 		--line-cat=1000,500 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		$^
 	mv dem_40m_contour* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_40m/g' -i $(@:.pbf=.osm)
@@ -720,17 +624,10 @@ moi-2016/taiwan_40m-contour.pbf: moi-2016/dem_40m-zero.tif
 moi-2016/taiwan_80m-contour.pbf: moi-2016/dem_80m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--no-zero-contour \
 		--output-prefix=dem_80m_contour \
 		--line-cat=1000,500 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		$^
 	mv dem_80m_contour* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_80m/g' -i $(@:.pbf=.osm)
@@ -743,17 +640,10 @@ moi-2016/taiwan_80m-contour.pbf: moi-2016/dem_80m-zero.tif
 moi-2016/taiwan_160m-contour.pbf: moi-2016/dem_160m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--no-zero-contour \
 		--output-prefix=dem_160m_contour \
 		--line-cat=1000,500 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		$^
 	mv dem_160m_contour* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_160m/g' -i $(@:.pbf=.osm)
@@ -766,17 +656,10 @@ moi-2016/taiwan_160m-contour.pbf: moi-2016/dem_160m-zero.tif
 moi-2016/taiwan_320m-contour.pbf: moi-2016/dem_320m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--no-zero-contour \
 		--output-prefix=dem_320m_contour \
 		--line-cat=1000,500 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		$^
 	mv dem_320m_contour* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_320m/g' -i $(@:.pbf=.osm)
@@ -789,17 +672,10 @@ moi-2016/taiwan_320m-contour.pbf: moi-2016/dem_320m-zero.tif
 moi-2016/taiwan_640m-contour.pbf: moi-2016/dem_640m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--no-zero-contour \
 		--output-prefix=dem_640m_contour \
 		--line-cat=1000,500 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		$^
 	mv dem_640m_contour* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_640m/g' -i $(@:.pbf=.osm)
@@ -812,17 +688,10 @@ moi-2016/taiwan_640m-contour.pbf: moi-2016/dem_640m-zero.tif
 moi-2016/taiwan_1280m-contour.pbf: moi-2016/dem_1280m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--no-zero-contour \
 		--output-prefix=dem_1280m_contour \
 		--line-cat=1000,500 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		$^
 	mv dem_1280m_contour* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_1280m/g' -i $(@:.pbf=.osm)
@@ -835,17 +704,10 @@ moi-2016/taiwan_1280m-contour.pbf: moi-2016/dem_1280m-zero.tif
 moi-2018/taiwan_40m-contour.pbf: moi-2018/DEM_40m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--no-zero-contour \
 		--output-prefix=dem_40m_contour \
 		--line-cat=1000,500 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		$^
 	mv dem_40m_contour* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_40m/g' -i $(@:.pbf=.osm)
@@ -858,17 +720,10 @@ moi-2018/taiwan_40m-contour.pbf: moi-2018/DEM_40m-zero.tif
 moi-2018/taiwan_80m-contour.pbf: moi-2018/DEM_80m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--no-zero-contour \
 		--output-prefix=dem_80m_contour \
 		--line-cat=1000,500 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		$^
 	mv dem_80m_contour* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_80m/g' -i $(@:.pbf=.osm)
@@ -881,17 +736,10 @@ moi-2018/taiwan_80m-contour.pbf: moi-2018/DEM_80m-zero.tif
 moi-2018/taiwan_160m-contour.pbf: moi-2018/DEM_160m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--no-zero-contour \
 		--output-prefix=dem_160m_contour \
 		--line-cat=1000,500 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		$^
 	mv dem_160m_contour* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_160m/g' -i $(@:.pbf=.osm)
@@ -904,17 +752,10 @@ moi-2018/taiwan_160m-contour.pbf: moi-2018/DEM_160m-zero.tif
 moi-2018/taiwan_320m-contour.pbf: moi-2018/DEM_320m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--no-zero-contour \
 		--output-prefix=dem_320m_contour \
 		--line-cat=1000,500 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		$^
 	mv dem_320m_contour* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_320m/g' -i $(@:.pbf=.osm)
@@ -927,17 +768,10 @@ moi-2018/taiwan_320m-contour.pbf: moi-2018/DEM_320m-zero.tif
 moi-2018/taiwan_640m-contour.pbf: moi-2018/DEM_640m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--no-zero-contour \
 		--output-prefix=dem_640m_contour \
 		--line-cat=1000,500 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		$^
 	mv dem_640m_contour* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_640m/g' -i $(@:.pbf=.osm)
@@ -946,21 +780,13 @@ moi-2018/taiwan_640m-contour.pbf: moi-2018/DEM_640m-zero.tif
 		$(@:.pbf=.osm) \
 		-o=$@
 
-
 moi-2018/taiwan_1280m-contour.pbf: moi-2018/DEM_1280m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--no-zero-contour \
 		--output-prefix=dem_1280m_contour \
 		--line-cat=1000,500 \
-		--jobs=8 \
-		--osm-version=0.6 \
-		--start-node-id=0 \
-		--start-way-id=0 \
-		--max-nodes-per-tile=0 \
-		--max-nodes-per-way=2000 \
 		--simplifyContoursEpsilon=0.00005 \
-		--void-range-max=-500 \
+		$(PHYGHT_OPTIONS) \
 		$^
 	mv dem_1280m_contour* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_1280m/g' -i $(@:.pbf=.osm)
