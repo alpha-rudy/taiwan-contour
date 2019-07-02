@@ -323,8 +323,8 @@ aw3d30/n3islets-zero.tif: aw3d30/n3islets-data0.tif
 
 
 .PHONY: n3islets-contour
-n3islets-contour: aw3d30/n3islets-contour.pbf
-aw3d30/n3islets-contour.pbf: aw3d30/n3islets-zero.tif
+n3islets-contour: aw3d30/n3islets-10_50_100-contour.pbf
+aw3d30/n3islets-10_50_100-contour.pbf: aw3d30/n3islets-zero.tif
 	phyghtmap \
 		--step=10 \
 		--no-zero-contour \
@@ -344,8 +344,8 @@ aw3d30/n3islets-contour.pbf: aw3d30/n3islets-zero.tif
 
 
 .PHONY: n3islets-lite-contour
-n3islets-lite-contour: aw3d30/n3islets-lite-contour.pbf
-aw3d30/n3islets-lite-contour.pbf: aw3d30/n3islets-zero.tif
+n3islets-lite-contour: aw3d30/n3islets-20_50_100-contour.pbf
+aw3d30/n3islets-20_50_100-contour.pbf: aw3d30/n3islets-zero.tif
 	phyghtmap \
 		--step=20 \
 		--no-zero-contour \
@@ -389,8 +389,8 @@ aw3d30/matsu-zero.tif: aw3d30/matsu-data0.tif
 
 
 .PHONY: matsu-contour
-matsu-contour: aw3d30/matsu-contour.pbf
-aw3d30/matsu-contour.pbf: aw3d30/matsu-zero.tif
+matsu-contour: aw3d30/matsu-10_50_100-contour.pbf
+aw3d30/matsu-10_50_100-contour.pbf: aw3d30/matsu-zero.tif
 	phyghtmap \
 		--step=10 \
 		--no-zero-contour \
@@ -410,8 +410,8 @@ aw3d30/matsu-contour.pbf: aw3d30/matsu-zero.tif
 
 
 .PHONY: matsu-lite-contour
-matsu-lite-contour: aw3d30/matsu-lite-contour.pbf
-aw3d30/matsu-lite-contour.pbf: aw3d30/matsu-zero.tif
+matsu-lite-contour: aw3d30/matsu-20_50_100-contour.pbf
+aw3d30/matsu-20_50_100-contour.pbf: aw3d30/matsu-zero.tif
 	phyghtmap \
 		--step=20 \
 		--no-zero-contour \
@@ -453,8 +453,8 @@ aw3d30/wuqiu-zero.tif: aw3d30/wuqiu-data0.tif
 
 
 .PHONY: wuqiu-contour
-wuqiu-contour: aw3d30/wuqiu-contour.pbf
-aw3d30/wuqiu-contour.pbf: aw3d30/wuqiu-zero.tif
+wuqiu-contour: aw3d30/wuqiu-10_50_100-contour.pbf
+aw3d30/wuqiu-10_50_100-contour.pbf: aw3d30/wuqiu-zero.tif
 	phyghtmap \
 		--step=10 \
 		--no-zero-contour \
@@ -474,8 +474,8 @@ aw3d30/wuqiu-contour.pbf: aw3d30/wuqiu-zero.tif
 
 
 .PHONY: wuqiu-lite-contour
-wuqiu-lite-contour: aw3d30/wuqiu-lite-contour.pbf
-aw3d30/wuqiu-lite-contour.pbf: aw3d30/wuqiu-zero.tif
+wuqiu-lite-contour: aw3d30/wuqiu-20_50_100-contour.pbf
+aw3d30/wuqiu-20_50_100-contour.pbf: aw3d30/wuqiu-zero.tif
 	phyghtmap \
 		--step=20 \
 		--no-zero-contour \
@@ -517,8 +517,8 @@ aw3d30/kinmen-zero.tif: aw3d30/kinmen-data0.tif
 
 
 .PHONY: kinmen-contour
-kinmen-contour: aw3d30/kinmen-contour.pbf
-aw3d30/kinmen-contour.pbf: aw3d30/kinmen-zero.tif
+kinmen-contour: aw3d30/kinmen-10_50_100-contour.pbf
+aw3d30/kinmen-10_50_100-contour.pbf: aw3d30/kinmen-zero.tif
 	phyghtmap \
 		--step=10 \
 		--no-zero-contour \
@@ -538,8 +538,8 @@ aw3d30/kinmen-contour.pbf: aw3d30/kinmen-zero.tif
 
 
 .PHONY: kinmen-lite-contour
-kinmen-lite-contour: aw3d30/kinmen-lite-contour.pbf
-aw3d30/kinmen-lite-contour.pbf: aw3d30/kinmen-zero.tif
+kinmen-lite-contour: aw3d30/kinmen-20_50_100-contour.pbf
+aw3d30/kinmen-20_50_100-contour.pbf: aw3d30/kinmen-zero.tif
 	phyghtmap \
 		--step=20 \
 		--no-zero-contour \
@@ -976,39 +976,53 @@ aw3d30/islands-10_50_100_500-contour.pbf: aw3d30/islands-10_100_500-contour.pbf
 
 
 aw3d30/islands-10_100_500-contour.pbf: \
-  aw3d30/kinmen-contour.pbf \
-  aw3d30/matsu-contour.pbf \
-  aw3d30/n3islets-contour.pbf \
-  aw3d30/wuqiu-contour.pbf
-	## kinmen
-	osmium renumber \
-		-s 1,1,0 \
-		aw3d30/kinmen-contour.pbf \
-		-Oo $@
-	## matsu
-	tools/osium-append.sh $@ aw3d30/matsu-contour.pbf
-	## n3islets
-	tools/osium-append.sh $@ aw3d30/n3islets-contour.pbf
-	## wuqiu
-	tools/osium-append.sh $@ aw3d30/wuqiu-contour.pbf
+  aw3d30/kinmen-10_50_100-contour.pbf \
+  aw3d30/matsu-10_50_100-contour.pbf \
+  aw3d30/n3islets-10_50_100-contour.pbf \
+  aw3d30/wuqiu-10_50_100-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
 
 
 aw3d30/islands-20_100_500-contour.pbf: \
-  aw3d30/kinmen-lite-contour.pbf \
-  aw3d30/matsu-lite-contour.pbf \
-  aw3d30/n3islets-lite-contour.pbf \
-  aw3d30/wuqiu-lite-contour.pbf
-	## kinmen
-	osmium renumber \
-		-s 1,1,0 \
-		aw3d30/kinmen-lite-contour.pbf \
-		-Oo $@
-	## matsu
-	tools/osium-append.sh $@ aw3d30/matsu-lite-contour.pbf
-	## n3islets
-	tools/osium-append.sh $@ aw3d30/n3islets-lite-contour.pbf
-	## wuqiu
-	tools/osium-append.sh $@ aw3d30/wuqiu-lite-contour.pbf
+  aw3d30/kinmen-20_50_100-contour.pbf \
+  aw3d30/matsu-20_50_100-contour.pbf \
+  aw3d30/n3islets-20_50_100-contour.pbf \
+  aw3d30/wuqiu-20_50_100-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
+aw3d30/islands_nokinmen-10_100_500-contour.pbf: \
+  aw3d30/matsu-10_50_100-contour.pbf \
+  aw3d30/n3islets-10_50_100-contour.pbf \
+  aw3d30/wuqiu-10_50_100-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
+aw3d30/islands_nokinmen-20_100_500-contour.pbf: \
+  aw3d30/matsu-20_50_100-contour.pbf \
+  aw3d30/n3islets-20_50_100-contour.pbf \
+  aw3d30/wuqiu-20_50_100-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
 
 
 moi-2016/marker-contour.pbf: \
@@ -1018,21 +1032,12 @@ moi-2016/marker-contour.pbf: \
   moi-2016/taiwan_320m-contour.pbf \
   moi-2016/taiwan_640m-contour.pbf \
   moi-2016/taiwan_1280m-contour.pbf
-	## 40m
-	osmium renumber \
-		-s 1,1,0 \
-		moi-2016/taiwan_40m-contour.pbf \
-		-Oo $@
-	## 80m
-	tools/osium-append.sh $@ moi-2016/taiwan_80m-contour.pbf
-	## 160m
-	tools/osium-append.sh $@ moi-2016/taiwan_160m-contour.pbf
-	## 320m
-	tools/osium-append.sh $@ moi-2016/taiwan_320m-contour.pbf
-	## 640m
-	tools/osium-append.sh $@ moi-2016/taiwan_640m-contour.pbf
-	## 1280m
-	tools/osium-append.sh $@ moi-2016/taiwan_1280m-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
 
 
 moi-2018/marker-contour.pbf: \
@@ -1042,21 +1047,27 @@ moi-2018/marker-contour.pbf: \
   moi-2018/taiwan_320m-contour.pbf \
   moi-2018/taiwan_640m-contour.pbf \
   moi-2018/taiwan_1280m-contour.pbf
-	## 40m
-	osmium renumber \
-		-s 1,1,0 \
-		moi-2018/taiwan_40m-contour.pbf \
-		-Oo $@
-	## 80m
-	tools/osium-append.sh $@ moi-2018/taiwan_80m-contour.pbf
-	## 160m
-	tools/osium-append.sh $@ moi-2018/taiwan_160m-contour.pbf
-	## 320m
-	tools/osium-append.sh $@ moi-2018/taiwan_320m-contour.pbf
-	## 640m
-	tools/osium-append.sh $@ moi-2018/taiwan_640m-contour.pbf
-	## 1280m
-	tools/osium-append.sh $@ moi-2018/taiwan_1280m-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
+moi-2019/marker-contour.pbf: \
+  moi-2019/taiwan_40m-contour.pbf \
+  moi-2019/taiwan_80m-contour.pbf \
+  moi-2019/taiwan_160m-contour.pbf \
+  moi-2019/taiwan_320m-contour.pbf \
+  moi-2019/taiwan_640m-contour.pbf \
+  moi-2019/taiwan_1280m-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
 
 
 .PHONY: taiwan-contour
@@ -1069,15 +1080,12 @@ ele_taiwan_10_100_500-2016.pbf: \
   moi-2016/taiwan-10_100_500-contour.pbf \
   moi-2016/penghu-10_100_500-contour.pbf \
   aw3d30/islands-10_100_500-contour.pbf
-	## taiwan main island
-	osmium renumber \
-		-s 7000000000,4000000000,0 \
-		moi-2016/taiwan-10_100_500-contour.pbf \
-		-Oo $@
-	## penghu
-	tools/osium-append.sh $@ moi-2016/penghu-10_100_500-contour.pbf
-	## islands: kinmen, matsu, n3islets, wuqiu
-	tools/osium-append.sh $@ aw3d30/islands-10_100_500-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
 
 
 .PHONY: taiwan-contour-2018
@@ -1086,15 +1094,27 @@ ele_taiwan_10_100_500-2018.pbf: \
   moi-2018/taiwan-10_100_500-contour.pbf \
   moi-2016/penghu-10_100_500-contour.pbf \
   aw3d30/islands-10_100_500-contour.pbf
-	## taiwan main island
-	osmium renumber \
-		-s 7000000000,4000000000,0 \
-		moi-2018/taiwan-10_100_500-contour.pbf \
-		-Oo $@
-	## penghu
-	tools/osium-append.sh $@ moi-2016/penghu-10_100_500-contour.pbf
-	## islands: kinmen, matsu, n3islets, wuqiu
-	tools/osium-append.sh $@ aw3d30/islands-10_100_500-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-2019
+taiwan-contour-2019: ele_taiwan_10_100_500-2019.pbf
+ele_taiwan_10_100_500-2019.pbf: \
+  moi-2019/taiwan-10_100_500-contour.pbf \
+  moi-2019/penghu-10_100_500-contour.pbf \
+  moi-2019/kinmen-10_100_500-contour.pbf \
+  aw3d30/islands_nokinmen-10_100_500-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
 
 
 .PHONY: taiwan-contour-mix
@@ -1109,19 +1129,12 @@ ele_taiwan_10_50_100_500_mix-2016.pbf: \
   moi-2016/penghu-10_50_100_500-contour.pbf \
   aw3d30/islands-10_50_100_500-contour.pbf \
   moi-2016/marker-contour.pbf
-	## taiwan sea & land
-	osmium renumber \
-	    -s 7000000000,4000000000,0 \
-	    precompiled/taiwan-sealand.pbf \
-	    -Oo $@
-	## taiwan main island
-	tools/osium-append.sh $@ moi-2016/taiwan-10_50_100_500-contour.pbf
-	## penghu
-	tools/osium-append.sh $@ moi-2016/penghu-10_50_100_500-contour.pbf
-	## islands: kinmen, matsu, n3islets, wuqiu
-	tools/osium-append.sh $@ aw3d30/islands-10_50_100_500-contour.pbf
-	## marker
-	tools/osium-append.sh $@ moi-2016/marker-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
 
 
 .PHONY: taiwan-contour-mix-2018
@@ -1132,19 +1145,29 @@ ele_taiwan_10_100_500_mix-2018.pbf: \
   moi-2016/penghu-10_50_100_500-contour.pbf \
   aw3d30/islands-10_50_100_500-contour.pbf \
   moi-2018/marker-contour.pbf
-	## taiwan sea & land
-	osmium renumber \
-	    -s 7000000000,4000000000,0 \
-	    precompiled/taiwan-sealand.pbf \
-	    -Oo $@
-	## taiwan main island
-	tools/osium-append.sh $@ moi-2018/taiwan-10_50_100_500-contour.pbf
-	## penghu
-	tools/osium-append.sh $@ moi-2016/penghu-10_50_100_500-contour.pbf
-	## islands: kinmen, matsu, n3islets, wuqiu
-	tools/osium-append.sh $@ aw3d30/islands-10_50_100_500-contour.pbf
-	## marker
-	tools/osium-append.sh $@ moi-2018/marker-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-mix-2019
+taiwan-contour-mix-2018: ele_taiwan_10_100_500_mix-2019.pbf
+ele_taiwan_10_100_500_mix-2019.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  moi-2019/taiwan-10_50_100_500-contour.pbf \
+  moi-2019/penghu-10_50_100_500-contour.pbf \
+  moi-2019/kinmen-10_50_100_500-contour.pbf \
+  aw3d30/islands_nokinmen-10_50_100_500-contour.pbf \
+  moi-2019/marker-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
 
 
 .PHONY: taiwan-lite-contour-mix
@@ -1159,19 +1182,12 @@ ele_taiwan_20_100_500_mix-2016.pbf: \
   moi-2016/penghu-20_100_500-contour.pbf \
   aw3d30/islands-20_100_500-contour.pbf \
   moi-2016/marker-contour.pbf
-	## taiwan sea & land
-	osmium renumber \
-	    -s 7000000000,4000000000,0 \
-	    precompiled/taiwan-sealand.pbf \
-	    -Oo $@
-	## taiwan main island
-	tools/osium-append.sh $@ moi-2016/taiwan-20_100_500-contour.pbf
-	## penghu
-	tools/osium-append.sh $@ moi-2016/penghu-20_100_500-contour.pbf
-	## islands: kinmen, matsu, n3islets, wuqiu
-	tools/osium-append.sh $@ aw3d30/islands-20_100_500-contour.pbf
-	## marker
-	tools/osium-append.sh $@ moi-2016/marker-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
 
 
 .PHONY: taiwan-lite-contour-mix-2018
@@ -1182,16 +1198,26 @@ ele_taiwan_20_100_500_mix-2018.pbf: \
   moi-2016/penghu-20_100_500-contour.pbf \
   aw3d30/islands-20_100_500-contour.pbf \
   moi-2018/marker-contour.pbf
-	## taiwan sea & land
-	osmium renumber \
-	    -s 7000000000,4000000000,0 \
-	    precompiled/taiwan-sealand.pbf \
-	    -Oo $@
-	## taiwan main island
-	tools/osium-append.sh $@ moi-2018/taiwan-20_100_500-contour.pbf
-	## penghu
-	tools/osium-append.sh $@ moi-2016/penghu-20_100_500-contour.pbf
-	## islands: kinmen, matsu, n3islets, wuqiu
-	tools/osium-append.sh $@ aw3d30/islands-20_100_500-contour.pbf
-	## marker
-	tools/osium-append.sh $@ moi-2018/marker-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-lite-contour-mix-2019
+taiwan-lite-contour-mix-2019: ele_taiwan_20_100_500_mix-2019.pbf
+ele_taiwan_20_100_500_mix-2019.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  moi-2019/taiwan-20_100_500-contour.pbf \
+  moi-2019/penghu-20_100_500-contour.pbf \
+  moi-2019/kinmen-20_100_500-contour.pbf \
+  aw3d30/islands_nokinmen-20_100_500-contour.pbf \
+  moi-2019/marker-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
