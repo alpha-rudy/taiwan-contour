@@ -260,7 +260,6 @@ moi-2018/taiwan-20_100_500-contour.pbf: moi-2018/DEM_20m-zero.tif
 	mv dem_lite_contour* $@
 
 
-.PHONY: aw3d-orig
 aw3d-orig: aw3d30/.unzip
 aw3d30/.unzip:
 	cd aw3d30/ && \
@@ -279,7 +278,6 @@ aw3d30/n3islets-data0.tif: aw3d30/.unzip
 		$@
 
 
-.PHONY: n3islets-zero
 n3islets-zero: aw3d30/n3islets-zero.tif
 aw3d30/n3islets-zero.tif: aw3d30/n3islets-data0.tif
 	rm -f $@
@@ -290,7 +288,6 @@ aw3d30/n3islets-zero.tif: aw3d30/n3islets-data0.tif
 		$@
 
 
-.PHONY: n3islets-contour
 n3islets-contour: aw3d30/n3islets-10_50_100-contour.pbf
 aw3d30/n3islets-10_50_100-contour.pbf: aw3d30/n3islets-zero.tif
 	phyghtmap \
@@ -304,7 +301,6 @@ aw3d30/n3islets-10_50_100-contour.pbf: aw3d30/n3islets-zero.tif
 	mv n3islets_contour* $@
 
 
-.PHONY: n3islets-lite-contour
 n3islets-lite-contour: aw3d30/n3islets-20_50_100-contour.pbf
 aw3d30/n3islets-20_50_100-contour.pbf: aw3d30/n3islets-zero.tif
 	phyghtmap \
@@ -331,7 +327,6 @@ aw3d30/matsu-data0.tif: aw3d30/.unzip
 		$@
 
 
-.PHONY: matsu-zero
 matsu-zero: aw3d30/matsu-zero.tif
 aw3d30/matsu-zero.tif: aw3d30/matsu-data0.tif
 	rm -f $@
@@ -342,7 +337,6 @@ aw3d30/matsu-zero.tif: aw3d30/matsu-data0.tif
 		$@
 
 
-.PHONY: matsu-contour
 matsu-contour: aw3d30/matsu-10_50_100-contour.pbf
 aw3d30/matsu-10_50_100-contour.pbf: aw3d30/matsu-zero.tif
 	phyghtmap \
@@ -355,7 +349,6 @@ aw3d30/matsu-10_50_100-contour.pbf: aw3d30/matsu-zero.tif
 	mv matsu_contour* $@
 
 
-.PHONY: matsu-lite-contour
 matsu-lite-contour: aw3d30/matsu-20_50_100-contour.pbf
 aw3d30/matsu-20_50_100-contour.pbf: aw3d30/matsu-zero.tif
 	phyghtmap \
@@ -380,7 +373,6 @@ aw3d30/wuqiu-data0.tif: aw3d30/.unzip
 		$@
 
 
-.PHONY: wuqiu-zero
 wuqiu-zero: aw3d30/wuqiu-zero.tif
 aw3d30/wuqiu-zero.tif: aw3d30/wuqiu-data0.tif
 	rm -f $@
@@ -391,7 +383,6 @@ aw3d30/wuqiu-zero.tif: aw3d30/wuqiu-data0.tif
 		$@
 
 
-.PHONY: wuqiu-contour
 wuqiu-contour: aw3d30/wuqiu-10_50_100-contour.pbf
 aw3d30/wuqiu-10_50_100-contour.pbf: aw3d30/wuqiu-zero.tif
 	phyghtmap \
@@ -405,7 +396,6 @@ aw3d30/wuqiu-10_50_100-contour.pbf: aw3d30/wuqiu-zero.tif
 	mv wuqiu_contour* $@
 
 
-.PHONY: wuqiu-lite-contour
 wuqiu-lite-contour: aw3d30/wuqiu-20_50_100-contour.pbf
 aw3d30/wuqiu-20_50_100-contour.pbf: aw3d30/wuqiu-zero.tif
 	phyghtmap \
@@ -430,7 +420,6 @@ aw3d30/kinmen-data0.tif: aw3d30/.unzip
 		$@
 
 
-.PHONY: kinmen-zero
 kinmen-zero: aw3d30/kinmen-zero.tif
 aw3d30/kinmen-zero.tif: aw3d30/kinmen-data0.tif
 	rm -f $@
@@ -441,7 +430,6 @@ aw3d30/kinmen-zero.tif: aw3d30/kinmen-data0.tif
 		$@
 
 
-.PHONY: kinmen-contour
 kinmen-contour: aw3d30/kinmen-10_50_100-contour.pbf
 aw3d30/kinmen-10_50_100-contour.pbf: aw3d30/kinmen-zero.tif
 	phyghtmap \
@@ -455,7 +443,6 @@ aw3d30/kinmen-10_50_100-contour.pbf: aw3d30/kinmen-zero.tif
 	mv kinmen_contour* $@
 
 
-.PHONY: kinmen-lite-contour
 kinmen-lite-contour: aw3d30/kinmen-20_50_100-contour.pbf
 aw3d30/kinmen-20_50_100-contour.pbf: aw3d30/kinmen-zero.tif
 	phyghtmap \
