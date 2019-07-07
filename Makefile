@@ -1269,7 +1269,7 @@ moi-2019/marker-contour.pbf: \
 
 
 .PHONY: taiwan-contour
-taiwan-contour: taiwan-contour-2018
+taiwan-contour: taiwan-contour-2019
 
 
 .PHONY: taiwan-contour-2016
@@ -1352,7 +1352,7 @@ ele_taiwan_10_100_500_mix-2018.pbf: \
 
 
 .PHONY: taiwan-contour-mix-2019
-taiwan-contour-mix-2018: ele_taiwan_10_100_500_mix-2019.pbf
+taiwan-contour-mix-2019: ele_taiwan_10_100_500_mix-2019.pbf
 ele_taiwan_10_100_500_mix-2019.pbf: \
   precompiled/taiwan-sealand.pbf \
   moi-2019/taiwan-10_50_100_500-contour.pbf \
