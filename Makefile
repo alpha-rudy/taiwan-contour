@@ -1604,7 +1604,7 @@ moi-2019/marker-contour.pbf: \
 
 
 .PHONY: taiwan-contour
-taiwan-contour: taiwan-contour-2019
+taiwan-contour: taiwan-contour-2020
 
 
 .PHONY: taiwan-contour-2016
@@ -1651,7 +1651,7 @@ ele_taiwan_10_100_500-2019.pbf: \
 
 
 .PHONY: taiwan-contour-mix
-taiwan-contour-mix: taiwan-contour-mix-2019
+taiwan-contour-mix: taiwan-contour-mix-2020
 
 
 .PHONY: taiwan-contour-mix-2016
@@ -1704,7 +1704,7 @@ ele_taiwan_10_100_500_mix-2019.pbf: \
 
 
 .PHONY: taiwan-lite-contour-mix
-taiwan-lite-contour-mix: taiwan-lite-contour-mix-2019
+taiwan-lite-contour-mix: taiwan-lite-contour-mix-2020
 
 
 .PHONY: taiwan-lite-contour-mix-2016
