@@ -13,7 +13,10 @@ class ElevationSubHandler(osmium.SimpleHandler):
         return
 
     def way(self, w):
-        if w.tags.get('ele', 'xx')[-2:] == '50':
+        if w.tags.get('ele', 'xx')[-1:] == '5':
+            self.handle_elevation_5p(w)
+            return
+        elif w.tags.get('ele', 'xx')[-2:] == '50':
             self.handle_elevation_sub(w)
             return
 
@@ -24,6 +27,14 @@ class ElevationSubHandler(osmium.SimpleHandler):
         self.writer.add_relation(r)
         return
 
+    def handle_elevation_5p(self, w):
+        w = w.replace(tags=self.handle_elevation_5p_tags(w))
+        self.writer.add_way(w)
+
+    def handle_elevation_5p_tags(self, o):
+        tags = dict((tag.k, tag.v) for tag in o.tags)
+        tags['contour_ext'] = 'elevation_5p'
+        return tags
 
     def handle_elevation_sub(self, w):
         w = w.replace(tags=self.handle_elevation_sub_tags(w))
@@ -33,7 +44,6 @@ class ElevationSubHandler(osmium.SimpleHandler):
         tags = dict((tag.k, tag.v) for tag in o.tags)
         tags['contour_ext'] = 'elevation_sub'
         return tags
-
 
 def main():
     if len(sys.argv) != 3:
