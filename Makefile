@@ -1133,6 +1133,17 @@ moi-2018/DEM_1280m-zero.tif: moi-2018/DEM_20m-zero.tif
 	  $@
 
 
+moi-2019/$(MOI2019_TAIWAN)_10m-zero.tif: moi-2019/$(MOI2019_TAIWAN)-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 21652 0 \
+		-r bilinear \
+		-wt $(WORKING_TYPE) \
+	  $^ \
+	  $@
+
 moi-2019/$(MOI2019_TAIWAN)_40m-zero.tif: moi-2019/$(MOI2019_TAIWAN)-zero.tif
 	rm -f $@
 	gdalwarp \
