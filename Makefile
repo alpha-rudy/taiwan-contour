@@ -37,6 +37,9 @@ PHYGHT_OPTIONS = \
 	--void-range-max=-50
 
 
+MOI2020_TAIWAN = 2020dtm20m
+
+
 MOI2019_TAIWAN = DEMg_geoid2014_20m_20190515
 MOI2019_PENGHU = DEMg_20m_PH_20190521
 MOI2019_KINMEN = DEMg_20m_KM_20190521
@@ -211,6 +214,327 @@ moi-2019/from2016.tif: moi-2016/dem_20m-zero.tif
 		-cutline moi-2019/void_area.shp \
 		$^ \
 		$@
+
+
+.PHONY: taiwan-contour-mix-2020
+taiwan-contour-mix-2020: ele_taiwan_10_100_500_mix-2020.pbf
+ele_taiwan_10_100_500_mix-2020.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  moi-2020/taiwan-10_50_100_500-contour.pbf \
+  moi-2019/penghu-10_50_100_500-contour.pbf \
+  moi-2019/kinmen-10_50_100_500-contour.pbf \
+  aw3d30/islands_nokinmen-10_50_100_500-contour.pbf \
+  moi-2020/marker-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-lite-contour-mix-2020
+taiwan-lite-contour-mix-2020: ele_taiwan_20_100_500_mix-2020.pbf
+ele_taiwan_20_100_500_mix-2020.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  moi-2020/taiwan-20_100_500-contour.pbf \
+  moi-2019/penghu-20_100_500-contour.pbf \
+  moi-2019/kinmen-20_100_500-contour.pbf \
+  aw3d30/islands_nokinmen-20_100_500-contour.pbf \
+  moi-2020/marker-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-2020
+taiwan-contour-2020: ele_taiwan_10_100_500-2020.pbf
+ele_taiwan_10_100_500-2020.pbf: \
+  moi-2020/taiwan-10_100_500-contour.pbf \
+  moi-2019/penghu-10_100_500-contour.pbf \
+  moi-2019/kinmen-10_100_500-contour.pbf \
+  aw3d30/islands_nokinmen-10_100_500-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+moi-2020/taiwan-10_50_100_500-contour.pbf: moi-2020/taiwan-10_100_500-contour.pbf
+	rm -f $@
+	python3 tools/elevation_sub.py $< $@
+
+
+moi-2020/taiwan-20_100_500-contour.pbf: moi-2020/$(MOI2020_TAIWAN)-zero.tif
+	phyghtmap \
+		--step=20 \
+		--output-prefix=dem_lite_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.00005 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv dem_lite_contour* $@
+
+
+moi-2020/taiwan-10_100_500-contour.pbf: moi-2020/$(MOI2020_TAIWAN)_15m-zero.tif
+	phyghtmap \
+		--step=10 \
+		--output-prefix=dem_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.00001 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv dem_contour* $@
+
+
+moi-2020/marker-contour.pbf: \
+  moi-2020/taiwan_40m-contour.pbf \
+  moi-2020/taiwan_80m-contour.pbf \
+  moi-2020/taiwan_160m-contour.pbf \
+  moi-2020/taiwan_320m-contour.pbf \
+  moi-2020/taiwan_640m-contour.pbf \
+  moi-2020/taiwan_1280m-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
+moi-2020/taiwan_40m-contour.pbf: moi-2020/$(MOI2020_TAIWAN)_40m-zero.tif
+	phyghtmap \
+		--step=100 \
+		--output-prefix=dem_40m_contour \
+		--line-cat=1000,500 \
+		--simplifyContoursEpsilon=0.00005 \
+		$(PHYGHT_OPTIONS) \
+		$^
+	mv dem_40m_contour* $(@:.pbf=.osm)
+	$(SED_CMD) -e 's/contour_ext/contour_40m/g' -i $(@:.pbf=.osm)
+	osmconvert \
+		--out-pbf \
+		$(@:.pbf=.osm) \
+		-o=$@
+
+
+moi-2020/taiwan_80m-contour.pbf: moi-2020/$(MOI2020_TAIWAN)_80m-zero.tif
+	phyghtmap \
+		--step=100 \
+		--output-prefix=dem_80m_contour \
+		--line-cat=1000,500 \
+		--simplifyContoursEpsilon=0.00005 \
+		$(PHYGHT_OPTIONS) \
+		$^
+	mv dem_80m_contour* $(@:.pbf=.osm)
+	$(SED_CMD) -e 's/contour_ext/contour_80m/g' -i $(@:.pbf=.osm)
+	osmconvert \
+		--out-pbf \
+		$(@:.pbf=.osm) \
+		-o=$@
+
+
+moi-2020/taiwan_160m-contour.pbf: moi-2020/$(MOI2020_TAIWAN)_160m-zero.tif
+	phyghtmap \
+		--step=100 \
+		--output-prefix=dem_160m_contour \
+		--line-cat=1000,500 \
+		--simplifyContoursEpsilon=0.00005 \
+		$(PHYGHT_OPTIONS) \
+		$^
+	mv dem_160m_contour* $(@:.pbf=.osm)
+	$(SED_CMD) -e 's/contour_ext/contour_160m/g' -i $(@:.pbf=.osm)
+	osmconvert \
+		--out-pbf \
+		$(@:.pbf=.osm) \
+		-o=$@
+
+
+moi-2020/taiwan_320m-contour.pbf: moi-2020/$(MOI2020_TAIWAN)_320m-zero.tif
+	phyghtmap \
+		--step=100 \
+		--output-prefix=dem_320m_contour \
+		--line-cat=1000,500 \
+		--simplifyContoursEpsilon=0.00005 \
+		$(PHYGHT_OPTIONS) \
+		$^
+	mv dem_320m_contour* $(@:.pbf=.osm)
+	$(SED_CMD) -e 's/contour_ext/contour_320m/g' -i $(@:.pbf=.osm)
+	osmconvert \
+		--out-pbf \
+		$(@:.pbf=.osm) \
+		-o=$@
+
+
+moi-2020/taiwan_640m-contour.pbf: moi-2020/$(MOI2020_TAIWAN)_640m-zero.tif
+	phyghtmap \
+		--step=100 \
+		--output-prefix=dem_640m_contour \
+		--line-cat=1000,500 \
+		--simplifyContoursEpsilon=0.00005 \
+		$(PHYGHT_OPTIONS) \
+		$^
+	mv dem_640m_contour* $(@:.pbf=.osm)
+	$(SED_CMD) -e 's/contour_ext/contour_640m/g' -i $(@:.pbf=.osm)
+	osmconvert \
+		--out-pbf \
+		$(@:.pbf=.osm) \
+		-o=$@
+
+moi-2020/taiwan_1280m-contour.pbf: moi-2020/$(MOI2020_TAIWAN)_1280m-zero.tif
+	phyghtmap \
+		--step=100 \
+		--output-prefix=dem_1280m_contour \
+		--line-cat=1000,500 \
+		--simplifyContoursEpsilon=0.00005 \
+		$(PHYGHT_OPTIONS) \
+		$^
+	mv dem_1280m_contour* $(@:.pbf=.osm)
+	$(SED_CMD) -e 's/contour_ext/contour_1280m/g' -i $(@:.pbf=.osm)
+	osmconvert \
+		--out-pbf \
+		$(@:.pbf=.osm) \
+		-o=$@
+
+
+moi-2020/$(MOI2020_TAIWAN)_15m-zero.tif: moi-2020/$(MOI2020_TAIWAN)-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 14435 0 \
+		-r bilinear \
+		-wt $(WORKING_TYPE) \
+	  $^ \
+	  $@
+
+moi-2020/$(MOI2020_TAIWAN)_40m-zero.tif: moi-2020/$(MOI2020_TAIWAN)-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 5413 0 \
+		-r bilinear \
+		-wt $(WORKING_TYPE) \
+	  $^ \
+	  $@
+
+moi-2020/$(MOI2020_TAIWAN)_80m-zero.tif: moi-2020/$(MOI2020_TAIWAN)-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 2707 0 \
+		-r bilinear \
+		-wt $(WORKING_TYPE) \
+	  $^ \
+	  $@
+
+moi-2020/$(MOI2020_TAIWAN)_160m-zero.tif: moi-2020/$(MOI2020_TAIWAN)-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 1353 0 \
+		-r bilinear \
+		-wt $(WORKING_TYPE) \
+	  $^ \
+	  $@
+
+moi-2020/$(MOI2020_TAIWAN)_320m-zero.tif: moi-2020/$(MOI2020_TAIWAN)-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 677 0 \
+		-r bilinear \
+		-wt $(WORKING_TYPE) \
+	  $^ \
+	  $@
+
+moi-2020/$(MOI2020_TAIWAN)_640m-zero.tif: moi-2020/$(MOI2020_TAIWAN)-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 338 0 \
+		-r bilinear \
+		-wt $(WORKING_TYPE) \
+	  $^ \
+	  $@
+
+
+moi-2020/$(MOI2020_TAIWAN)_1280m-zero.tif: moi-2020/$(MOI2020_TAIWAN)-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 169 0 \
+		-r bilinear \
+		-wt $(WORKING_TYPE) \
+	  $^ \
+	  $@
+
+
+moi-2020/$(MOI2020_TAIWAN)-zero.tif: moi-2020/$(MOI2020_TAIWAN)-nodata0.tif
+	rm -f $@
+	gdal_translate \
+		$(OUTPUTS) \
+		-a_nodata none \
+		$^ \
+		$@
+
+
+moi-2020/$(MOI2020_TAIWAN)-nodata0.tif: moi-2020/$(MOI2020_TAIWAN)-nodata.tif
+	rm -f $@
+	gdal_calc.py \
+		--NoDataValue=0 \
+		--calc="(A > 0) * A" \
+		-A $^ \
+		--outfile=$@
+
+
+moi-2020/$(MOI2020_TAIWAN)-nodata.tif: moi-2020/from2016.tif moi-2020/$(MOI2020_TAIWAN)-wgs84.tif
+	rm -f $@
+	gdal_merge.py \
+		$(OUTPUTS) \
+		-n $(NODATA_VALUE) -a_nodata $(NODATA_VALUE) \
+		$^ \
+		-o $@
+
+
+moi-2020/$(MOI2020_TAIWAN)-wgs84.tif: moi-2020/$(MOI2020_TAIWAN).tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		$(GDALWARP_WGS84_OPTIONS) \
+	  $^ \
+	  $@
+
+
+moi-2020/from2016.tif: moi-2016/dem_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-crop_to_cutline \
+		-cutline moi-2020/void_area.shp \
+		$^ \
+		$@
+
+
+moi-2020/$(MOI2020_TAIWAN).tif: moi-2020/.unzip
+moi-2020/.unzip: moi-2020/$(MOI2020_TAIWAN).7z.001
+	cd moi-2020/ && \
+		7za x $(MOI2020_TAIWAN).7z.001
+	touch $@
 
 
 moi-2016/phDEM_20m-nodata.tif: moi-2016/phDEM_20m-wgs84.tif
