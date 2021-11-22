@@ -216,6 +216,23 @@ moi-2019/from2016.tif: moi-2016/dem_20m-zero.tif
 		$@
 
 
+.PHONY: taiwan-contour-mix-2021
+taiwan-contour-mix-2021: ele_taiwan_10_100_500_mix-2021.pbf
+ele_taiwan_10_100_500_mix-2021.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  moi-2020/taiwan-10_50_100_500-contour.pbf \
+  moi-2019/penghu-10_50_100_500-contour.pbf \
+  moi-2019/kinmen-10_50_100_500-contour.pbf \
+  aw3d30-3.1/islands_nokinmen-10_50_100_500-contour.pbf \
+  moi-2020/marker-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
 .PHONY: taiwan-contour-mix-2020
 taiwan-contour-mix-2020: ele_taiwan_10_100_500_mix-2020.pbf
 ele_taiwan_10_100_500_mix-2020.pbf: \
@@ -224,6 +241,23 @@ ele_taiwan_10_100_500_mix-2020.pbf: \
   moi-2019/penghu-10_50_100_500-contour.pbf \
   moi-2019/kinmen-10_50_100_500-contour.pbf \
   aw3d30-2.1/islands_nokinmen-10_50_100_500-contour.pbf \
+  moi-2020/marker-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-lite-contour-mix-2021
+taiwan-lite-contour-mix-2021: ele_taiwan_20_100_500_mix-2021.pbf
+ele_taiwan_20_100_500_mix-2021.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  moi-2020/taiwan-20_100_500-contour.pbf \
+  moi-2019/penghu-20_100_500-contour.pbf \
+  moi-2019/kinmen-20_100_500-contour.pbf \
+  aw3d30-3.1/islands_nokinmen-20_100_500-contour.pbf \
   moi-2020/marker-contour.pbf
 	# combines all dependences
 	./tools/combine.sh \
@@ -242,6 +276,21 @@ ele_taiwan_20_100_500_mix-2020.pbf: \
   moi-2019/kinmen-20_100_500-contour.pbf \
   aw3d30-2.1/islands_nokinmen-20_100_500-contour.pbf \
   moi-2020/marker-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-2021
+taiwan-contour-2021: ele_taiwan_10_100_500-2021.pbf
+ele_taiwan_10_100_500-2021.pbf: \
+  moi-2020/taiwan-10_100_500-contour.pbf \
+  moi-2019/penghu-10_100_500-contour.pbf \
+  moi-2019/kinmen-10_100_500-contour.pbf \
+  aw3d30-3.1/islands_nokinmen-10_100_500-contour.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -801,11 +850,28 @@ moi-2019/taiwan-20_100_500-contour.pbf: moi-2019/$(MOI2019_TAIWAN)-zero.tif
 	mv dem_lite_contour* $@
 
 
-aw3d-orig: aw3d30-2.1/.unzip
+aw3d-orig: aw3d30-3.1/.unzip
+aw3d30-3.1/.unzip:
+	cd aw3d30-3.1/ && \
+	7za x aw3d30-3.1.7z
+	touch $@
+
+
 aw3d30-2.1/.unzip:
 	cd aw3d30-2.1/ && \
 	7za x aw3d30-2.1.7z.001
 	touch $@
+
+
+aw3d30-3.1/n3islets-data0.tif: aw3d30-3.1/.unzip
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-crop_to_cutline \
+		-cutline aw3d30-3.1/n3islets.shp \
+		-dstnodata 0 \
+		aw3d30-3.1/ALPSMLC30_N025E122_DSM.tif \
+		$@
 
 
 aw3d30-2.1/n3islets-data0.tif: aw3d30-2.1/.unzip
@@ -819,7 +885,16 @@ aw3d30-2.1/n3islets-data0.tif: aw3d30-2.1/.unzip
 		$@
 
 
-n3islets-zero: aw3d30-2.1/n3islets-zero.tif
+n3islets-zero: aw3d30-3.1/n3islets-zero.tif
+aw3d30-3.1/n3islets-zero.tif: aw3d30-3.1/n3islets-data0.tif
+	rm -f $@
+	gdal_translate \
+		$(OUTPUTS) \
+		-a_nodata none \
+		$^ \
+		$@
+
+
 aw3d30-2.1/n3islets-zero.tif: aw3d30-2.1/n3islets-data0.tif
 	rm -f $@
 	gdal_translate \
@@ -829,7 +904,19 @@ aw3d30-2.1/n3islets-zero.tif: aw3d30-2.1/n3islets-data0.tif
 		$@
 
 
-n3islets-contour: aw3d30-2.1/n3islets-10_50_100-contour.pbf
+n3islets-contour: aw3d30-3.1/n3islets-10_50_100-contour.pbf
+aw3d30-3.1/n3islets-10_50_100-contour.pbf: aw3d30-3.1/n3islets-zero.tif
+	phyghtmap \
+		--step=10 \
+		--output-prefix=n3islets_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000025 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv n3islets_contour* $@
+
+
 aw3d30-2.1/n3islets-10_50_100-contour.pbf: aw3d30-2.1/n3islets-zero.tif
 	phyghtmap \
 		--step=10 \
@@ -842,7 +929,19 @@ aw3d30-2.1/n3islets-10_50_100-contour.pbf: aw3d30-2.1/n3islets-zero.tif
 	mv n3islets_contour* $@
 
 
-n3islets-lite-contour: aw3d30-2.1/n3islets-20_50_100-contour.pbf
+n3islets-lite-contour: aw3d30-3.1/n3islets-20_50_100-contour.pbf
+aw3d30-3.1/n3islets-20_50_100-contour.pbf: aw3d30-3.1/n3islets-zero.tif
+	phyghtmap \
+		--step=20 \
+		--output-prefix=n3islets_lite_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000125 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv n3islets_lite_contour* $@
+
+
 aw3d30-2.1/n3islets-20_50_100-contour.pbf: aw3d30-2.1/n3islets-zero.tif
 	phyghtmap \
 		--step=20 \
@@ -853,6 +952,19 @@ aw3d30-2.1/n3islets-20_50_100-contour.pbf: aw3d30-2.1/n3islets-zero.tif
 		--pbf \
 		$^
 	mv n3islets_lite_contour* $@
+
+
+aw3d30-3.1/matsu-data0.tif: aw3d30-3.1/.unzip
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-crop_to_cutline \
+		-cutline aw3d30-3.1/matsu.shp \
+		-dstnodata 0 \
+		aw3d30-3.1/ALPSMLC30_N026E119_DSM.tif \
+		aw3d30-3.1/ALPSMLC30_N026E120_DSM.tif \
+		aw3d30-3.1/ALPSMLC30_N025E119_DSM.tif \
+		$@
 
 
 aw3d30-2.1/matsu-data0.tif: aw3d30-2.1/.unzip
@@ -868,7 +980,16 @@ aw3d30-2.1/matsu-data0.tif: aw3d30-2.1/.unzip
 		$@
 
 
-matsu-zero: aw3d30-2.1/matsu-zero.tif
+matsu-zero: aw3d30-3.1/matsu-zero.tif
+aw3d30-3.1/matsu-zero.tif: aw3d30-3.1/matsu-data0.tif
+	rm -f $@
+	gdal_translate \
+		$(OUTPUTS) \
+		-a_nodata none \
+		$^ \
+		$@
+
+
 aw3d30-2.1/matsu-zero.tif: aw3d30-2.1/matsu-data0.tif
 	rm -f $@
 	gdal_translate \
@@ -878,7 +999,18 @@ aw3d30-2.1/matsu-zero.tif: aw3d30-2.1/matsu-data0.tif
 		$@
 
 
-matsu-contour: aw3d30-2.1/matsu-10_50_100-contour.pbf
+matsu-contour: aw3d30-3.1/matsu-10_50_100-contour.pbf
+aw3d30-3.1/matsu-10_50_100-contour.pbf: aw3d30-3.1/matsu-zero.tif
+	phyghtmap \
+		--step=10 \
+		--output-prefix=matsu_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000025 \
+		--pbf \
+		$^
+	mv matsu_contour* $@
+
+
 aw3d30-2.1/matsu-10_50_100-contour.pbf: aw3d30-2.1/matsu-zero.tif
 	phyghtmap \
 		--step=10 \
@@ -890,7 +1022,19 @@ aw3d30-2.1/matsu-10_50_100-contour.pbf: aw3d30-2.1/matsu-zero.tif
 	mv matsu_contour* $@
 
 
-matsu-lite-contour: aw3d30-2.1/matsu-20_50_100-contour.pbf
+matsu-lite-contour: aw3d30-3.1/matsu-20_50_100-contour.pbf
+aw3d30-3.1/matsu-20_50_100-contour.pbf: aw3d30-3.1/matsu-zero.tif
+	phyghtmap \
+		--step=20 \
+		--output-prefix=matsu_lite_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000125 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv matsu_lite_contour* $@
+
+
 aw3d30-2.1/matsu-20_50_100-contour.pbf: aw3d30-2.1/matsu-zero.tif
 	phyghtmap \
 		--step=20 \
@@ -901,6 +1045,17 @@ aw3d30-2.1/matsu-20_50_100-contour.pbf: aw3d30-2.1/matsu-zero.tif
 		--pbf \
 		$^
 	mv matsu_lite_contour* $@
+
+
+aw3d30-3.1/wuqiu-data0.tif: aw3d30-3.1/.unzip
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-crop_to_cutline \
+		-cutline aw3d30-3.1/wuqiu.shp \
+		-dstnodata 0 \
+		aw3d30-3.1/ALPSMLC30_N024E119_DSM.tif \
+		$@
 
 
 aw3d30-2.1/wuqiu-data0.tif: aw3d30-2.1/.unzip
@@ -914,7 +1069,16 @@ aw3d30-2.1/wuqiu-data0.tif: aw3d30-2.1/.unzip
 		$@
 
 
-wuqiu-zero: aw3d30-2.1/wuqiu-zero.tif
+wuqiu-zero: aw3d30-3.1/wuqiu-zero.tif
+aw3d30-3.1/wuqiu-zero.tif: aw3d30-3.1/wuqiu-data0.tif
+	rm -f $@
+	gdal_translate \
+		$(OUTPUTS) \
+		-a_nodata none \
+		aw3d30-3.1/wuqiu-data0.tif \
+		$@
+
+
 aw3d30-2.1/wuqiu-zero.tif: aw3d30-2.1/wuqiu-data0.tif
 	rm -f $@
 	gdal_translate \
@@ -924,7 +1088,19 @@ aw3d30-2.1/wuqiu-zero.tif: aw3d30-2.1/wuqiu-data0.tif
 		$@
 
 
-wuqiu-contour: aw3d30-2.1/wuqiu-10_50_100-contour.pbf
+wuqiu-contour: aw3d30-3.1/wuqiu-10_50_100-contour.pbf
+aw3d30-3.1/wuqiu-10_50_100-contour.pbf: aw3d30-3.1/wuqiu-zero.tif
+	phyghtmap \
+		--step=10 \
+		--output-prefix=wuqiu_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000025 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv wuqiu_contour* $@
+
+
 aw3d30-2.1/wuqiu-10_50_100-contour.pbf: aw3d30-2.1/wuqiu-zero.tif
 	phyghtmap \
 		--step=10 \
@@ -937,7 +1113,19 @@ aw3d30-2.1/wuqiu-10_50_100-contour.pbf: aw3d30-2.1/wuqiu-zero.tif
 	mv wuqiu_contour* $@
 
 
-wuqiu-lite-contour: aw3d30-2.1/wuqiu-20_50_100-contour.pbf
+wuqiu-lite-contour: aw3d30-3.1/wuqiu-20_50_100-contour.pbf
+aw3d30-3.1/wuqiu-20_50_100-contour.pbf: aw3d30-3.1/wuqiu-zero.tif
+	phyghtmap \
+		--step=20 \
+		--output-prefix=wuqiu_lite_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000125 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv wuqiu_lite_contour* $@
+
+
 aw3d30-2.1/wuqiu-20_50_100-contour.pbf: aw3d30-2.1/wuqiu-zero.tif
 	phyghtmap \
 		--step=20 \
@@ -1503,6 +1691,11 @@ aw3d30-2.1/islands-10_50_100_500-contour.pbf: aw3d30-2.1/islands-10_100_500-cont
 	python3 tools/elevation_sub.py $< $@
 
 
+aw3d30-3.1/islands_nokinmen-10_50_100_500-contour.pbf: aw3d30-3.1/islands_nokinmen-10_100_500-contour.pbf
+	rm -f $@
+	python3 tools/elevation_sub.py $< $@
+
+
 aw3d30-2.1/islands_nokinmen-10_50_100_500-contour.pbf: aw3d30-2.1/islands_nokinmen-10_100_500-contour.pbf
 	rm -f $@
 	python3 tools/elevation_sub.py $< $@
@@ -1534,10 +1727,34 @@ aw3d30-2.1/islands-20_100_500-contour.pbf: \
 		$^
 
 
+aw3d30-3.1/islands_nokinmen-10_100_500-contour.pbf: \
+  aw3d30-3.1/matsu-10_50_100-contour.pbf \
+  aw3d30-3.1/n3islets-10_50_100-contour.pbf \
+  aw3d30-3.1/wuqiu-10_50_100-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
 aw3d30-2.1/islands_nokinmen-10_100_500-contour.pbf: \
   aw3d30-2.1/matsu-10_50_100-contour.pbf \
   aw3d30-2.1/n3islets-10_50_100-contour.pbf \
   aw3d30-2.1/wuqiu-10_50_100-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
+aw3d30-3.1/islands_nokinmen-20_100_500-contour.pbf: \
+  aw3d30-3.1/matsu-20_50_100-contour.pbf \
+  aw3d30-3.1/n3islets-20_50_100-contour.pbf \
+  aw3d30-3.1/wuqiu-20_50_100-contour.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1604,7 +1821,7 @@ moi-2019/marker-contour.pbf: \
 
 
 .PHONY: taiwan-contour
-taiwan-contour: taiwan-contour-2020
+taiwan-contour: taiwan-contour-2021
 
 
 .PHONY: taiwan-contour-2016
@@ -1651,7 +1868,7 @@ ele_taiwan_10_100_500-2019.pbf: \
 
 
 .PHONY: taiwan-contour-mix
-taiwan-contour-mix: taiwan-contour-mix-2020
+taiwan-contour-mix: taiwan-contour-mix-2021
 
 
 .PHONY: taiwan-contour-mix-2016
@@ -1704,7 +1921,7 @@ ele_taiwan_10_100_500_mix-2019.pbf: \
 
 
 .PHONY: taiwan-lite-contour-mix
-taiwan-lite-contour-mix: taiwan-lite-contour-mix-2020
+taiwan-lite-contour-mix: taiwan-lite-contour-mix-2021
 
 
 .PHONY: taiwan-lite-contour-mix-2016
