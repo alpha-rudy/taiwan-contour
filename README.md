@@ -4,32 +4,95 @@
 
     $ make all   ### to make the default targets
 
+    History: 
+    * taiwan-contour-2021:
+      * 台灣本島: MOI DLA v2020 20m
+      * 樂山基地: MOI DLA v2016 20m
+      * 澎湖群島: MOI DLA v2019 20m
+      * 金門群島: MOI DLA v2019 20m
+      * 馬祖、烏坵、北方三島: JAXA AW3D30 v3.1
+    * taiwan-contour-2020:
+      * 台灣本島: MOI DLA v2020 20m
+      * 樂山基地: MOI DLA v2016 20m
+      * 澎湖群島: MOI DLA v2019 20m
+      * 金門群島: MOI DLA v2019 20m
+      * 馬祖、烏坵、北方三島: JAXA AW3D30 v2.1
+    * taiwan-contour-2019:
+      * 台灣本島: MOI DLA v2019 20m
+      * 樂山基地: MOI DLA v2016 20m
+      * 澎湖群島: MOI DLA v2019 20m
+      * 金門群島: MOI DLA v2019 20m
+      * 馬祖、烏坵、北方三島: JAXA AW3D30 v2.1
+    * taiwan-contour-2018:
+      * 台灣本島: MOI DLA v2018 20m
+      * 樂山基地: MOI DLA v2016 20m
+      * 澎湖群島: MOI DLA v2016 20m
+      * 金門、馬祖、烏坵、北方三島: JAXA AW3D30 v2.1
+    * taiwan-contour-2017: (手工製作)
+      * 台灣本島: MOI DLA v2016 20m
+      * 樂山基地: MOI DLA v2016 20m
+      * 澎湖群島: MOI DLA v2016 20m
+      * 金門、馬祖、烏坵、北方三島: NASA SRTM90 v3.0
+
 ## Target list
 
 * `taiwan-contour`
-  * use MOI Taiwan DTM 20m v2019
-  * taiwan contour lines in 10/100/500 scale
+  * use MOI DLA Taiwan DTM v2020 20m
+  * Taiwan contour lines in 10/100/500 scale
   * Regions of DTM
-    * MOI Taiwan DTM 20m v2019
+    * MOI DLA Taiwan DTM v2020 20m
       * taiwan island
+    * MOI Taiwan DTM v2019 20m
       * penghu island
-    * JAXA AW3D30
-      * kinmen
-      * matsu
+      * kinmen island
+    * MOI Taiwan DTM v2016 20m
+      * yaoshan
+    * JAXA AW3D30 v3.1
+      * matsu island
+      * wuqiu island
+      * n3islets
 
 * `taiwan-contour-mix`
-  * use MOI Taiwan DTM 20m v2019
+  * use MOI Taiwan DTM 20m v2020
   * taiwan contour lines in 10/50/100/500 scale
   * marker line for the lable of elevation
 
 * `taiwan-lite-contour-mix`
-  * use MOI Taiwan DTM 20m v2019
+  * use MOI Taiwan DTM 20m v2020
   * taiwan contour lines in 20/100/500 scale
   * marker line for the lable of elevation
 
-* `all`
-  * all previous targets
-  
+* `taiwan-contour-2020`
+  * use MOI DLA Taiwan DTM v2020 20m
+  * Taiwan contour lines in 10/100/500 scale
+  * Regions of DTM
+    * MOI DLA Taiwan DTM v2020 20m
+      * taiwan island
+    * MOI Taiwan DTM v2019 20m
+      * penghu island
+      * kinmen island
+    * MOI Taiwan DTM v2016 20m
+      * yaoshan
+    * JAXA AW3D30 v2.1
+      * matsu island
+      * wuqiu island
+      * n3islets
+
+* `taiwan-contour-2019`
+  * use MOI Taiwan DTM v2019 20m
+  * taiwan contour lines in 10/100/500 scale
+  * Regions of DTM
+    * MOI Taiwan DTM v2019 20m
+      * taiwan island
+      * penghu island
+      * kinmen island
+    * MOI Taiwan DTM v2016 20m
+      * yaoshan
+    * JAXA AW3D30 v2.1
+      * matsu island
+      * wuqiu island
+      * n3islets
+
 * `taiwan-contour-2018`
   * use MOI Taiwan DTM 20m v2018
   * taiwan contour lines in 10/100/500 scale
