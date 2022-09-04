@@ -1012,7 +1012,7 @@ moi-2016/dem_1280m-zero.tif: moi-2016/dem_20m-zero.tif
 	  $@
 
 
-moi-2018/DEM_40m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
+$(MOI2018_TAIWAN)_40m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1023,7 +1023,7 @@ moi-2018/DEM_40m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 	  $^ \
 	  $@
 
-moi-2018/DEM_80m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
+$(MOI2018_TAIWAN)_80m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1034,7 +1034,7 @@ moi-2018/DEM_80m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 	  $^ \
 	  $@
 
-moi-2018/DEM_160m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
+$(MOI2018_TAIWAN)_160m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1045,7 +1045,7 @@ moi-2018/DEM_160m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 	  $^ \
 	  $@
 
-moi-2018/DEM_320m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
+$(MOI2018_TAIWAN)_320m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1056,7 +1056,7 @@ moi-2018/DEM_320m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 	  $^ \
 	  $@
 
-moi-2018/DEM_640m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
+$(MOI2018_TAIWAN)_640m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1068,7 +1068,7 @@ moi-2018/DEM_640m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 	  $@
 
 
-moi-2018/DEM_1280m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
+$(MOI2018_TAIWAN)_1280m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1255,7 +1255,7 @@ moi-2016/taiwan_1280m-contour.pbf: moi-2016/dem_1280m-zero.tif
 		-o=$@
 
 
-moi-2018/taiwan_40m-contour.pbf: moi-2018/DEM_40m-zero.tif
+moi-2018/taiwan_40m-contour.pbf: $(MOI2018_TAIWAN)_40m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--output-prefix=dem_40m_contour \
@@ -1271,7 +1271,7 @@ moi-2018/taiwan_40m-contour.pbf: moi-2018/DEM_40m-zero.tif
 		-o=$@
 
 
-moi-2018/taiwan_80m-contour.pbf: moi-2018/DEM_80m-zero.tif
+moi-2018/taiwan_80m-contour.pbf: $(MOI2018_TAIWAN)_80m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--output-prefix=dem_80m_contour \
@@ -1287,7 +1287,7 @@ moi-2018/taiwan_80m-contour.pbf: moi-2018/DEM_80m-zero.tif
 		-o=$@
 
 
-moi-2018/taiwan_160m-contour.pbf: moi-2018/DEM_160m-zero.tif
+moi-2018/taiwan_160m-contour.pbf: $(MOI2018_TAIWAN)_160m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--output-prefix=dem_160m_contour \
@@ -1303,7 +1303,7 @@ moi-2018/taiwan_160m-contour.pbf: moi-2018/DEM_160m-zero.tif
 		-o=$@
 
 
-moi-2018/taiwan_320m-contour.pbf: moi-2018/DEM_320m-zero.tif
+moi-2018/taiwan_320m-contour.pbf: $(MOI2018_TAIWAN)_320m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--output-prefix=dem_320m_contour \
@@ -1319,7 +1319,7 @@ moi-2018/taiwan_320m-contour.pbf: moi-2018/DEM_320m-zero.tif
 		-o=$@
 
 
-moi-2018/taiwan_640m-contour.pbf: moi-2018/DEM_640m-zero.tif
+moi-2018/taiwan_640m-contour.pbf: $(MOI2018_TAIWAN)_640m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--output-prefix=dem_640m_contour \
@@ -1334,7 +1334,7 @@ moi-2018/taiwan_640m-contour.pbf: moi-2018/DEM_640m-zero.tif
 		$(@:.pbf=.osm) \
 		-o=$@
 
-moi-2018/taiwan_1280m-contour.pbf: moi-2018/DEM_1280m-zero.tif
+moi-2018/taiwan_1280m-contour.pbf: $(MOI2018_TAIWAN)_1280m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--output-prefix=dem_1280m_contour \
