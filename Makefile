@@ -405,7 +405,21 @@ moi-2020/taiwan_1280m-contour.pbf: $(MOI2020_TAIWAN)_1280m-zero.tif
 		-o=$@
 
 
+$(MOI2019_TAIWAN)_10m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
+%_10m-zero.tif: %_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 21652 0 \
+		-r bilinear \
+		-wt $(WORKING_TYPE) \
+	  $^ \
+	  $@
+
+
 $(MOI2020_TAIWAN)_15m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+%_15m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -416,18 +430,26 @@ $(MOI2020_TAIWAN)_15m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 	  $^ \
 	  $@
 
+
+$(MOI2018_TAIWAN)_40m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
+$(MOI2019_TAIWAN)_40m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_40m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+%_40m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		-ts 5413 0 \
+		-ts 5414 0 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
 
+
+$(MOI2018_TAIWAN)_80m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
+$(MOI2019_TAIWAN)_80m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_80m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+%_80m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -438,7 +460,11 @@ $(MOI2020_TAIWAN)_80m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 	  $^ \
 	  $@
 
+
+$(MOI2018_TAIWAN)_160m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
+$(MOI2019_TAIWAN)_160m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_160m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+%_160m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -449,7 +475,11 @@ $(MOI2020_TAIWAN)_160m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 	  $^ \
 	  $@
 
+
+$(MOI2018_TAIWAN)_320m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
+$(MOI2019_TAIWAN)_320m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_320m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+%_320m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -460,7 +490,11 @@ $(MOI2020_TAIWAN)_320m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 	  $^ \
 	  $@
 
+
+$(MOI2018_TAIWAN)_640m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
+$(MOI2019_TAIWAN)_640m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_640m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+%_640m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -472,7 +506,10 @@ $(MOI2020_TAIWAN)_640m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 	  $@
 
 
+$(MOI2018_TAIWAN)_1280m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
+$(MOI2019_TAIWAN)_1280m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_1280m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+%_1280m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -483,7 +520,8 @@ $(MOI2020_TAIWAN)_1280m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 	  $^ \
 	  $@
 
-test: $(MOI2020_TAIWAN)_20m-zero.tif $(MOI2019_TAIWAN)_20m-zero.tif $(MOI2019_PENGHU)-zero.tif $(MOI2019_KINMEN)-zero.tif $(MOI2018_TAIWAN)_20m-zero.tif 
+TESTM = 10m
+test: $(MOI2020_TAIWAN)_$(TESTM)-zero.tif $(MOI2019_TAIWAN)_$(TESTM)-zero.tif $(MOI2018_TAIWAN)_$(TESTM)-zero.tif 
 
 aw3d30-2.1/kinmen-zero.tif: aw3d30-2.1/kinmen-nodata0.tif
 aw3d30-2.1/wuqiu-zero.tif: aw3d30-2.1/wuqiu-nodata0.tif
@@ -1006,153 +1044,6 @@ moi-2016/dem_1280m-zero.tif: moi-2016/dem_20m-zero.tif
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
 		-ts 172 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-
-$(MOI2018_TAIWAN)_40m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 5414 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-$(MOI2018_TAIWAN)_80m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 2707 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-$(MOI2018_TAIWAN)_160m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 1353 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-$(MOI2018_TAIWAN)_320m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 677 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-$(MOI2018_TAIWAN)_640m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 338 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-
-$(MOI2018_TAIWAN)_1280m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 169 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-
-$(MOI2019_TAIWAN)_10m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 21652 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-$(MOI2019_TAIWAN)_40m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 5413 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-$(MOI2019_TAIWAN)_80m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 2707 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-$(MOI2019_TAIWAN)_160m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 1353 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-$(MOI2019_TAIWAN)_320m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 677 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-$(MOI2019_TAIWAN)_640m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 338 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-	  $^ \
-	  $@
-
-
-$(MOI2019_TAIWAN)_1280m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 169 0 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 	  $^ \
