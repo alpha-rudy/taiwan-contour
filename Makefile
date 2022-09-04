@@ -37,13 +37,13 @@ PHYGHT_OPTIONS = \
 	--void-range-max=-50
 
 
-MOI2020_TAIWAN = moi-2020/2020dtm20m
+MOI2020_TAIWAN = moi-2020/taiwan_20m
 
-MOI2019_TAIWAN = moi-2019/DEMg_geoid2014_20m_20190515
-MOI2019_PENGHU = moi-2019/DEMg_20m_PH_20190521
-MOI2019_KINMEN = moi-2019/DEMg_20m_KM_20190521
+MOI2019_TAIWAN = moi-2019/taiwan_20m
+MOI2019_PENGHU = moi-2019/penghu
+MOI2019_KINMEN = moi-2019/kinmen
 
-MOI2018_TAIWAN = moi-2018/DEM_20m
+MOI2018_TAIWAN = moi-2018/taiwan_20m
 
 
 moi-2016/penghu-10_100_500-contour.pbf: moi-2016/phDEM_20m-zero.tif
@@ -130,7 +130,8 @@ moi-2016/.unzip: moi-2016/dem_20m.7z.001
 $(MOI2018_TAIWAN).tif: moi-2018/.unzip
 moi-2018/.unzip:
 	cd moi-2018/ && \
-		7za x DEM_20m.7z.001
+		7za x DEM_20m.7z.001 && \
+		mv DEM_20m.tif taiwan_20m.tif
 	touch $@
 
 $(MOI2019_TAIWAN).tif: moi-2019/.unzip
@@ -138,7 +139,10 @@ $(MOI2019_PENGHU).tif: moi-2019/.unzip
 $(MOI2019_KINMEN).tif: moi-2019/.unzip
 moi-2019/.unzip: moi-2019/DEMg_20m.7z.001
 	cd moi-2019/ && \
-		7za x DEMg_20m.7z.001
+		7za x DEMg_20m.7z.001 && \
+		mv DEMg_geoid2014_20m_20190515.tif taiwan_20m.tif && \
+		mv DEMg_20m_PH_20190521.tif penghu.tif && \
+		mv DEMg_20m_KM_20190521.tif kinmen.tif
 	touch $@
 
 
@@ -479,7 +483,7 @@ $(MOI2020_TAIWAN)_1280m-zero.tif: $(MOI2020_TAIWAN)-zero.tif
 	  $^ \
 	  $@
 
-test: aw3d30-2.1/kinmen-zero.tif aw3d30-2.1/wuqiu-zero.tif aw3d30-3.1/wuqiu-zero.tif aw3d30-2.1/matsu-zero.tif aw3d30-3.1/matsu-zero.tif aw3d30-2.1/n3islets-zero.tif aw3d30-3.1/n3islets-zero.tif moi-2016/dem_20m-zero.tif moi-2016/phDEM_20m-zero.tif $(MOI2018_TAIWAN)-zero.tif $(MOI2019_KINMEN)-zero.tif $(MOI2019_PENGHU)-zero.tif $(MOI2019_TAIWAN)-zero.tif $(MOI2020_TAIWAN)-zero.tif 
+test: $(MOI2020_TAIWAN)-zero.tif $(MOI2019_TAIWAN)-zero.tif $(MOI2019_PENGHU)-zero.tif $(MOI2019_KINMEN)-zero.tif $(MOI2018_TAIWAN)-zero.tif 
 
 aw3d30-2.1/kinmen-zero.tif: aw3d30-2.1/kinmen-nodata0.tif
 aw3d30-2.1/wuqiu-zero.tif: aw3d30-2.1/wuqiu-nodata0.tif
@@ -564,9 +568,10 @@ moi-2020/from2016.tif: moi-2016/dem_20m-zero.tif
 
 
 $(MOI2020_TAIWAN).tif: moi-2020/.unzip
-moi-2020/.unzip: $(MOI2020_TAIWAN).7z.001
+moi-2020/.unzip: moi-2020/2020dtm20m.7z.001
 	cd moi-2020/ && \
-		7za x 2020dtm20m.7z.001
+		7za x 2020dtm20m.7z.001 && \
+		mv 2020dtm20m.tif taiwan_20m.tif
 	touch $@
 
 
