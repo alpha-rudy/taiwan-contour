@@ -7,3 +7,7 @@
 .unzip
 *.pbf
 *.osm
+*.shx
+*.prj
+*.shp
+*.dbf
