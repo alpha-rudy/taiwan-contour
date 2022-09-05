@@ -556,8 +556,6 @@ $(MOI2020_TAIWAN)_1280m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 	  $^ \
 	  $@
 
-TESTM = 10m
-test: $(MOI2016_TAIWAN)_$(TESTM)-zero.tif
 
 $(AW21_KINMEN)-zero.tif: $(AW21_KINMEN)-nodata0.tif
 $(AW21_WUQIU)-zero.tif: $(AW21_WUQIU)-nodata0.tif
