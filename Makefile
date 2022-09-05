@@ -265,7 +265,17 @@ ele_taiwan_10_100_500-2020.pbf: \
 		$^
 
 
+aw3d30-2.1/islands-10_50_100_500-contour.pbf: aw3d30-2.1/islands-10_100_500-contour.pbf
 $(MOI2020_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2020_TAIWAN)-10_100_500-contour.pbf
+$(MOI2019_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2019_TAIWAN)-10_100_500-contour.pbf
+$(MOI2019_PENGHU)-10_50_100_500-contour.pbf: $(MOI2019_PENGHU)-10_100_500-contour.pbf
+$(MOI2019_KINMEN)-10_50_100_500-contour.pbf: $(MOI2019_KINMEN)-10_100_500-contour.pbf
+$(MOI2018_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2018_TAIWAN)-10_100_500-contour.pbf
+$(MOI2016_PENGHU)-10_50_100_500-contour.pbf: $(MOI2016_PENGHU)-10_100_500-contour.pbf
+$(MOI2016_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2016_TAIWAN)-10_100_500-contour.pbf
+$(AW31_NO_KINMEN)-10_50_100_500-contour.pbf: $(AW31_NO_KINMEN)-10_100_500-contour.pbf
+$(AW21_NO_KINMEN)-10_50_100_500-contour.pbf: $(AW21_NO_KINMEN)-10_100_500-contour.pbf
+%-10_50_100_500-contour.pbf: %-10_100_500-contour.pbf
 	rm -f $@
 	python3 tools/elevation_sub.py $< $@
 
@@ -665,36 +675,6 @@ $(MOI2018_TAIWAN)-10_100_500-contour.pbf: $(MOI2018_TAIWAN)_20m-zero.tif
 	mv dem_contour* $@
 
 
-$(MOI2016_PENGHU)-10_50_100_500-contour.pbf: $(MOI2016_PENGHU)-10_100_500-contour.pbf
-	rm -f $@
-	python3 tools/elevation_sub.py $< $@
-
-
-$(MOI2016_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2016_TAIWAN)-10_100_500-contour.pbf
-	rm -f $@
-	python3 tools/elevation_sub.py $< $@
-
-
-$(MOI2018_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2018_TAIWAN)-10_100_500-contour.pbf
-	rm -f $@
-	python3 tools/elevation_sub.py $< $@
-
-
-$(MOI2019_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2019_TAIWAN)-10_100_500-contour.pbf
-	rm -f $@
-	python3 tools/elevation_sub.py $< $@
-
-
-$(MOI2019_PENGHU)-10_50_100_500-contour.pbf: $(MOI2019_PENGHU)-10_100_500-contour.pbf
-	rm -f $@
-	python3 tools/elevation_sub.py $< $@
-
-
-$(MOI2019_KINMEN)-10_50_100_500-contour.pbf: $(MOI2019_KINMEN)-10_100_500-contour.pbf
-	rm -f $@
-	python3 tools/elevation_sub.py $< $@
-
-
 $(MOI2016_TAIWAN)-20_100_500-contour.pbf: $(MOI2016_TAIWAN)_20m-zero.tif
 	phyghtmap \
 		--step=20 \
@@ -974,21 +954,6 @@ $(MOI2016_TAIWAN)_1280m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 		-wt $(WORKING_TYPE) \
 	  $^ \
 	  $@
-
-
-aw3d30-2.1/islands-10_50_100_500-contour.pbf: aw3d30-2.1/islands-10_100_500-contour.pbf
-	rm -f $@
-	python3 tools/elevation_sub.py $< $@
-
-
-$(AW31_NO_KINMEN)-10_50_100_500-contour.pbf: $(AW31_NO_KINMEN)-10_100_500-contour.pbf
-	rm -f $@
-	python3 tools/elevation_sub.py $< $@
-
-
-$(AW21_NO_KINMEN)-10_50_100_500-contour.pbf: $(AW21_NO_KINMEN)-10_100_500-contour.pbf
-	rm -f $@
-	python3 tools/elevation_sub.py $< $@
 
 
 aw3d30-2.1/islands-10_100_500-contour.pbf: \
