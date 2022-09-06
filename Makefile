@@ -361,6 +361,74 @@ aw3d30-2.1/.unzip:
 	7za x aw3d30-2.1.7z.001
 	touch $@
 
+##
+## zero tif ==> pbf
+## 
+
+$(MOI2020_TAIWAN)-10_100_500-contour.pbf: $(MOI2020_TAIWAN)_15m-zero.tif
+	phyghtmap \
+		--step=10 \
+		--output-prefix=dem_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.00001 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv dem_contour* $@
+
+
+$(MOI2019_TAIWAN)-10_100_500-contour.pbf: $(MOI2019_TAIWAN)_20m-zero.tif
+$(MOI2018_TAIWAN)-10_100_500-contour.pbf: $(MOI2018_TAIWAN)_20m-zero.tif
+%-10_100_500-contour.pbf: %_20m-zero.tif
+	phyghtmap \
+		--step=10 \
+		--output-prefix=dem_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.00001 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv dem_contour* $@
+
+
+$(MOI2016_TAIWAN)-10_100_500-contour.pbf: $(MOI2016_TAIWAN)_20m-zero.tif
+	phyghtmap \
+		--step=10 \
+		--output-prefix=dem_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000002 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv dem_contour* $@
+
+
+$(MOI2020_TAIWAN)-20_100_500-contour.pbf: $(MOI2020_TAIWAN)_20m-zero.tif
+$(MOI2019_TAIWAN)-20_100_500-contour.pbf: $(MOI2019_TAIWAN)_20m-zero.tif
+$(MOI2018_TAIWAN)-20_100_500-contour.pbf: $(MOI2018_TAIWAN)_20m-zero.tif
+%/taiwan-20_100_500-contour.pbf: %/taiwan_20m-zero.tif
+	phyghtmap \
+		--step=20 \
+		--output-prefix=dem_lite_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.00005 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv dem_lite_contour* $@
+
+
+$(MOI2016_TAIWAN)-20_100_500-contour.pbf: $(MOI2016_TAIWAN)_20m-zero.tif
+	phyghtmap \
+		--step=20 \
+		--output-prefix=dem_lite_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000005 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv dem_lite_contour* $@
+
 
 $(MOI2019_PENGHU)-10_100_500-contour.pbf: $(MOI2019_PENGHU)-zero.tif
 $(MOI2016_PENGHU)-10_100_500-contour.pbf: $(MOI2016_PENGHU)-zero.tif
@@ -414,83 +482,111 @@ $(MOI2019_KINMEN)-20_100_500-contour.pbf: $(MOI2019_KINMEN)-zero.tif
 	mv kinmen_lite_contour* $@
 
 
-moi-2018/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-crop_to_cutline \
-		-cutline moi-2018/void_area.shp \
-		$^ \
-		$@
-
-
-moi-2019/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-crop_to_cutline \
-		-cutline moi-2019/void_area.shp \
-		$^ \
-		$@
-
-
-aw3d30-2.1/islands-10_50_100_500-contour.pbf: aw3d30-2.1/islands-10_100_500-contour.pbf
-$(MOI2020_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2020_TAIWAN)-10_100_500-contour.pbf
-$(MOI2019_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2019_TAIWAN)-10_100_500-contour.pbf
-$(MOI2019_PENGHU)-10_50_100_500-contour.pbf: $(MOI2019_PENGHU)-10_100_500-contour.pbf
-$(MOI2019_KINMEN)-10_50_100_500-contour.pbf: $(MOI2019_KINMEN)-10_100_500-contour.pbf
-$(MOI2018_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2018_TAIWAN)-10_100_500-contour.pbf
-$(MOI2016_PENGHU)-10_50_100_500-contour.pbf: $(MOI2016_PENGHU)-10_100_500-contour.pbf
-$(MOI2016_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2016_TAIWAN)-10_100_500-contour.pbf
-$(AW31_NO_KINMEN)-10_50_100_500-contour.pbf: $(AW31_NO_KINMEN)-10_100_500-contour.pbf
-$(AW21_NO_KINMEN)-10_50_100_500-contour.pbf: $(AW21_NO_KINMEN)-10_100_500-contour.pbf
-%-10_50_100_500-contour.pbf: %-10_100_500-contour.pbf
-	rm -f $@
-	python3 tools/elevation_sub.py $< $@
-
-
-$(MOI2020_TAIWAN)-20_100_500-contour.pbf: $(MOI2020_TAIWAN)_20m-zero.tif
-$(MOI2019_TAIWAN)-20_100_500-contour.pbf: $(MOI2019_TAIWAN)_20m-zero.tif
-$(MOI2018_TAIWAN)-20_100_500-contour.pbf: $(MOI2018_TAIWAN)_20m-zero.tif
-%/taiwan-20_100_500-contour.pbf: %/taiwan_20m-zero.tif
-	phyghtmap \
-		--step=20 \
-		--output-prefix=dem_lite_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.00005 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv dem_lite_contour* $@
-
-
-$(MOI2020_TAIWAN)-10_100_500-contour.pbf: $(MOI2020_TAIWAN)_15m-zero.tif
+$(AW21_KINMEN)-10_50_100-contour.pbf: $(AW21_KINMEN)-zero.tif
 	phyghtmap \
 		--step=10 \
-		--output-prefix=dem_contour \
+		--output-prefix=kinmen_contour \
 		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.00001 \
+		--simplifyContoursEpsilon=0.000025 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
-	mv dem_contour* $@
+	mv kinmen_contour* $@
 
 
-$(MOI2020_MARKER)-contour.pbf: \
-  $(MOI2020_TAIWAN)_40m-contour.pbf \
-  $(MOI2020_TAIWAN)_80m-contour.pbf \
-  $(MOI2020_TAIWAN)_160m-contour.pbf \
-  $(MOI2020_TAIWAN)_320m-contour.pbf \
-  $(MOI2020_TAIWAN)_640m-contour.pbf \
-  $(MOI2020_TAIWAN)_1280m-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
+$(AW21_KINMEN)-20_50_100-contour.pbf: $(AW21_KINMEN)-zero.tif
+	phyghtmap \
+		--step=20 \
+		--output-prefix=kinmen_lite_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000125 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
 		$^
+	mv kinmen_lite_contour* $@
+
+
+$(AW31_MATSU)-10_50_100-contour.pbf: $(AW31_MATSU)-zero.tif
+$(AW21_MATSU)-10_50_100-contour.pbf: $(AW21_MATSU)-zero.tif
+%/matsu-10_50_100-contour.pbf: %/matsu-zero.tif
+	phyghtmap \
+		--step=10 \
+		--output-prefix=matsu_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000025 \
+		--pbf \
+		$^
+	mv matsu_contour* $@
+
+
+$(AW31_MATSU)-20_50_100-contour.pbf: $(AW31_MATSU)-zero.tif
+$(AW21_MATSU)-20_50_100-contour.pbf: $(AW21_MATSU)-zero.tif
+%/matsu-20_50_100-contour.pbf: %/matsu-zero.tif
+	phyghtmap \
+		--step=20 \
+		--output-prefix=matsu_lite_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000125 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv matsu_lite_contour* $@
+
+
+$(AW31_N3ISLETS)-10_50_100-contour.pbf: $(AW31_N3ISLETS)-zero.tif
+$(AW21_N3ISLETS)-10_50_100-contour.pbf: $(AW21_N3ISLETS)-zero.tif
+%/n3islets-10_50_100-contour.pbf: %/n3islets-zero.tif
+	phyghtmap \
+		--step=10 \
+		--output-prefix=n3islets_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000025 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv n3islets_contour* $@
+
+
+$(AW31_N3ISLETS)-20_50_100-contour.pbf: $(AW31_N3ISLETS)-zero.tif
+$(AW21_N3ISLETS)-20_50_100-contour.pbf: $(AW21_N3ISLETS)-zero.tif
+%/n3islets-20_50_100-contour.pbf: %/n3islets-zero.tif
+	phyghtmap \
+		--step=20 \
+		--output-prefix=n3islets_lite_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000125 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv n3islets_lite_contour* $@
+
+
+$(AW31_WUQIU)-10_50_100-contour.pbf: $(AW31_WUQIU)-zero.tif
+$(AW21_WUQIU)-10_50_100-contour.pbf: $(AW21_WUQIU)-zero.tif
+%/wuqiu-10_50_100-contour.pbf: %/wuqiu-zero.tif
+	phyghtmap \
+		--step=10 \
+		--output-prefix=wuqiu_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000025 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv wuqiu_contour* $@
+
+
+$(AW31_WUQIU)-20_50_100-contour.pbf: $(AW31_WUQIU)-zero.tif
+$(AW21_WUQIU)-20_50_100-contour.pbf: $(AW21_WUQIU)-zero.tif
+%/wuqiu-20_50_100-contour.pbf: %/wuqiu-zero.tif
+	phyghtmap \
+		--step=20 \
+		--output-prefix=wuqiu_lite_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000125 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv wuqiu_lite_contour* $@
 
 
 $(MOI2020_TAIWAN)_40m-contour.pbf: $(MOI2020_TAIWAN)_40m-zero.tif
@@ -610,6 +706,58 @@ $(MOI2016_TAIWAN)_1280m-contour.pbf: $(MOI2016_TAIWAN)_1280m-zero.tif
 		--out-pbf \
 		$(@:.pbf=.osm) \
 		-o=$@
+
+
+moi-2018/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-crop_to_cutline \
+		-cutline moi-2018/void_area.shp \
+		$^ \
+		$@
+
+
+moi-2019/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-crop_to_cutline \
+		-cutline moi-2019/void_area.shp \
+		$^ \
+		$@
+
+
+aw3d30-2.1/islands-10_50_100_500-contour.pbf: aw3d30-2.1/islands-10_100_500-contour.pbf
+$(MOI2020_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2020_TAIWAN)-10_100_500-contour.pbf
+$(MOI2019_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2019_TAIWAN)-10_100_500-contour.pbf
+$(MOI2019_PENGHU)-10_50_100_500-contour.pbf: $(MOI2019_PENGHU)-10_100_500-contour.pbf
+$(MOI2019_KINMEN)-10_50_100_500-contour.pbf: $(MOI2019_KINMEN)-10_100_500-contour.pbf
+$(MOI2018_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2018_TAIWAN)-10_100_500-contour.pbf
+$(MOI2016_PENGHU)-10_50_100_500-contour.pbf: $(MOI2016_PENGHU)-10_100_500-contour.pbf
+$(MOI2016_TAIWAN)-10_50_100_500-contour.pbf: $(MOI2016_TAIWAN)-10_100_500-contour.pbf
+$(AW31_NO_KINMEN)-10_50_100_500-contour.pbf: $(AW31_NO_KINMEN)-10_100_500-contour.pbf
+$(AW21_NO_KINMEN)-10_50_100_500-contour.pbf: $(AW21_NO_KINMEN)-10_100_500-contour.pbf
+%-10_50_100_500-contour.pbf: %-10_100_500-contour.pbf
+	rm -f $@
+	python3 tools/elevation_sub.py $< $@
+
+
+$(MOI2020_MARKER)-contour.pbf: \
+  $(MOI2020_TAIWAN)_40m-contour.pbf \
+  $(MOI2020_TAIWAN)_80m-contour.pbf \
+  $(MOI2020_TAIWAN)_160m-contour.pbf \
+  $(MOI2020_TAIWAN)_320m-contour.pbf \
+  $(MOI2020_TAIWAN)_640m-contour.pbf \
+  $(MOI2020_TAIWAN)_1280m-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
 
 
 $(MOI2019_TAIWAN)_10m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
@@ -810,44 +958,6 @@ moi-2020/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 		$@
 
 
-$(MOI2016_TAIWAN)-10_100_500-contour.pbf: $(MOI2016_TAIWAN)_20m-zero.tif
-	phyghtmap \
-		--step=10 \
-		--output-prefix=dem_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000002 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv dem_contour* $@
-
-
-$(MOI2019_TAIWAN)-10_100_500-contour.pbf: $(MOI2019_TAIWAN)_20m-zero.tif
-$(MOI2018_TAIWAN)-10_100_500-contour.pbf: $(MOI2018_TAIWAN)_20m-zero.tif
-%-10_100_500-contour.pbf: %_20m-zero.tif
-	phyghtmap \
-		--step=10 \
-		--output-prefix=dem_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.00001 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv dem_contour* $@
-
-
-$(MOI2016_TAIWAN)-20_100_500-contour.pbf: $(MOI2016_TAIWAN)_20m-zero.tif
-	phyghtmap \
-		--step=20 \
-		--output-prefix=dem_lite_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000005 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv dem_lite_contour* $@
-
-
 $(AW31_N3ISLETS)-nodata0.tif: aw3d30-3.1/.unzip
 	rm -f $@
 	gdalwarp \
@@ -868,34 +978,6 @@ $(AW21_N3ISLETS)-nodata0.tif: aw3d30-2.1/.unzip
 		-dstnodata 0 \
 		aw3d30-2.1/N025E122_AVE_DSM.tif \
 		$@
-
-
-$(AW31_N3ISLETS)-10_50_100-contour.pbf: $(AW31_N3ISLETS)-zero.tif
-$(AW21_N3ISLETS)-10_50_100-contour.pbf: $(AW21_N3ISLETS)-zero.tif
-%/n3islets-10_50_100-contour.pbf: %/n3islets-zero.tif
-	phyghtmap \
-		--step=10 \
-		--output-prefix=n3islets_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000025 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv n3islets_contour* $@
-
-
-$(AW31_N3ISLETS)-20_50_100-contour.pbf: $(AW31_N3ISLETS)-zero.tif
-$(AW21_N3ISLETS)-20_50_100-contour.pbf: $(AW21_N3ISLETS)-zero.tif
-%/n3islets-20_50_100-contour.pbf: %/n3islets-zero.tif
-	phyghtmap \
-		--step=20 \
-		--output-prefix=n3islets_lite_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000125 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv n3islets_lite_contour* $@
 
 
 $(AW31_MATSU)-nodata0.tif: aw3d30-3.1/.unzip
@@ -924,33 +1006,6 @@ $(AW21_MATSU)-nodata0.tif: aw3d30-2.1/.unzip
 		$@
 
 
-$(AW31_MATSU)-10_50_100-contour.pbf: $(AW31_MATSU)-zero.tif
-$(AW21_MATSU)-10_50_100-contour.pbf: $(AW21_MATSU)-zero.tif
-%/matsu-10_50_100-contour.pbf: %/matsu-zero.tif
-	phyghtmap \
-		--step=10 \
-		--output-prefix=matsu_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000025 \
-		--pbf \
-		$^
-	mv matsu_contour* $@
-
-
-$(AW31_MATSU)-20_50_100-contour.pbf: $(AW31_MATSU)-zero.tif
-$(AW21_MATSU)-20_50_100-contour.pbf: $(AW21_MATSU)-zero.tif
-%/matsu-20_50_100-contour.pbf: %/matsu-zero.tif
-	phyghtmap \
-		--step=20 \
-		--output-prefix=matsu_lite_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000125 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv matsu_lite_contour* $@
-
-
 $(AW31_WUQIU)-nodata0.tif: aw3d30-3.1/.unzip
 	rm -f $@
 	gdalwarp \
@@ -973,34 +1028,6 @@ $(AW21_WUQIU)-nodata0.tif: aw3d30-2.1/.unzip
 		$@
 
 
-$(AW31_WUQIU)-10_50_100-contour.pbf: $(AW31_WUQIU)-zero.tif
-$(AW21_WUQIU)-10_50_100-contour.pbf: $(AW21_WUQIU)-zero.tif
-%/wuqiu-10_50_100-contour.pbf: %/wuqiu-zero.tif
-	phyghtmap \
-		--step=10 \
-		--output-prefix=wuqiu_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000025 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv wuqiu_contour* $@
-
-
-$(AW31_WUQIU)-20_50_100-contour.pbf: $(AW31_WUQIU)-zero.tif
-$(AW21_WUQIU)-20_50_100-contour.pbf: $(AW21_WUQIU)-zero.tif
-%/wuqiu-20_50_100-contour.pbf: %/wuqiu-zero.tif
-	phyghtmap \
-		--step=20 \
-		--output-prefix=wuqiu_lite_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000125 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv wuqiu_lite_contour* $@
-
-
 $(AW21_KINMEN)-nodata0.tif: aw3d30-2.1/.unzip
 	rm -f $@
 	gdalwarp \
@@ -1010,30 +1037,6 @@ $(AW21_KINMEN)-nodata0.tif: aw3d30-2.1/.unzip
 		-dstnodata 0 \
 		aw3d30-2.1/N024E118_AVE_DSM.tif \
 		$@
-
-
-$(AW21_KINMEN)-10_50_100-contour.pbf: $(AW21_KINMEN)-zero.tif
-	phyghtmap \
-		--step=10 \
-		--output-prefix=kinmen_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000025 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv kinmen_contour* $@
-
-
-$(AW21_KINMEN)-20_50_100-contour.pbf: $(AW21_KINMEN)-zero.tif
-	phyghtmap \
-		--step=20 \
-		--output-prefix=kinmen_lite_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000125 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv kinmen_lite_contour* $@
 
 
 $(MOI2016_TAIWAN)_40m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
