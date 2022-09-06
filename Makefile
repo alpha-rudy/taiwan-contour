@@ -540,7 +540,7 @@ $(MOI2019_KINMEN)-20_100_500-contour.pbf: $(MOI2019_KINMEN)-zero.tif
 	mv kinmen_lite_contour* $@
 
 
-$(AW21_KINMEN)-10_50_100-contour.pbf: $(AW21_KINMEN)-zero.tif
+$(AW21_KINMEN)-10_100_500-contour.pbf: $(AW21_KINMEN)-zero.tif
 	phyghtmap \
 		--step=10 \
 		--output-prefix=kinmen_contour \
@@ -552,7 +552,7 @@ $(AW21_KINMEN)-10_50_100-contour.pbf: $(AW21_KINMEN)-zero.tif
 	mv kinmen_contour* $@
 
 
-$(AW21_KINMEN)-20_50_100-contour.pbf: $(AW21_KINMEN)-zero.tif
+$(AW21_KINMEN)-20_100_500-contour.pbf: $(AW21_KINMEN)-zero.tif
 	phyghtmap \
 		--step=20 \
 		--output-prefix=kinmen_lite_contour \
@@ -564,9 +564,9 @@ $(AW21_KINMEN)-20_50_100-contour.pbf: $(AW21_KINMEN)-zero.tif
 	mv kinmen_lite_contour* $@
 
 
-$(AW31_MATSU)-10_50_100-contour.pbf: $(AW31_MATSU)-zero.tif
-$(AW21_MATSU)-10_50_100-contour.pbf: $(AW21_MATSU)-zero.tif
-%/matsu-10_50_100-contour.pbf: %/matsu-zero.tif
+$(AW31_MATSU)-10_100_500-contour.pbf: $(AW31_MATSU)-zero.tif
+$(AW21_MATSU)-10_100_500-contour.pbf: $(AW21_MATSU)-zero.tif
+%/matsu-10_100_500-contour.pbf: %/matsu-zero.tif
 	phyghtmap \
 		--step=10 \
 		--output-prefix=matsu_contour \
@@ -577,9 +577,9 @@ $(AW21_MATSU)-10_50_100-contour.pbf: $(AW21_MATSU)-zero.tif
 	mv matsu_contour* $@
 
 
-$(AW31_MATSU)-20_50_100-contour.pbf: $(AW31_MATSU)-zero.tif
-$(AW21_MATSU)-20_50_100-contour.pbf: $(AW21_MATSU)-zero.tif
-%/matsu-20_50_100-contour.pbf: %/matsu-zero.tif
+$(AW31_MATSU)-20_100_500-contour.pbf: $(AW31_MATSU)-zero.tif
+$(AW21_MATSU)-20_100_500-contour.pbf: $(AW21_MATSU)-zero.tif
+%/matsu-20_100_500-contour.pbf: %/matsu-zero.tif
 	phyghtmap \
 		--step=20 \
 		--output-prefix=matsu_lite_contour \
@@ -591,9 +591,9 @@ $(AW21_MATSU)-20_50_100-contour.pbf: $(AW21_MATSU)-zero.tif
 	mv matsu_lite_contour* $@
 
 
-$(AW31_N3ISLETS)-10_50_100-contour.pbf: $(AW31_N3ISLETS)-zero.tif
-$(AW21_N3ISLETS)-10_50_100-contour.pbf: $(AW21_N3ISLETS)-zero.tif
-%/n3islets-10_50_100-contour.pbf: %/n3islets-zero.tif
+$(AW31_N3ISLETS)-10_100_500-contour.pbf: $(AW31_N3ISLETS)-zero.tif
+$(AW21_N3ISLETS)-10_100_500-contour.pbf: $(AW21_N3ISLETS)-zero.tif
+%/n3islets-10_100_500-contour.pbf: %/n3islets-zero.tif
 	phyghtmap \
 		--step=10 \
 		--output-prefix=n3islets_contour \
@@ -605,9 +605,9 @@ $(AW21_N3ISLETS)-10_50_100-contour.pbf: $(AW21_N3ISLETS)-zero.tif
 	mv n3islets_contour* $@
 
 
-$(AW31_N3ISLETS)-20_50_100-contour.pbf: $(AW31_N3ISLETS)-zero.tif
-$(AW21_N3ISLETS)-20_50_100-contour.pbf: $(AW21_N3ISLETS)-zero.tif
-%/n3islets-20_50_100-contour.pbf: %/n3islets-zero.tif
+$(AW31_N3ISLETS)-20_100_500-contour.pbf: $(AW31_N3ISLETS)-zero.tif
+$(AW21_N3ISLETS)-20_100_500-contour.pbf: $(AW21_N3ISLETS)-zero.tif
+%/n3islets-20_100_500-contour.pbf: %/n3islets-zero.tif
 	phyghtmap \
 		--step=20 \
 		--output-prefix=n3islets_lite_contour \
@@ -619,9 +619,9 @@ $(AW21_N3ISLETS)-20_50_100-contour.pbf: $(AW21_N3ISLETS)-zero.tif
 	mv n3islets_lite_contour* $@
 
 
-$(AW31_WUQIU)-10_50_100-contour.pbf: $(AW31_WUQIU)-zero.tif
-$(AW21_WUQIU)-10_50_100-contour.pbf: $(AW21_WUQIU)-zero.tif
-%/wuqiu-10_50_100-contour.pbf: %/wuqiu-zero.tif
+$(AW31_WUQIU)-10_100_500-contour.pbf: $(AW31_WUQIU)-zero.tif
+$(AW21_WUQIU)-10_100_500-contour.pbf: $(AW21_WUQIU)-zero.tif
+%/wuqiu-10_100_500-contour.pbf: %/wuqiu-zero.tif
 	phyghtmap \
 		--step=10 \
 		--output-prefix=wuqiu_contour \
@@ -633,9 +633,9 @@ $(AW21_WUQIU)-10_50_100-contour.pbf: $(AW21_WUQIU)-zero.tif
 	mv wuqiu_contour* $@
 
 
-$(AW31_WUQIU)-20_50_100-contour.pbf: $(AW31_WUQIU)-zero.tif
-$(AW21_WUQIU)-20_50_100-contour.pbf: $(AW21_WUQIU)-zero.tif
-%/wuqiu-20_50_100-contour.pbf: %/wuqiu-zero.tif
+$(AW31_WUQIU)-20_100_500-contour.pbf: $(AW31_WUQIU)-zero.tif
+$(AW21_WUQIU)-20_100_500-contour.pbf: $(AW21_WUQIU)-zero.tif
+%/wuqiu-20_100_500-contour.pbf: %/wuqiu-zero.tif
 	phyghtmap \
 		--step=20 \
 		--output-prefix=wuqiu_lite_contour \
@@ -1166,10 +1166,10 @@ $(MOI2016_TAIWAN)_1280m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 
 
 aw3d30-2.1/islands-10_100_500-contour.pbf: \
-  $(AW21_KINMEN)-10_50_100-contour.pbf \
-  $(AW21_MATSU)-10_50_100-contour.pbf \
-  $(AW21_N3ISLETS)-10_50_100-contour.pbf \
-  $(AW21_WUQIU)-10_50_100-contour.pbf
+  $(AW21_KINMEN)-10_100_500-contour.pbf \
+  $(AW21_MATSU)-10_100_500-contour.pbf \
+  $(AW21_N3ISLETS)-10_100_500-contour.pbf \
+  $(AW21_WUQIU)-10_100_500-contour.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1179,10 +1179,10 @@ aw3d30-2.1/islands-10_100_500-contour.pbf: \
 
 
 aw3d30-2.1/islands-20_100_500-contour.pbf: \
-  $(AW21_KINMEN)-20_50_100-contour.pbf \
-  $(AW21_MATSU)-20_50_100-contour.pbf \
-  $(AW21_N3ISLETS)-20_50_100-contour.pbf \
-  $(AW21_WUQIU)-20_50_100-contour.pbf
+  $(AW21_KINMEN)-20_100_500-contour.pbf \
+  $(AW21_MATSU)-20_100_500-contour.pbf \
+  $(AW21_N3ISLETS)-20_100_500-contour.pbf \
+  $(AW21_WUQIU)-20_100_500-contour.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1204,17 +1204,17 @@ aw3d30-2.1/islands-20_100_500-contour.pbf: \
 
 
 $(AW31_NO_KINMEN)-10_100_500-contour.pbf: \
-  $(AW31_MATSU)-10_50_100-contour.pbf \
-  $(AW31_N3ISLETS)-10_50_100-contour.pbf \
-  $(AW31_WUQIU)-10_50_100-contour.pbf
+  $(AW31_MATSU)-10_100_500-contour.pbf \
+  $(AW31_N3ISLETS)-10_100_500-contour.pbf \
+  $(AW31_WUQIU)-10_100_500-contour.pbf
 $(AW21_NO_KINMEN)-10_100_500-contour.pbf: \
-  $(AW21_MATSU)-10_50_100-contour.pbf \
-  $(AW21_N3ISLETS)-10_50_100-contour.pbf \
-  $(AW21_WUQIU)-10_50_100-contour.pbf
+  $(AW21_MATSU)-10_100_500-contour.pbf \
+  $(AW21_N3ISLETS)-10_100_500-contour.pbf \
+  $(AW21_WUQIU)-10_100_500-contour.pbf
 %/islands_nokinmen-10_100_500-contour.pbf: \
-  %/matsu-10_50_100-contour.pbf \
-  %/n3islets-10_50_100-contour.pbf \
-  %/wuqiu-10_50_100-contour.pbf
+  %/matsu-10_100_500-contour.pbf \
+  %/n3islets-10_100_500-contour.pbf \
+  %/wuqiu-10_100_500-contour.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1224,17 +1224,17 @@ $(AW21_NO_KINMEN)-10_100_500-contour.pbf: \
 
 
 $(AW31_NO_KINMEN)-20_100_500-contour.pbf: \
-  $(AW31_MATSU)-20_50_100-contour.pbf \
-  $(AW31_N3ISLETS)-20_50_100-contour.pbf \
-  $(AW31_WUQIU)-20_50_100-contour.pbf
+  $(AW31_MATSU)-20_100_500-contour.pbf \
+  $(AW31_N3ISLETS)-20_100_500-contour.pbf \
+  $(AW31_WUQIU)-20_100_500-contour.pbf
 $(AW21_NO_KINMEN)-20_100_500-contour.pbf: \
-  $(AW21_MATSU)-20_50_100-contour.pbf \
-  $(AW21_N3ISLETS)-20_50_100-contour.pbf \
-  $(AW21_WUQIU)-20_50_100-contour.pbf
+  $(AW21_MATSU)-20_100_500-contour.pbf \
+  $(AW21_N3ISLETS)-20_100_500-contour.pbf \
+  $(AW21_WUQIU)-20_100_500-contour.pbf
 %/islands_nokinmen-20_100_500-contour.pbf: \
-  %/matsu-20_50_100-contour.pbf \
-  %/n3islets-20_50_100-contour.pbf \
-  %/wuqiu-20_50_100-contour.pbf
+  %/matsu-20_100_500-contour.pbf \
+  %/n3islets-20_100_500-contour.pbf \
+  %/wuqiu-20_100_500-contour.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
