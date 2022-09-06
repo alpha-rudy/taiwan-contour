@@ -194,10 +194,10 @@ class ContourTranslation(ogr2osm.TranslationBase):
         tags={}
 
         if 'height' in attrs:
-            tags['ele'] = attrs['height']
             tags['contour'] = 'elevation'
 
             height = int(float(attrs['height']))
+            tags['ele'] = str(height)
             if height % self.major_category == 0:
                 tags[self.category_tag] = 'elevation_major'
             elif height % self.medium_category == 0:
