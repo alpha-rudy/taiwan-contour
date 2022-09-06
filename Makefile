@@ -63,6 +63,246 @@ AW21_WUQIU = aw3d30-2.1/wuqiu
 AW21_KINMEN = aw3d30-2.1/kinmen
 AW21_NO_KINMEN = aw3d30-2.1/islands_nokinmen
 
+## Outputs
+
+.PHONY: taiwan-contour-2021
+taiwan-contour-2021: ele_taiwan_10_100_500-2021.pbf
+ele_taiwan_10_100_500-2021.pbf: \
+  $(MOI2020_TAIWAN)-10_100_500-contour.pbf \
+  $(MOI2019_PENGHU)-10_100_500-contour.pbf \
+  $(MOI2019_KINMEN)-10_100_500-contour.pbf \
+  $(AW31_NO_KINMEN)-10_100_500-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-mix-2021
+taiwan-contour-mix-2021: ele_taiwan_10_100_500_mix-2021.pbf
+ele_taiwan_10_100_500_mix-2021.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2020_TAIWAN)-10_50_100_500-contour.pbf \
+  $(MOI2019_PENGHU)-10_50_100_500-contour.pbf \
+  $(MOI2019_KINMEN)-10_50_100_500-contour.pbf \
+  $(AW31_NO_KINMEN)-10_50_100_500-contour.pbf \
+  $(MOI2020_MARKER)-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-lite-contour-mix-2021
+taiwan-lite-contour-mix-2021: ele_taiwan_20_100_500_mix-2021.pbf
+ele_taiwan_20_100_500_mix-2021.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2020_TAIWAN)-20_100_500-contour.pbf \
+  $(MOI2019_PENGHU)-20_100_500-contour.pbf \
+  $(MOI2019_KINMEN)-20_100_500-contour.pbf \
+  $(AW31_NO_KINMEN)-20_100_500-contour.pbf \
+  $(MOI2020_MARKER)-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-2020
+taiwan-contour-2020: ele_taiwan_10_100_500-2020.pbf
+ele_taiwan_10_100_500-2020.pbf: \
+  $(MOI2020_TAIWAN)-10_100_500-contour.pbf \
+  $(MOI2019_PENGHU)-10_100_500-contour.pbf \
+  $(MOI2019_KINMEN)-10_100_500-contour.pbf \
+  $(AW21_NO_KINMEN)-10_100_500-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-mix-2020
+taiwan-contour-mix-2020: ele_taiwan_10_100_500_mix-2020.pbf
+ele_taiwan_10_100_500_mix-2020.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2020_TAIWAN)-10_50_100_500-contour.pbf \
+  $(MOI2019_PENGHU)-10_50_100_500-contour.pbf \
+  $(MOI2019_KINMEN)-10_50_100_500-contour.pbf \
+  $(AW21_NO_KINMEN)-10_50_100_500-contour.pbf \
+  $(MOI2020_MARKER)-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-lite-contour-mix-2020
+taiwan-lite-contour-mix-2020: ele_taiwan_20_100_500_mix-2020.pbf
+ele_taiwan_20_100_500_mix-2020.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2020_TAIWAN)-20_100_500-contour.pbf \
+  $(MOI2019_PENGHU)-20_100_500-contour.pbf \
+  $(MOI2019_KINMEN)-20_100_500-contour.pbf \
+  $(AW21_NO_KINMEN)-20_100_500-contour.pbf \
+  $(MOI2020_MARKER)-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-2019
+taiwan-contour-2019: ele_taiwan_10_100_500-2019.pbf
+ele_taiwan_10_100_500-2019.pbf: \
+  $(MOI2019_TAIWAN)-10_100_500-contour.pbf \
+  $(MOI2019_PENGHU)-10_100_500-contour.pbf \
+  $(MOI2019_KINMEN)-10_100_500-contour.pbf \
+  $(AW21_NO_KINMEN)-10_100_500-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-mix-2019
+taiwan-contour-mix-2019: ele_taiwan_10_100_500_mix-2019.pbf
+ele_taiwan_10_100_500_mix-2019.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2019_TAIWAN)-10_50_100_500-contour.pbf \
+  $(MOI2019_PENGHU)-10_50_100_500-contour.pbf \
+  $(MOI2019_KINMEN)-10_50_100_500-contour.pbf \
+  $(AW21_NO_KINMEN)-10_50_100_500-contour.pbf \
+  $(MOI2019_MARKER)-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-lite-contour-mix-2019
+taiwan-lite-contour-mix-2019: ele_taiwan_20_100_500_mix-2019.pbf
+ele_taiwan_20_100_500_mix-2019.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2019_TAIWAN)-20_100_500-contour.pbf \
+  $(MOI2019_PENGHU)-20_100_500-contour.pbf \
+  $(MOI2019_KINMEN)-20_100_500-contour.pbf \
+  $(AW21_NO_KINMEN)-20_100_500-contour.pbf \
+  $(MOI2019_MARKER)-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-2018
+taiwan-contour-2018: ele_taiwan_10_100_500-2018.pbf
+ele_taiwan_10_100_500-2018.pbf: \
+  $(MOI2018_TAIWAN)-10_100_500-contour.pbf \
+  $(MOI2016_PENGHU)-10_100_500-contour.pbf \
+  aw3d30-2.1/islands-10_100_500-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-mix-2018
+taiwan-contour-mix-2018: ele_taiwan_10_100_500_mix-2018.pbf
+ele_taiwan_10_100_500_mix-2018.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2018_TAIWAN)-10_50_100_500-contour.pbf \
+  $(MOI2016_PENGHU)-10_50_100_500-contour.pbf \
+  aw3d30-2.1/islands-10_50_100_500-contour.pbf \
+  $(MOI2018_MARKER)-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-lite-contour-mix-2018
+taiwan-lite-contour-mix-2018: ele_taiwan_20_100_500_mix-2018.pbf
+ele_taiwan_20_100_500_mix-2018.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2018_TAIWAN)-20_100_500-contour.pbf \
+  $(MOI2016_PENGHU)-20_100_500-contour.pbf \
+  aw3d30-2.1/islands-20_100_500-contour.pbf \
+  $(MOI2018_MARKER)-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-2016
+taiwan-contour-2016: ele_taiwan_10_100_500-2016.pbf
+ele_taiwan_10_100_500-2016.pbf: \
+  $(MOI2016_TAIWAN)-10_100_500-contour.pbf \
+  $(MOI2016_PENGHU)-10_100_500-contour.pbf \
+  aw3d30-2.1/islands-10_100_500-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-mix-2016
+taiwan-contour-mix-2016: ele_taiwan_10_50_100_500_mix-2016.pbf
+ele_taiwan_10_50_100_500_mix-2016.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2016_TAIWAN)-10_50_100_500-contour.pbf \
+  $(MOI2016_PENGHU)-10_50_100_500-contour.pbf \
+  aw3d30-2.1/islands-10_50_100_500-contour.pbf \
+  $(MOI2016_MARKER)-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-lite-contour-mix-2016
+taiwan-lite-contour-mix-2016: ele_taiwan_20_100_500_mix-2016.pbf
+ele_taiwan_20_100_500_mix-2016.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2016_TAIWAN)-20_100_500-contour.pbf \
+  $(MOI2016_PENGHU)-20_100_500-contour.pbf \
+  aw3d30-2.1/islands-20_100_500-contour.pbf \
+  $(MOI2016_MARKER)-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
 
 $(MOI2019_PENGHU)-10_100_500-contour.pbf: $(MOI2019_PENGHU)-zero.tif
 $(MOI2016_PENGHU)-10_100_500-contour.pbf: $(MOI2016_PENGHU)-zero.tif
@@ -165,104 +405,6 @@ moi-2019/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 		-cutline moi-2019/void_area.shp \
 		$^ \
 		$@
-
-
-.PHONY: taiwan-contour-mix-2021
-taiwan-contour-mix-2021: ele_taiwan_10_100_500_mix-2021.pbf
-ele_taiwan_10_100_500_mix-2021.pbf: \
-  precompiled/taiwan-sealand.pbf \
-  $(MOI2020_TAIWAN)-10_50_100_500-contour.pbf \
-  $(MOI2019_PENGHU)-10_50_100_500-contour.pbf \
-  $(MOI2019_KINMEN)-10_50_100_500-contour.pbf \
-  $(AW31_NO_KINMEN)-10_50_100_500-contour.pbf \
-  $(MOI2020_MARKER)-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-contour-mix-2020
-taiwan-contour-mix-2020: ele_taiwan_10_100_500_mix-2020.pbf
-ele_taiwan_10_100_500_mix-2020.pbf: \
-  precompiled/taiwan-sealand.pbf \
-  $(MOI2020_TAIWAN)-10_50_100_500-contour.pbf \
-  $(MOI2019_PENGHU)-10_50_100_500-contour.pbf \
-  $(MOI2019_KINMEN)-10_50_100_500-contour.pbf \
-  $(AW21_NO_KINMEN)-10_50_100_500-contour.pbf \
-  $(MOI2020_MARKER)-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-lite-contour-mix-2021
-taiwan-lite-contour-mix-2021: ele_taiwan_20_100_500_mix-2021.pbf
-ele_taiwan_20_100_500_mix-2021.pbf: \
-  precompiled/taiwan-sealand.pbf \
-  $(MOI2020_TAIWAN)-20_100_500-contour.pbf \
-  $(MOI2019_PENGHU)-20_100_500-contour.pbf \
-  $(MOI2019_KINMEN)-20_100_500-contour.pbf \
-  $(AW31_NO_KINMEN)-20_100_500-contour.pbf \
-  $(MOI2020_MARKER)-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-lite-contour-mix-2020
-taiwan-lite-contour-mix-2020: ele_taiwan_20_100_500_mix-2020.pbf
-ele_taiwan_20_100_500_mix-2020.pbf: \
-  precompiled/taiwan-sealand.pbf \
-  $(MOI2020_TAIWAN)-20_100_500-contour.pbf \
-  $(MOI2019_PENGHU)-20_100_500-contour.pbf \
-  $(MOI2019_KINMEN)-20_100_500-contour.pbf \
-  $(AW21_NO_KINMEN)-20_100_500-contour.pbf \
-  $(MOI2020_MARKER)-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-contour-2021
-taiwan-contour-2021: ele_taiwan_10_100_500-2021.pbf
-ele_taiwan_10_100_500-2021.pbf: \
-  $(MOI2020_TAIWAN)-10_100_500-contour.pbf \
-  $(MOI2019_PENGHU)-10_100_500-contour.pbf \
-  $(MOI2019_KINMEN)-10_100_500-contour.pbf \
-  $(AW31_NO_KINMEN)-10_100_500-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-contour-2020
-taiwan-contour-2020: ele_taiwan_10_100_500-2020.pbf
-ele_taiwan_10_100_500-2020.pbf: \
-  $(MOI2020_TAIWAN)-10_100_500-contour.pbf \
-  $(MOI2019_PENGHU)-10_100_500-contour.pbf \
-  $(MOI2019_KINMEN)-10_100_500-contour.pbf \
-  $(AW21_NO_KINMEN)-10_100_500-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
 
 
 aw3d30-2.1/islands-10_50_100_500-contour.pbf: aw3d30-2.1/islands-10_100_500-contour.pbf
@@ -1064,155 +1206,3 @@ $(MOI2019_MARKER)-contour.pbf: \
 		1 \
 		$^
 
-
-.PHONY: taiwan-contour
-taiwan-contour: taiwan-contour-2021
-
-
-.PHONY: taiwan-contour-2016
-taiwan-contour-2016: ele_taiwan_10_100_500-2016.pbf
-ele_taiwan_10_100_500-2016.pbf: \
-  $(MOI2016_TAIWAN)-10_100_500-contour.pbf \
-  $(MOI2016_PENGHU)-10_100_500-contour.pbf \
-  aw3d30-2.1/islands-10_100_500-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-contour-2018
-taiwan-contour-2018: ele_taiwan_10_100_500-2018.pbf
-ele_taiwan_10_100_500-2018.pbf: \
-  $(MOI2018_TAIWAN)-10_100_500-contour.pbf \
-  $(MOI2016_PENGHU)-10_100_500-contour.pbf \
-  aw3d30-2.1/islands-10_100_500-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-contour-2019
-taiwan-contour-2019: ele_taiwan_10_100_500-2019.pbf
-ele_taiwan_10_100_500-2019.pbf: \
-  $(MOI2019_TAIWAN)-10_100_500-contour.pbf \
-  $(MOI2019_PENGHU)-10_100_500-contour.pbf \
-  $(MOI2019_KINMEN)-10_100_500-contour.pbf \
-  $(AW21_NO_KINMEN)-10_100_500-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-contour-mix
-taiwan-contour-mix: taiwan-contour-mix-2021
-
-
-.PHONY: taiwan-contour-mix-2016
-taiwan-contour-mix-2016: ele_taiwan_10_50_100_500_mix-2016.pbf
-ele_taiwan_10_50_100_500_mix-2016.pbf: \
-  precompiled/taiwan-sealand.pbf \
-  $(MOI2016_TAIWAN)-10_50_100_500-contour.pbf \
-  $(MOI2016_PENGHU)-10_50_100_500-contour.pbf \
-  aw3d30-2.1/islands-10_50_100_500-contour.pbf \
-  $(MOI2016_MARKER)-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-contour-mix-2018
-taiwan-contour-mix-2018: ele_taiwan_10_100_500_mix-2018.pbf
-ele_taiwan_10_100_500_mix-2018.pbf: \
-  precompiled/taiwan-sealand.pbf \
-  $(MOI2018_TAIWAN)-10_50_100_500-contour.pbf \
-  $(MOI2016_PENGHU)-10_50_100_500-contour.pbf \
-  aw3d30-2.1/islands-10_50_100_500-contour.pbf \
-  $(MOI2018_MARKER)-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-contour-mix-2019
-taiwan-contour-mix-2019: ele_taiwan_10_100_500_mix-2019.pbf
-ele_taiwan_10_100_500_mix-2019.pbf: \
-  precompiled/taiwan-sealand.pbf \
-  $(MOI2019_TAIWAN)-10_50_100_500-contour.pbf \
-  $(MOI2019_PENGHU)-10_50_100_500-contour.pbf \
-  $(MOI2019_KINMEN)-10_50_100_500-contour.pbf \
-  $(AW21_NO_KINMEN)-10_50_100_500-contour.pbf \
-  $(MOI2019_MARKER)-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-lite-contour-mix
-taiwan-lite-contour-mix: taiwan-lite-contour-mix-2021
-
-
-.PHONY: taiwan-lite-contour-mix-2016
-taiwan-lite-contour-mix-2016: ele_taiwan_20_100_500_mix-2016.pbf
-ele_taiwan_20_100_500_mix-2016.pbf: \
-  precompiled/taiwan-sealand.pbf \
-  $(MOI2016_TAIWAN)-20_100_500-contour.pbf \
-  $(MOI2016_PENGHU)-20_100_500-contour.pbf \
-  aw3d30-2.1/islands-20_100_500-contour.pbf \
-  $(MOI2016_MARKER)-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-lite-contour-mix-2018
-taiwan-lite-contour-mix-2018: ele_taiwan_20_100_500_mix-2018.pbf
-ele_taiwan_20_100_500_mix-2018.pbf: \
-  precompiled/taiwan-sealand.pbf \
-  $(MOI2018_TAIWAN)-20_100_500-contour.pbf \
-  $(MOI2016_PENGHU)-20_100_500-contour.pbf \
-  aw3d30-2.1/islands-20_100_500-contour.pbf \
-  $(MOI2018_MARKER)-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
-
-
-.PHONY: taiwan-lite-contour-mix-2019
-taiwan-lite-contour-mix-2019: ele_taiwan_20_100_500_mix-2019.pbf
-ele_taiwan_20_100_500_mix-2019.pbf: \
-  precompiled/taiwan-sealand.pbf \
-  $(MOI2019_TAIWAN)-20_100_500-contour.pbf \
-  $(MOI2019_PENGHU)-20_100_500-contour.pbf \
-  $(MOI2019_KINMEN)-20_100_500-contour.pbf \
-  $(AW21_NO_KINMEN)-20_100_500-contour.pbf \
-  $(MOI2019_MARKER)-contour.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		7000000000 \
-		4000000000 \
-		$^
