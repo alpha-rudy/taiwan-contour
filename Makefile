@@ -1192,9 +1192,9 @@ aw3d30-2.1/islands-20_100_500-contour.pbf: \
 
 
 %/islands_nokinmen-gdal_10_100_500.pbf: \
-  %/matsu-gdal_10_50_100.pbf \
-  %/n3islets-gdal_10_50_100.pbf \
-  %/wuqiu-gdal_10_50_100.pbf
+  %/matsu-gdal_10_100_500.pbf \
+  %/n3islets-gdal_10_100_500.pbf \
+  %/wuqiu-gdal_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
