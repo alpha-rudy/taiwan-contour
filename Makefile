@@ -63,7 +63,10 @@ AW21_WUQIU = aw3d30-2.1/wuqiu
 AW21_KINMEN = aw3d30-2.1/kinmen
 AW21_NO_KINMEN = aw3d30-2.1/islands_nokinmen
 
+
+##
 ## Outputs
+##
 
 .PHONY: taiwan-contour-2021
 taiwan-contour-2021: ele_taiwan_10_100_500-2021.pbf
@@ -304,6 +307,61 @@ ele_taiwan_20_100_500_mix-2016.pbf: \
 		$^
 
 
+## 
+## Inputs 
+##
+
+$(MOI2020_TAIWAN)_20m.tif: moi-2020/.unzip
+moi-2020/.unzip: moi-2020/2020dtm20m.7z.001
+	cd moi-2020/ && \
+		7za x 2020dtm20m.7z.001 && \
+		mv 2020dtm20m.tif taiwan_20m.tif
+	touch $@
+
+
+$(MOI2019_TAIWAN)_20m.tif: moi-2019/.unzip
+$(MOI2019_PENGHU).tif: moi-2019/.unzip
+$(MOI2019_KINMEN).tif: moi-2019/.unzip
+moi-2019/.unzip: moi-2019/DEMg_20m.7z.001
+	cd moi-2019/ && \
+		7za x DEMg_20m.7z.001 && \
+		mv DEMg_geoid2014_20m_20190515.tif taiwan_20m.tif && \
+		mv DEMg_20m_PH_20190521.tif penghu.tif && \
+		mv DEMg_20m_KM_20190521.tif kinmen.tif
+	touch $@
+
+
+$(MOI2018_TAIWAN)_20m.tif: moi-2018/.unzip
+moi-2018/.unzip:
+	cd moi-2018/ && \
+		7za x DEM_20m.7z.001 && \
+		mv DEM_20m.tif taiwan_20m.tif
+	touch $@
+
+
+$(MOI2016_TAIWAN)_20m.tif: moi-2016/.unzip
+$(MOI2016_PENGHU).tif: moi-2016/.unzip
+moi-2016/.unzip: moi-2016/dem_20m.7z.001
+	cd moi-2016/ && \
+		7za x dem_20m.7z.001 && \
+		mv dem_20m.tif taiwan_20m.tif && \
+		mv phDEM_20m_119.tif penghu.tif
+	touch $@
+
+
+aw3d-orig: aw3d30-3.1/.unzip
+aw3d30-3.1/.unzip:
+	cd aw3d30-3.1/ && \
+	7za x aw3d30-3.1.7z
+	touch $@
+
+
+aw3d30-2.1/.unzip:
+	cd aw3d30-2.1/ && \
+	7za x aw3d30-2.1.7z.001
+	touch $@
+
+
 $(MOI2019_PENGHU)-10_100_500-contour.pbf: $(MOI2019_PENGHU)-zero.tif
 $(MOI2016_PENGHU)-10_100_500-contour.pbf: $(MOI2016_PENGHU)-zero.tif
 %/penghu-10_100_500-contour.pbf: %/penghu-zero.tif
@@ -354,35 +412,6 @@ $(MOI2019_KINMEN)-20_100_500-contour.pbf: $(MOI2019_KINMEN)-zero.tif
 		--pbf \
 		$^
 	mv kinmen_lite_contour* $@
-
-
-$(MOI2016_TAIWAN)_20m.tif: moi-2016/.unzip
-$(MOI2016_PENGHU).tif: moi-2016/.unzip
-moi-2016/.unzip: moi-2016/dem_20m.7z.001
-	cd moi-2016/ && \
-		7za x dem_20m.7z.001 && \
-		mv dem_20m.tif taiwan_20m.tif && \
-		mv phDEM_20m_119.tif penghu.tif
-	touch $@
-
-
-$(MOI2018_TAIWAN)_20m.tif: moi-2018/.unzip
-moi-2018/.unzip:
-	cd moi-2018/ && \
-		7za x DEM_20m.7z.001 && \
-		mv DEM_20m.tif taiwan_20m.tif
-	touch $@
-
-$(MOI2019_TAIWAN)_20m.tif: moi-2019/.unzip
-$(MOI2019_PENGHU).tif: moi-2019/.unzip
-$(MOI2019_KINMEN).tif: moi-2019/.unzip
-moi-2019/.unzip: moi-2019/DEMg_20m.7z.001
-	cd moi-2019/ && \
-		7za x DEMg_20m.7z.001 && \
-		mv DEMg_geoid2014_20m_20190515.tif taiwan_20m.tif && \
-		mv DEMg_20m_PH_20190521.tif penghu.tif && \
-		mv DEMg_20m_KM_20190521.tif kinmen.tif
-	touch $@
 
 
 moi-2018/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
@@ -781,14 +810,6 @@ moi-2020/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 		$@
 
 
-$(MOI2020_TAIWAN)_20m.tif: moi-2020/.unzip
-moi-2020/.unzip: moi-2020/2020dtm20m.7z.001
-	cd moi-2020/ && \
-		7za x 2020dtm20m.7z.001 && \
-		mv 2020dtm20m.tif taiwan_20m.tif
-	touch $@
-
-
 $(MOI2016_TAIWAN)-10_100_500-contour.pbf: $(MOI2016_TAIWAN)_20m-zero.tif
 	phyghtmap \
 		--step=10 \
@@ -825,19 +846,6 @@ $(MOI2016_TAIWAN)-20_100_500-contour.pbf: $(MOI2016_TAIWAN)_20m-zero.tif
 		--pbf \
 		$^
 	mv dem_lite_contour* $@
-
-
-aw3d-orig: aw3d30-3.1/.unzip
-aw3d30-3.1/.unzip:
-	cd aw3d30-3.1/ && \
-	7za x aw3d30-3.1.7z
-	touch $@
-
-
-aw3d30-2.1/.unzip:
-	cd aw3d30-2.1/ && \
-	7za x aw3d30-2.1.7z.001
-	touch $@
 
 
 $(AW31_N3ISLETS)-nodata0.tif: aw3d30-3.1/.unzip
