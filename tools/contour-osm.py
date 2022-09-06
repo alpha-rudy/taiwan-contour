@@ -1,4 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
+# origin from https://github.com/roelderickx/contour-osm
+# used only as a tool by calling from command line
+# all changes are within only this file
 
 # contour-osm -- write contour lines from a file or database source to an osm file
 # Copyright (C) 2019  Roel Derickx <roel.derickx AT gmail>
@@ -122,7 +126,7 @@ class Polyfile:
 
 
 class ContourTranslation(ogr2osm.TranslationBase):
-    def __init__(self, is_database_source, src_srs, poly, major_category, medium_category):
+    def __init__(self, is_database_source, src_srs, poly, major_category, medium_category, category_tag):
         self.logger = logging.getLogger('contour-osm')
 
         self.is_database_source = is_database_source
@@ -132,6 +136,7 @@ class ContourTranslation(ogr2osm.TranslationBase):
             self.boundaries = poly.get_geometry(src_srs)
         self.major_category = major_category
         self.medium_category = medium_category
+        self.category_tag = category_tag
 
         # intersection datasource, should not go out of scope as long as the intersection layer is used
         self.intersect_ds = None
@@ -194,11 +199,11 @@ class ContourTranslation(ogr2osm.TranslationBase):
 
             height = int(float(attrs['height']))
             if height % self.major_category == 0:
-                tags['contour_ext'] = 'elevation_major'
+                tags[self.category_tag] = 'elevation_major'
             elif height % self.medium_category == 0:
-                tags['contour_ext'] = 'elevation_medium'
+                tags[self.category_tag] = 'elevation_medium'
             else:
-                tags['contour_ext'] = 'elevation_minor'
+                tags[self.category_tag] = 'elevation_minor'
 
         return tags
 
@@ -231,6 +236,8 @@ def parse_commandline():
     parser.add_argument('-m', '--medium', dest='mediumcat', metavar='CATEGORY',
                         type=int, default=100,
                         help='Medium elevation category (default=%(default)s)')
+    parser.add_argument('-t', '--cat_tag', dest='cat_tag', metavar='CATEGORY_TAG',
+                        default='contour_ext', help='category tag (default=%(default)s)')
     parser.add_argument('--osm', dest='osm', action='store_true',
                         help='Write the output as an OSM file in stead of a PBF file')
     # required output file
@@ -338,7 +345,7 @@ def main():
 
     # create the translation object
     translation_object = ContourTranslation(params.is_database_source, params.srcsrs, poly,
-                                            params.majorcat, params.mediumcat)
+                                            params.majorcat, params.mediumcat, params.cat_tag)
 
     # create and open the datasource
     datasource = ogr2osm.OgrDatasource(translation_object, source_epsg=params.srcsrs, gisorder=True)
