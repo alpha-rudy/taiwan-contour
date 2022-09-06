@@ -68,6 +68,38 @@ AW21_NO_KINMEN = aw3d30-2.1/islands_nokinmen
 ## Outputs
 ##
 
+.PHONY: taiwan-contour-2022
+taiwan-contour-2022: ele_taiwan_10_100_500-2022.pbf
+ele_taiwan_10_100_500-2022.pbf: \
+  $(MOI2020_TAIWAN)_20m-gdal_10_100_500.pbf \
+  $(MOI2019_PENGHU)-gdal_10_100_500.pbf \
+  $(MOI2019_KINMEN)-gdal_10_100_500.pbf \
+  $(AW31_NO_KINMEN)-gdal_10_100_500.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-mix-2022
+taiwan-contour-mix-2022: ele_taiwan_10_100_500_mix-2022.pbf
+ele_taiwan_10_100_500_mix-2022.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2020_TAIWAN)_20m-gdal_10_50_100_500.pbf \
+  $(MOI2019_PENGHU)-gdal_10_50_100_500.pbf \
+  $(MOI2019_KINMEN)-gdal_10_50_100_500.pbf \
+  $(AW31_NO_KINMEN)-gdal_10_50_100_500.pbf \
+  $(MOI2020_MARKER)-gdal.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
 .PHONY: taiwan-contour-2021
 taiwan-contour-2021: ele_taiwan_10_100_500-2021.pbf
 ele_taiwan_10_100_500-2021.pbf: \
@@ -361,8 +393,34 @@ aw3d30-2.1/.unzip:
 	7za x aw3d30-2.1.7z.001
 	touch $@
 
+
 ##
-## zero tif ==> pbf
+## zero tif ==gdal_contour==> contour shp
+## 
+
+$(MOI2020_TAIWAN)_15m-c10.shp: $(MOI2020_TAIWAN)_15m-zero.tif
+$(MOI2019_KINMEN)-c10.shp: $(MOI2019_KINMEN)-zero.tif
+%-c10.shp: %-zero.tif
+	gdal_contour \
+		-i 10 \
+		-a height \
+		$^ \
+		$@
+
+
+$(MOI2020_TAIWAN)_15m-gdal_10_100_500.pbf: $(MOI2020_TAIWAN)_15m-c10.shp
+$(MOI2019_KINMEN)-gdal_10_100_500.pbf: $(MOI2019_KINMEN)-c10.shp
+%-gdal_10_100_500.pbf: %-c10.shp
+	python3 tools/contour-osm.py \
+		-t 'contour_ext' \
+		-m 100 \
+		-M 500 \
+		--datasource $^ \
+		$@
+
+
+##
+## zero tif ==phyghtmap==> contour pbf
 ## 
 
 $(MOI2020_TAIWAN)-10_100_500-contour.pbf: $(MOI2020_TAIWAN)_15m-zero.tif
@@ -1125,6 +1183,18 @@ aw3d30-2.1/islands-20_100_500-contour.pbf: \
   $(AW21_MATSU)-20_50_100-contour.pbf \
   $(AW21_N3ISLETS)-20_50_100-contour.pbf \
   $(AW21_WUQIU)-20_50_100-contour.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
+%/islands_nokinmen-gdal_10_100_500.pbf: \
+  %/matsu-gdal_10_50_100.pbf \
+  %/n3islets-gdal_10_50_100.pbf \
+  %/wuqiu-gdal_10_50_100.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
