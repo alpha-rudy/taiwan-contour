@@ -100,6 +100,23 @@ ele_taiwan_10_100_500_mix-2022.pbf: \
 		$^
 
 
+.PHONY: taiwan-lite-contour-mix-2022
+taiwan-lite-contour-mix-2022: ele_taiwan_20_100_500_mix-2022.pbf
+ele_taiwan_20_100_500_mix-2022.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2020_TAIWAN)_40m-gdal_20_100_500.pbf \
+  $(MOI2019_PENGHU)-gdal_20_100_500.pbf \
+  $(MOI2019_KINMEN)-gdal_20_100_500.pbf \
+  $(AW31_NO_KINMEN)-gdal_20_100_500.pbf \
+  $(MOI2020_MARKER)-gdal.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
 .PHONY: taiwan-contour-2021
 taiwan-contour-2021: ele_taiwan_10_100_500-2021.pbf
 ele_taiwan_10_100_500-2021.pbf: \
@@ -415,6 +432,125 @@ $(MOI2019_KINMEN)-gdal_10_100_500.pbf: $(MOI2019_KINMEN)-c10.shp
 		-t 'contour_ext' \
 		-m 100 \
 		-M 500 \
+		--datasource $^ \
+		$@
+
+
+%-c20.shp: %-zero.tif
+	gdal_contour \
+		-i 20 \
+		-a height \
+		$^ \
+		$@
+
+
+%-gdal_20_100_500.pbf: %-c20.shp
+	python3 tools/contour-osm.py \
+		-t 'contour_ext' \
+		-m 100 \
+		-M 500 \
+		--datasource $^ \
+		$@
+
+
+%_40m-c100.shp: %_40m-zero.tif
+	gdal_contour \
+		-i 100 \
+		-a height \
+		$^ \
+		$@
+
+
+%-gdal_40m.pbf: %_40m-c100.shp
+	python3 tools/contour-osm.py \
+		-t 'contour_40m' \
+		-m 500 \
+		-M 1000 \
+		--datasource $^ \
+		$@
+
+
+%_80m-c100.shp: %_80m-zero.tif
+	gdal_contour \
+		-i 100 \
+		-a height \
+		$^ \
+		$@
+
+
+%-gdal_80m.pbf: %_80m-c100.shp
+	python3 tools/contour-osm.py \
+		-t 'contour_80m' \
+		-m 500 \
+		-M 1000 \
+		--datasource $^ \
+		$@
+
+
+%_160m-c100.shp: %_160m-zero.tif
+	gdal_contour \
+		-i 100 \
+		-a height \
+		$^ \
+		$@
+
+
+%-gdal_160m.pbf: %_160m-c100.shp
+	python3 tools/contour-osm.py \
+		-t 'contour_160m' \
+		-m 500 \
+		-M 1000 \
+		--datasource $^ \
+		$@
+
+
+%_320m-c100.shp: %_320m-zero.tif
+	gdal_contour \
+		-i 100 \
+		-a height \
+		$^ \
+		$@
+
+
+%-gdal_320m.pbf: %_320m-c100.shp
+	python3 tools/contour-osm.py \
+		-t 'contour_320m' \
+		-m 500 \
+		-M 1000 \
+		--datasource $^ \
+		$@
+
+
+%_640m-c100.shp: %_640m-zero.tif
+	gdal_contour \
+		-i 100 \
+		-a height \
+		$^ \
+		$@
+
+
+%-gdal_640m.pbf: %_640m-c100.shp
+	python3 tools/contour-osm.py \
+		-t 'contour_640m' \
+		-m 500 \
+		-M 1000 \
+		--datasource $^ \
+		$@
+
+
+%_1280m-c100.shp: %_1280m-zero.tif
+	gdal_contour \
+		-i 100 \
+		-a height \
+		$^ \
+		$@
+
+
+%-gdal_1280m.pbf: %_1280m-c100.shp
+	python3 tools/contour-osm.py \
+		-t 'contour_1280m' \
+		-m 500 \
+		-M 1000 \
 		--datasource $^ \
 		$@
 
@@ -798,9 +934,24 @@ $(MOI2016_PENGHU)-pygm_10_50_100_500.pbf: $(MOI2016_PENGHU)-pygm_10_100_500.pbf
 $(MOI2016_TAIWAN)-pygm_10_50_100_500.pbf: $(MOI2016_TAIWAN)-pygm_10_100_500.pbf
 $(AW31_NO_KINMEN)-pygm_10_50_100_500.pbf: $(AW31_NO_KINMEN)-pygm_10_100_500.pbf
 $(AW21_NO_KINMEN)-pygm_10_50_100_500.pbf: $(AW21_NO_KINMEN)-pygm_10_100_500.pbf
-%-pygm_10_50_100_500.pbf: %-pygm_10_100_500.pbf
+%_10_50_100_500.pbf: %_10_100_500.pbf
 	rm -f $@
 	python3 tools/elevation_sub.py $< $@
+
+
+%/marker-gdal.pbf: \
+  %/taiwan-gdal_40m.pbf \
+  %/taiwan-gdal_80m.pbf \
+  %/taiwan-gdal_160m.pbf \
+  %/taiwan-gdal_320m.pbf \
+  %/taiwan-gdal_640m.pbf \
+  %/taiwan-gdal_1280m.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
 
 
 $(MOI2020_MARKER)-pygm.pbf: \
@@ -1195,6 +1346,18 @@ aw3d30-2.1/islands-pygm_20_100_500.pbf: \
   %/matsu-gdal_10_100_500.pbf \
   %/n3islets-gdal_10_100_500.pbf \
   %/wuqiu-gdal_10_100_500.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
+%/islands_nokinmen-gdal_20_100_500.pbf: \
+  %/matsu-gdal_20_100_500.pbf \
+  %/n3islets-gdal_20_100_500.pbf \
+  %/wuqiu-gdal_20_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
