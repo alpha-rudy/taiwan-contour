@@ -74,7 +74,9 @@ ele_taiwan_10_100_500-2022.pbf: \
   $(MOI2020_TAIWAN)_20m-gdal_10_100_500.pbf \
   $(MOI2019_PENGHU)-gdal_10_100_500.pbf \
   $(MOI2019_KINMEN)-gdal_10_100_500.pbf \
-  $(AW31_NO_KINMEN)-gdal_10_100_500.pbf
+  $(AW31_MATSU)-gdal_10_100_500.pbf \
+  $(AW31_N3ISLETS)-gdal_10_100_500.pbf \
+  $(AW31_WUQIU)-gdal_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -90,7 +92,9 @@ ele_taiwan_10_100_500_mix-2022.pbf: \
   $(MOI2020_TAIWAN)_20m-gdal_10_50_100_500.pbf \
   $(MOI2019_PENGHU)-gdal_10_50_100_500.pbf \
   $(MOI2019_KINMEN)-gdal_10_50_100_500.pbf \
-  $(AW31_NO_KINMEN)-gdal_10_50_100_500.pbf \
+  $(AW31_MATSU)-gdal_10_50_100_500.pbf \
+  $(AW31_N3ISLETS)-gdal_10_50_100_500.pbf \
+  $(AW31_WUQIU)-gdal_10_50_100_500.pbf \
   $(MOI2020_MARKER)-gdal.pbf
 	# combines all dependences
 	./tools/combine.sh \
@@ -107,7 +111,9 @@ ele_taiwan_20_100_500_mix-2022.pbf: \
   $(MOI2020_TAIWAN)_40m-gdal_20_100_500.pbf \
   $(MOI2019_PENGHU)-gdal_20_100_500.pbf \
   $(MOI2019_KINMEN)-gdal_20_100_500.pbf \
-  $(AW31_NO_KINMEN)-gdal_20_100_500.pbf \
+  $(AW31_MATSU)-gdal_20_100_500.pbf \
+  $(AW21_N3ISLETS)-gdal_20_100_500.pbf \
+  $(AW21_WUQIU)-gdal_20_100_500.pbf \
   $(MOI2020_MARKER)-gdal.pbf
 	# combines all dependences
 	./tools/combine.sh \
@@ -1334,30 +1340,6 @@ aw3d30-2.1/islands-pygm_20_100_500.pbf: \
   $(AW21_MATSU)-pygm_20_100_500.pbf \
   $(AW21_N3ISLETS)-pygm_20_100_500.pbf \
   $(AW21_WUQIU)-pygm_20_100_500.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
-		$^
-
-
-%/islands_nokinmen-gdal_10_100_500.pbf: \
-  %/matsu-gdal_10_100_500.pbf \
-  %/n3islets-gdal_10_100_500.pbf \
-  %/wuqiu-gdal_10_100_500.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
-		$^
-
-
-%/islands_nokinmen-gdal_20_100_500.pbf: \
-  %/matsu-gdal_20_100_500.pbf \
-  %/n3islets-gdal_20_100_500.pbf \
-  %/wuqiu-gdal_20_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
