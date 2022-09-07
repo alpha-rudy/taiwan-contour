@@ -13,6 +13,10 @@ endif
 .PHONY: all clean
 all: taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
 
+taiwan-contour: taiwan-contour-2022
+taiwan-contour-mix: taiwan-contour-mix-2022
+taiwan-lite-contour-mix: taiwan-lite-contour-mix-2022
+
 clean:
 	git clean -fdx
 
