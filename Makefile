@@ -1,4 +1,8 @@
+# remove half-dones
 .DELETE_ON_ERROR:
+
+# keep intermediates 
+.SECONDARY:
 
 ifeq ($(shell uname),Darwin)
 MD5_CMD := md5 -q $$EXAM_FILE
