@@ -439,15 +439,48 @@ $(MOI2019_KINMEN)-c10.shp: $(MOI2019_KINMEN)-zero.tif
 		$@
 
 
-$(MOI2020_TAIWAN)_15m-gdal_10_100_500.pbf: $(MOI2020_TAIWAN)_15m-c10.shp
-$(MOI2019_KINMEN)-gdal_10_100_500.pbf: $(MOI2019_KINMEN)-c10.shp
-%-gdal_10_100_500.pbf: %-c10.shp
-	python3 tools/contour-osm.py \
-		-t 'contour_ext' \
+%-ogr.pbf: %.shp
+	time ogr2osm \
+		--no-memory-copy \
+		--pbf \
+		--force \
+		$^ \
+		-o $@
+
+
+%-gdal_10_100_500.pbf: %-c10-ogr.pbf
+	python3 tools/gdal2phyghtmap.py \
 		-m 100 \
 		-M 500 \
-		--datasource $^ \
+		$^ \
 		$@
+
+
+%-gdal_20_100_500.pbf: %-c20-ogr.pbf
+	python3 tools/gdal2phyghtmap.py \
+		-m 100 \
+		-M 500 \
+		$^ \
+		$@
+
+
+%-gdal_100_500_1000.pbf: %-c100-ogr.pbf
+	python3 tools/gdal2phyghtmap.py \
+		-m 500 \
+		-M 1000 \
+		$^ \
+		$@
+
+
+# $(MOI2020_TAIWAN)_15m-gdal_10_100_500.pbf: $(MOI2020_TAIWAN)_15m-c10.shp
+# $(MOI2019_KINMEN)-gdal_10_100_500.pbf: $(MOI2019_KINMEN)-c10.shp
+# %-gdal_10_100_500.pbf: %-c10.shp
+# 	python3 tools/contour-osm.py \
+# 		-t 'contour_ext' \
+# 		-m 100 \
+# 		-M 500 \
+# 		--datasource $^ \
+# 		$@
 
 
 %-c20.shp: %-zero.tif
@@ -458,13 +491,13 @@ $(MOI2019_KINMEN)-gdal_10_100_500.pbf: $(MOI2019_KINMEN)-c10.shp
 		$@
 
 
-%-gdal_20_100_500.pbf: %-c20.shp
-	python3 tools/contour-osm.py \
-		-t 'contour_ext' \
-		-m 100 \
-		-M 500 \
-		--datasource $^ \
-		$@
+# %-gdal_20_100_500.pbf: %-c20.shp
+# 	python3 tools/contour-osm.py \
+# 		-t 'contour_ext' \
+# 		-m 100 \
+# 		-M 500 \
+# 		--datasource $^ \
+# 		$@
 
 
 %_40m-c100.shp: %_40m-zero.tif
@@ -475,13 +508,13 @@ $(MOI2019_KINMEN)-gdal_10_100_500.pbf: $(MOI2019_KINMEN)-c10.shp
 		$@
 
 
-%-gdal_40m.pbf: %_40m-c100.shp
-	python3 tools/contour-osm.py \
-		-t 'contour_40m' \
-		-m 500 \
-		-M 1000 \
-		--datasource $^ \
-		$@
+# %-gdal_40m.pbf: %_40m-c100.shp
+# 	python3 tools/contour-osm.py \
+# 		-t 'contour_40m' \
+# 		-m 500 \
+# 		-M 1000 \
+# 		--datasource $^ \
+# 		$@
 
 
 %_80m-c100.shp: %_80m-zero.tif
@@ -492,13 +525,13 @@ $(MOI2019_KINMEN)-gdal_10_100_500.pbf: $(MOI2019_KINMEN)-c10.shp
 		$@
 
 
-%-gdal_80m.pbf: %_80m-c100.shp
-	python3 tools/contour-osm.py \
-		-t 'contour_80m' \
-		-m 500 \
-		-M 1000 \
-		--datasource $^ \
-		$@
+# %-gdal_80m.pbf: %_80m-c100.shp
+# 	python3 tools/contour-osm.py \
+# 		-t 'contour_80m' \
+# 		-m 500 \
+# 		-M 1000 \
+# 		--datasource $^ \
+# 		$@
 
 
 %_160m-c100.shp: %_160m-zero.tif
@@ -509,13 +542,13 @@ $(MOI2019_KINMEN)-gdal_10_100_500.pbf: $(MOI2019_KINMEN)-c10.shp
 		$@
 
 
-%-gdal_160m.pbf: %_160m-c100.shp
-	python3 tools/contour-osm.py \
-		-t 'contour_160m' \
-		-m 500 \
-		-M 1000 \
-		--datasource $^ \
-		$@
+# %-gdal_160m.pbf: %_160m-c100.shp
+# 	python3 tools/contour-osm.py \
+# 		-t 'contour_160m' \
+# 		-m 500 \
+# 		-M 1000 \
+# 		--datasource $^ \
+# 		$@
 
 
 %_320m-c100.shp: %_320m-zero.tif
@@ -526,13 +559,13 @@ $(MOI2019_KINMEN)-gdal_10_100_500.pbf: $(MOI2019_KINMEN)-c10.shp
 		$@
 
 
-%-gdal_320m.pbf: %_320m-c100.shp
-	python3 tools/contour-osm.py \
-		-t 'contour_320m' \
-		-m 500 \
-		-M 1000 \
-		--datasource $^ \
-		$@
+# %-gdal_320m.pbf: %_320m-c100.shp
+# 	python3 tools/contour-osm.py \
+# 		-t 'contour_320m' \
+# 		-m 500 \
+# 		-M 1000 \
+# 		--datasource $^ \
+# 		$@
 
 
 %_640m-c100.shp: %_640m-zero.tif
@@ -542,14 +575,13 @@ $(MOI2019_KINMEN)-gdal_10_100_500.pbf: $(MOI2019_KINMEN)-c10.shp
 		$^ \
 		$@
 
-
-%-gdal_640m.pbf: %_640m-c100.shp
-	python3 tools/contour-osm.py \
-		-t 'contour_640m' \
-		-m 500 \
-		-M 1000 \
-		--datasource $^ \
-		$@
+# %-gdal_640m.pbf: %_640m-c100.shp
+# 	python3 tools/contour-osm.py \
+# 		-t 'contour_640m' \
+# 		-m 500 \
+# 		-M 1000 \
+# 		--datasource $^ \
+# 		$@
 
 
 %_1280m-c100.shp: %_1280m-zero.tif
@@ -560,13 +592,13 @@ $(MOI2019_KINMEN)-gdal_10_100_500.pbf: $(MOI2019_KINMEN)-c10.shp
 		$@
 
 
-%-gdal_1280m.pbf: %_1280m-c100.shp
-	python3 tools/contour-osm.py \
-		-t 'contour_1280m' \
-		-m 500 \
-		-M 1000 \
-		--datasource $^ \
-		$@
+# %-gdal_1280m.pbf: %_1280m-c100.shp
+# 	python3 tools/contour-osm.py \
+# 		-t 'contour_1280m' \
+# 		-m 500 \
+# 		-M 1000 \
+# 		--datasource $^ \
+# 		$@
 
 
 ##
