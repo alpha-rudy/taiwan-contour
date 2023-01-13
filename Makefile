@@ -1290,17 +1290,6 @@ $(MOI2022_TAIWAN)_20m-wgs84.tif: $(MOI2022_TAIWAN)_20m.tif
 	  $@
 
 
-moi-2022/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-crop_to_cutline \
-		-cutline moi-2022/void_area.shp \
-		$^ \
-		$@
-
-
 moi-2020/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 	rm -f $@
 	gdalwarp \
