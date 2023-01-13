@@ -17,9 +17,9 @@ endif
 .PHONY: all clean
 all: taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
 
-taiwan-contour: taiwan-contour-2022
-taiwan-contour-mix: taiwan-contour-mix-2022
-taiwan-lite-contour-mix: taiwan-lite-contour-mix-2022
+taiwan-contour: taiwan-contour-2023
+taiwan-contour-mix: taiwan-contour-mix-2023
+taiwan-lite-contour-mix: taiwan-lite-contour-mix-2023
 
 clean:
 	git clean -fdx
@@ -44,6 +44,9 @@ PHYGHT_OPTIONS = \
 	--max-nodes-per-way=2000 \
 	--void-range-max=-50
 
+
+MOI2022_TAIWAN = moi-2022/taiwan
+MOI2022_MARKER = moi-2022/marker
 
 MOI2020_TAIWAN = moi-2020/taiwan
 MOI2020_MARKER = moi-2020/marker
@@ -75,6 +78,79 @@ AW21_NO_KINMEN = aw3d30-2.1/islands_nokinmen
 ##
 ## Outputs
 ##
+
+.PHONY: taiwan-contour-2023
+taiwan-contour-2023: ele_taiwan_10_100_500-2023.pbf
+ele_taiwan_10_100_500-2023.pbf: \
+  $(MOI2022_TAIWAN)_20m-gdal_10_100_500.pbf \
+  $(MOI2019_PENGHU)-gdal_10_100_500.pbf \
+  $(MOI2019_KINMEN)-gdal_10_100_500.pbf \
+  $(AW31_MATSU)-gdal_10_100_500.pbf \
+  $(AW31_N3ISLETS)-gdal_10_100_500.pbf \
+  $(AW31_WUQIU)-gdal_10_100_500.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-mix-2023
+taiwan-contour-mix-2023: ele_taiwan_10_100_500_mix-2023.pbf
+ele_taiwan_10_100_500_mix-2023.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2022_TAIWAN)_20m-gdal_10_50_100_500.pbf \
+  $(MOI2019_PENGHU)-gdal_10_50_100_500.pbf \
+  $(MOI2019_KINMEN)-gdal_10_50_100_500.pbf \
+  $(AW31_MATSU)-gdal_10_50_100_500.pbf \
+  $(AW31_N3ISLETS)-gdal_10_50_100_500.pbf \
+  $(AW31_WUQIU)-gdal_10_50_100_500.pbf \
+  $(MOI2022_MARKER)-gdal.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-lite-contour-mix-2023
+taiwan-lite-contour-mix-2023: ele_taiwan_20_100_500_mix-2023.pbf
+ele_taiwan_20_100_500_mix-2023.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  $(MOI2022_TAIWAN)_40m-gdal_20_100_500.pbf \
+  $(MOI2019_PENGHU)-gdal_20_100_500.pbf \
+  $(MOI2019_KINMEN)-gdal_20_100_500.pbf \
+  $(AW31_MATSU)-gdal_20_100_500.pbf \
+  $(AW21_N3ISLETS)-gdal_20_100_500.pbf \
+  $(AW21_WUQIU)-gdal_20_100_500.pbf \
+  $(MOI2022_MARKER)-gdal.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+$(MOI2022_TAIWAN)_20m.tif: moi-2022/.unzip
+moi-2022/.unzip: moi-2022/2022dtm20m.7z.001
+	cd moi-2022/ && \
+		7za x 2022dtm20m.7z.001
+	touch $@
+
+
+moi-2022/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-crop_to_cutline \
+		-cutline moi-2022/void_area.shp \
+		$^ \
+		$@
+
 
 .PHONY: taiwan-contour-2022
 taiwan-contour-2022: ele_taiwan_10_100_500-2022.pbf
@@ -429,6 +505,7 @@ aw3d30-2.1/.unzip:
 ## zero tif ==gdal_contour==> contour shp
 ## 
 
+$(MOI2022_TAIWAN)_15m-c10.shp: $(MOI2022_TAIWAN)_15m-zero.tif
 $(MOI2020_TAIWAN)_15m-c10.shp: $(MOI2020_TAIWAN)_15m-zero.tif
 $(MOI2019_KINMEN)-c10.shp: $(MOI2019_KINMEN)-zero.tif
 %-c10.shp: %-zero.tif
@@ -1028,6 +1105,7 @@ $(MOI2019_TAIWAN)_10m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 	  $@
 
 
+$(MOI2022_TAIWAN)_15m-zero.tif: $(MOI2022_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_15m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 %_15m-zero.tif: %_20m-zero.tif
 	rm -f $@
@@ -1044,6 +1122,7 @@ $(MOI2020_TAIWAN)_15m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 $(MOI2018_TAIWAN)_40m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 $(MOI2019_TAIWAN)_40m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_40m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+$(MOI2022_TAIWAN)_40m-zero.tif: $(MOI2022_TAIWAN)_20m-zero.tif
 %_40m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
@@ -1059,6 +1138,7 @@ $(MOI2020_TAIWAN)_40m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 $(MOI2018_TAIWAN)_80m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 $(MOI2019_TAIWAN)_80m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_80m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+$(MOI2022_TAIWAN)_80m-zero.tif: $(MOI2022_TAIWAN)_20m-zero.tif
 %_80m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
@@ -1074,6 +1154,7 @@ $(MOI2020_TAIWAN)_80m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 $(MOI2018_TAIWAN)_160m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 $(MOI2019_TAIWAN)_160m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_160m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+$(MOI2022_TAIWAN)_160m-zero.tif: $(MOI2022_TAIWAN)_20m-zero.tif
 %_160m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
@@ -1089,6 +1170,7 @@ $(MOI2020_TAIWAN)_160m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 $(MOI2018_TAIWAN)_320m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 $(MOI2019_TAIWAN)_320m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_320m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+$(MOI2022_TAIWAN)_320m-zero.tif: $(MOI2022_TAIWAN)_20m-zero.tif
 %_320m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
@@ -1104,6 +1186,7 @@ $(MOI2020_TAIWAN)_320m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 $(MOI2018_TAIWAN)_640m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 $(MOI2019_TAIWAN)_640m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_640m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+$(MOI2022_TAIWAN)_640m-zero.tif: $(MOI2022_TAIWAN)_20m-zero.tif
 %_640m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
@@ -1119,6 +1202,7 @@ $(MOI2020_TAIWAN)_640m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
 $(MOI2018_TAIWAN)_1280m-zero.tif: $(MOI2018_TAIWAN)_20m-zero.tif
 $(MOI2019_TAIWAN)_1280m-zero.tif: $(MOI2019_TAIWAN)_20m-zero.tif
 $(MOI2020_TAIWAN)_1280m-zero.tif: $(MOI2020_TAIWAN)_20m-zero.tif
+$(MOI2022_TAIWAN)_1280m-zero.tif: $(MOI2022_TAIWAN)_20m-zero.tif
 %_1280m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
@@ -1145,6 +1229,7 @@ $(MOI2019_KINMEN)-zero.tif: $(MOI2019_KINMEN)-nodata0.tif
 $(MOI2019_PENGHU)-zero.tif: $(MOI2019_PENGHU)-nodata0.tif
 $(MOI2019_TAIWAN)_20m-zero.tif: $(MOI2019_TAIWAN)_20m-nodata0.tif
 $(MOI2020_TAIWAN)_20m-zero.tif: $(MOI2020_TAIWAN)_20m-nodata0.tif
+$(MOI2022_TAIWAN)_20m-zero.tif: $(MOI2022_TAIWAN)_20m-nodata0.tif
 %-zero.tif: %-nodata0.tif
 	rm -f $@
 	gdal_translate \
@@ -1161,6 +1246,7 @@ $(MOI2019_KINMEN)-nodata0.tif: $(MOI2019_KINMEN)-nodata.tif
 $(MOI2019_PENGHU)-nodata0.tif: $(MOI2019_PENGHU)-nodata.tif
 $(MOI2019_TAIWAN)_20m-nodata0.tif: $(MOI2019_TAIWAN)_20m-nodata.tif
 $(MOI2020_TAIWAN)_20m-nodata0.tif: $(MOI2020_TAIWAN)_20m-nodata.tif
+$(MOI2022_TAIWAN)_20m-nodata0.tif: $(MOI2022_TAIWAN)_20m-nodata.tif
 %-nodata0.tif: %-nodata.tif
 	rm -f $@
 	gdal_calc.py \
@@ -1177,6 +1263,7 @@ $(MOI2019_KINMEN)-nodata.tif: $(MOI2019_KINMEN)-wgs84.tif
 $(MOI2019_PENGHU)-nodata.tif: $(MOI2019_PENGHU)-wgs84.tif
 $(MOI2019_TAIWAN)_20m-nodata.tif: $(MOI2019_TAIWAN)_20m-wgs84.tif moi-2019/from2016.tif 
 $(MOI2020_TAIWAN)_20m-nodata.tif: $(MOI2020_TAIWAN)_20m-wgs84.tif moi-2020/from2016.tif 
+$(MOI2022_TAIWAN)_20m-nodata.tif: $(MOI2022_TAIWAN)_20m-wgs84.tif moi-2022/from2016.tif 
 %-nodata.tif: %-wgs84.tif
 	rm -f $@
 	gdal_merge.py \
@@ -1193,6 +1280,7 @@ $(MOI2019_KINMEN)-wgs84.tif: $(MOI2019_KINMEN).tif
 $(MOI2019_PENGHU)-wgs84.tif: $(MOI2019_PENGHU).tif
 $(MOI2019_TAIWAN)_20m-wgs84.tif: $(MOI2019_TAIWAN)_20m.tif
 $(MOI2020_TAIWAN)_20m-wgs84.tif: $(MOI2020_TAIWAN)_20m.tif
+$(MOI2022_TAIWAN)_20m-wgs84.tif: $(MOI2022_TAIWAN)_20m.tif
 %-wgs84.tif: %.tif
 	rm -f $@
 	gdalwarp \
@@ -1200,6 +1288,17 @@ $(MOI2020_TAIWAN)_20m-wgs84.tif: $(MOI2020_TAIWAN)_20m.tif
 		$(GDALWARP_WGS84_OPTIONS) \
 	  $^ \
 	  $@
+
+
+moi-2022/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-crop_to_cutline \
+		-cutline moi-2022/void_area.shp \
+		$^ \
+		$@
 
 
 moi-2020/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
