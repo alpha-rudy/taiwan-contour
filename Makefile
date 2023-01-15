@@ -505,37 +505,40 @@ aw3d30-2.1/.unzip:
 ## zero tif ==gdal_contour==> contour shp
 ## 
 
-#%-ogr.pbf: %.shp
-#	time ogr2osm \
-#		--no-memory-copy \
-#		--pbf \
-#		--force \
-#		$^ \
-#		-o $@
+%-ogr.pbf: %-ogr.osm
+	osmium renumber -s 0,0,0 $^ -Oo $@
 
 
-#%-gdal_10_100_500.pbf: %-c10-ogr.pbf
-#	python3 tools/gdal2phyghtmap.py \
-#		-m 100 \
-#		-M 500 \
-#		$^ \
-#		$@
+%-ogr.osm: %.shp
+	time ogr2osm \
+		--no-memory-copy \
+		--force \
+		$^ \
+		-o $@
 
 
-#%-gdal_20_100_500.pbf: %-c20-ogr.pbf
-#	python3 tools/gdal2phyghtmap.py \
-#		-m 100 \
-#		-M 500 \
-#		$^ \
-#		$@
+%-ogr_10_100_500.pbf: %-c10-ogr.pbf
+	python3 tools/gdal2phyghtmap.py \
+		-m 100 \
+		-M 500 \
+		$^ \
+		$@
 
 
-#%-gdal_100_500_1000.pbf: %-c100-ogr.pbf
-#	python3 tools/gdal2phyghtmap.py \
-#		-m 500 \
-#		-M 1000 \
-#		$^ \
-#		$@
+%-ogr_20_100_500.pbf: %-c20-ogr.pbf
+	python3 tools/gdal2phyghtmap.py \
+		-m 100 \
+		-M 500 \
+		$^ \
+		$@
+
+
+%-ogr_100_500_1000.pbf: %-c100-ogr.pbf
+	python3 tools/gdal2phyghtmap.py \
+		-m 500 \
+		-M 1000 \
+		$^ \
+		$@
 
 
 %-gdal_10_100_500.pbf: %-c10.shp
