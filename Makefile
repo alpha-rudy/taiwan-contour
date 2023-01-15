@@ -665,7 +665,7 @@ $(MOI2020_TAIWAN)-pygm_10_100_500.pbf: $(MOI2020_TAIWAN)_15m-zero.tif
 	mv dem_contour* $@
 
 
-%-pygm_10_100_500.pbf: %_20m-zero.tif
+%-pygm_10_100_500.pbf: %-zero.tif
 	phyghtmap \
 		--step=10 \
 		--output-prefix=dem_contour \
@@ -1104,7 +1104,6 @@ $(MOI2020_MARKER)-pygm.pbf: \
 		-a_nodata none \
 		$^ \
 		$@
-
 
 %-nodata0.tif: %-nodata.tif
 	rm -f $@
