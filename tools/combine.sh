@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 usage() {
   echo "./tools/combine.sh combined.pbf 3000 4000 s1.pbf s2.pbf s3.pbf [s4.pbf].."
