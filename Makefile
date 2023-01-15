@@ -519,6 +519,7 @@ aw3d30-2.1/.unzip:
 
 %-ogr_10_100_500.pbf: %-c10-ogr.pbf
 	python3 tools/gdal2phyghtmap.py \
+		-t 'contour_ext' \
 		-m 100 \
 		-M 500 \
 		$^ \
@@ -527,6 +528,7 @@ aw3d30-2.1/.unzip:
 
 %-ogr_20_100_500.pbf: %-c20-ogr.pbf
 	python3 tools/gdal2phyghtmap.py \
+		-t 'contour_ext' \
 		-m 100 \
 		-M 500 \
 		$^ \
@@ -535,6 +537,7 @@ aw3d30-2.1/.unzip:
 
 %-ogr_100_500_1000.pbf: %-c100-ogr.pbf
 	python3 tools/gdal2phyghtmap.py \
+		-t 'contour_ext' \
 		-m 500 \
 		-M 1000 \
 		$^ \
