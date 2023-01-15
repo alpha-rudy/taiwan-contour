@@ -4,11 +4,12 @@ import argparse
 
 
 class ElevationSubHandler(osmium.SimpleHandler):
-    def __init__(self, writer, mediumcat, majorcat):
+    def __init__(self, writer, mediumcat, majorcat, cat_tag):
         osmium.SimpleHandler.__init__(self)
         self.writer = writer
         self.mediumcat = mediumcat
         self.majorcat = majorcat
+        self.cat_tag = cat_tag
 
     def node(self, n):
         self.writer.add_node(n)
@@ -23,11 +24,11 @@ class ElevationSubHandler(osmium.SimpleHandler):
         tags['ele'] = str(height)
         tags['contour'] = 'elevation'
         if height % self.majorcat == 0:
-            tags['contour_ext'] = 'elevation_major'
+            tags[self.cat_tag] = 'elevation_major'
         elif height % self.mediumcat == 0:
-            tags['contour_ext'] = 'elevation_medium'
+            tags[self.cat_tag] = 'elevation_medium'
         else:
-            tags['contour_ext'] = 'elevation_minor'
+            tags[self.cat_tag] = 'elevation_minor'
         
         self.writer.add_way(w.replace(tags=tags))
         return
@@ -44,6 +45,8 @@ def parse_commandline():
     parser.add_argument('-m', '--medium', dest='mediumcat', metavar='CATEGORY',
                         type=int, default=100,
                         help='Medium elevation category (default=%(default)s)')
+    parser.add_argument('-t', '--cat_tag', dest='cat_tag', metavar='CATEGORY_TAG',
+                        default='contour_ext', help='category tag (default=%(default)s)')
     parser.add_argument("infile", metavar="INPUT", help="Input from ogr2osm-ed gdal_contour tagging")
     parser.add_argument("outfile", metavar="OUTPUT", help="Output phyghtmap-tagging")
     return parser.parse_args()
@@ -52,7 +55,7 @@ def main():
     params = parse_commandline()
 
     writer = osmium.SimpleWriter(params.outfile)
-    handler = ElevationSubHandler(writer, params.mediumcat, params.majorcat)
+    handler = ElevationSubHandler(writer, params.mediumcat, params.majorcat, params.cat_tag)
     handler.apply_file(params.infile)
     writer.close()
 
