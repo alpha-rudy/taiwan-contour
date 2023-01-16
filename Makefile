@@ -52,7 +52,7 @@ PHYGHT_OPTIONS = \
 .PHONY: taiwan-contour-2023
 taiwan-contour-2023: ele_taiwan_10_100_500-2023.pbf
 ele_taiwan_10_100_500-2023.pbf: \
-  moi-2022/taiwan_20m-ogr_10_100_500.pbf \
+  moi-2022/taiwan16_20m-ogr_10_100_500.pbf \
   moi-2019/penghu-ogr_10_100_500.pbf \
   moi-2019/kinmen-ogr_10_100_500.pbf \
   aw3d30-3.1/matsu-ogr_10_100_500.pbf \
@@ -70,13 +70,13 @@ ele_taiwan_10_100_500-2023.pbf: \
 taiwan-contour-mix-2023: ele_taiwan_10_100_500_mix-2023.pbf
 ele_taiwan_10_100_500_mix-2023.pbf: \
   precompiled/taiwan-sealand.pbf \
-  moi-2022/taiwan_20m-ogr_10_50_100_500.pbf \
+  moi-2022/taiwan16_20m-ogr_10_50_100_500.pbf \
   moi-2019/penghu-ogr_10_50_100_500.pbf \
   moi-2019/kinmen-ogr_10_50_100_500.pbf \
   aw3d30-3.1/matsu-ogr_10_50_100_500.pbf \
   aw3d30-3.1/n3islets-ogr_10_50_100_500.pbf \
   aw3d30-3.1/wuqiu-ogr_10_50_100_500.pbf \
-  moi-2022/marker-ogrs.pbf
+  moi-2022/taiwan16-marker-ogrs.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -89,13 +89,13 @@ ele_taiwan_10_100_500_mix-2023.pbf: \
 taiwan-lite-contour-mix-2023: ele_taiwan_20_100_500_mix-2023.pbf
 ele_taiwan_20_100_500_mix-2023.pbf: \
   precompiled/taiwan-sealand.pbf \
-  moi-2022/taiwan_40m-ogr_20_100_500.pbf \
+  moi-2022/taiwan16_40m-ogr_20_100_500.pbf \
   moi-2019/penghu-ogr_20_100_500.pbf \
   moi-2019/kinmen-ogr_20_100_500.pbf \
   aw3d30-3.1/matsu-ogr_20_100_500.pbf \
   aw3d30-3.1/n3islets-ogr_20_100_500.pbf \
   aw3d30-3.1/wuqiu-ogr_20_100_500.pbf \
-  moi-2022/marker-ogrs.pbf
+  moi-2022/taiwan16-marker-ogrs.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -111,7 +111,7 @@ moi-2022/.unzip: moi-2022/2022dtm20m.7z.001
 	touch $@
 
 
-moi-2022/from2016.tif: moi-2016/taiwan_20m-zero.tif
+%/from2016-wgs84.tif: moi-2016/taiwan_20m-wgs84.tif
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
@@ -125,7 +125,7 @@ moi-2022/from2016.tif: moi-2016/taiwan_20m-zero.tif
 .PHONY: taiwan-contour-2022
 taiwan-contour-2022: ele_taiwan_10_100_500-2022.pbf
 ele_taiwan_10_100_500-2022.pbf: \
-  moi-2020/taiwan_20m-gdal_10_100_500.pbf \
+  moi-2020/taiwan16_20m-gdal_10_100_500.pbf \
   moi-2019/penghu-gdal_10_100_500.pbf \
   moi-2019/kinmen-gdal_10_100_500.pbf \
   aw3d30-3.1/matsu-gdal_10_100_500.pbf \
@@ -143,13 +143,13 @@ ele_taiwan_10_100_500-2022.pbf: \
 taiwan-contour-mix-2022: ele_taiwan_10_100_500_mix-2022.pbf
 ele_taiwan_10_100_500_mix-2022.pbf: \
   precompiled/taiwan-sealand.pbf \
-  moi-2020/taiwan_20m-gdal_10_50_100_500.pbf \
+  moi-2020/taiwan16_20m-gdal_10_50_100_500.pbf \
   moi-2019/penghu-gdal_10_50_100_500.pbf \
   moi-2019/kinmen-gdal_10_50_100_500.pbf \
   aw3d30-3.1/matsu-gdal_10_50_100_500.pbf \
   aw3d30-3.1/n3islets-gdal_10_50_100_500.pbf \
   aw3d30-3.1/wuqiu-gdal_10_50_100_500.pbf \
-  moi-2020/marker-gdal.pbf
+  moi-2020/taiwan16-marker-gdal.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -162,13 +162,13 @@ ele_taiwan_10_100_500_mix-2022.pbf: \
 taiwan-lite-contour-mix-2022: ele_taiwan_20_100_500_mix-2022.pbf
 ele_taiwan_20_100_500_mix-2022.pbf: \
   precompiled/taiwan-sealand.pbf \
-  moi-2020/taiwan_40m-gdal_20_100_500.pbf \
+  moi-2020/taiwan16_40m-gdal_20_100_500.pbf \
   moi-2019/penghu-gdal_20_100_500.pbf \
   moi-2019/kinmen-gdal_20_100_500.pbf \
   aw3d30-3.1/matsu-gdal_20_100_500.pbf \
   aw3d30-2.1/n3islets-gdal_20_100_500.pbf \
   aw3d30-2.1/wuqiu-gdal_20_100_500.pbf \
-  moi-2020/marker-gdal.pbf
+  moi-2020/taiwan16-marker-gdal.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1002,13 +1002,13 @@ moi-2019/from2016.tif: moi-2016/taiwan_20m-zero.tif
 	python3 tools/elevation_sub.py $< $@
 
 
-%/marker-ogrs.pbf: \
-	%/taiwan_40m-ogr_40t_100_500_1000.pbf \
-	%/taiwan_80m-ogr_80t_100_500_1000.pbf \
-	%/taiwan_160m-ogr_160t_100_500_1000.pbf \
-	%/taiwan_320m-ogr_320t_100_500_1000.pbf \
-	%/taiwan_640m-ogr_640t_100_500_1000.pbf \
-	%/taiwan_1280m-ogr_1280t_100_500_1000.pbf 
+%-marker-ogrs.pbf: \
+	%_40m-ogr_40t_100_500_1000.pbf \
+	%_80m-ogr_80t_100_500_1000.pbf \
+	%_160m-ogr_160t_100_500_1000.pbf \
+	%_320m-ogr_320t_100_500_1000.pbf \
+	%_640m-ogr_640t_100_500_1000.pbf \
+	%_1280m-ogr_1280t_100_500_1000.pbf 
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1017,7 +1017,13 @@ moi-2019/from2016.tif: moi-2016/taiwan_20m-zero.tif
 		$^
 
 
-%/marker-gdal.pbf: %/taiwan-gdal_40m.pbf %/taiwan-gdal_80m.pbf %/taiwan-gdal_160m.pbf %/taiwan-gdal_320m.pbf %/taiwan-gdal_640m.pbf %/taiwan-gdal_1280m.pbf
+%-marker-gdals.pbf: \
+	%_40m-gdal_40t_100_500_1000.pbf \
+	%_80m-gdal_80t_100_500_1000.pbf \
+	%_160m-gdal_160t_100_500_1000.pbf \
+	%_320m-gdal_320t_100_500_1000.pbf \
+	%_640m-gdal_640t_100_500_1000.pbf \
+	%_1280m-gdal_1280t_100_500_1000.pbf 
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1026,13 +1032,13 @@ moi-2019/from2016.tif: moi-2016/taiwan_20m-zero.tif
 		$^
 
 
-moi-2020/marker-pygm.pbf: \
-  moi-2020/taiwan-pygm_40m.pbf \
-  moi-2020/taiwan-pygm_80m.pbf \
-  moi-2020/taiwan-pygm_160m.pbf \
-  moi-2020/taiwan-pygm_320m.pbf \
-  moi-2020/taiwan-pygm_640m.pbf \
-  moi-2020/taiwan-pygm_1280m.pbf
+%-marker-pygms.pbf: \
+	%_40m-pygm_40t_100_500_1000.pbf \
+	%_80m-pygm_80t_100_500_1000.pbf \
+	%_160m-pygm_160t_100_500_1000.pbf \
+	%_320m-pygm_320t_100_500_1000.pbf \
+	%_640m-pygm_640t_100_500_1000.pbf \
+	%_1280m-pygm_1280t_100_500_1000.pbf 
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1070,7 +1076,7 @@ moi-2020/marker-pygm.pbf: \
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		-ts 5414 0 \
+		-ts 5413 0 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1145,6 +1151,15 @@ moi-2020/marker-pygm.pbf: \
 		$^ \
 		$@
 
+
+# moi-2022/taiwan16_20m-nodata0.tif: moi-2022/taiwan16_20m-nodata.tif
+# 	rm -f $@
+# 	gdal_calc.py \
+# 		--NoDataValue=0 \
+# 		--calc="0" \
+# 		-A $^ \
+# 		--outfile=$@
+
 %-nodata0.tif: %-nodata.tif
 	rm -f $@
 	gdal_calc.py \
@@ -1152,6 +1167,15 @@ moi-2020/marker-pygm.pbf: \
 		--calc="(A > 0) * A" \
 		-A $^ \
 		--outfile=$@
+
+
+%/taiwan16_20m-nodata.tif: %/taiwan_20m-wgs84.tif %/from2016-wgs84.tif
+	rm -f $@
+	gdal_merge.py \
+		$(OUTPUTS) \
+		-n $(NODATA_VALUE) -a_nodata $(NODATA_VALUE) \
+		$^ \
+		-o $@
 
 
 %-nodata.tif: %-wgs84.tif
