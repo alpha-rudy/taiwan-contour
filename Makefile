@@ -111,17 +111,6 @@ moi-2022/.unzip: moi-2022/2022dtm20m.7z.001
 	touch $@
 
 
-%/from2016-wgs84.tif: moi-2016/taiwan_20m-wgs84.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-crop_to_cutline \
-		-cutline moi-2022/void_area.shp \
-		$^ \
-		$@
-
-
 .PHONY: taiwan-contour-2022
 taiwan-contour-2022: ele_taiwan_10_100_500-2022.pbf
 ele_taiwan_10_100_500-2022.pbf: \
@@ -677,12 +666,24 @@ aw3d30-2.1/.unzip:
 ## zero tif ==phyghtmap==> contour pbf
 ## 
 
-moi-2020/taiwan-pygm_10_100_500.pbf: moi-2020/taiwan_15m-zero.tif
+moi-2020/taiwan16_15m-pygm_10_100_500.pbf: moi-2020/taiwan16_15m-zero.tif
 	phyghtmap \
 		--step=10 \
 		--output-prefix=dem_contour \
 		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.00001 \
+		--simplifyContoursEpsilon=0.000001 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv dem_contour* $@
+
+
+%/taiwan16_20m-pygm_10_100_500.pbf: %/taiwan16_20m-zero.tif
+	phyghtmap \
+		--step=10 \
+		--output-prefix=dem_contour \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.000001 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
@@ -713,12 +714,12 @@ moi-2016/taiwan-pygm_10_100_500.pbf: moi-2016/taiwan_20m-zero.tif
 	mv dem_contour* $@
 
 
-%/taiwan-pygm_20_100_500.pbf: %/taiwan_20m-zero.tif
+%/taiwan16_40m-pygm_20_100_500.pbf: %/taiwan16_40m-zero.tif
 	phyghtmap \
 		--step=20 \
 		--output-prefix=dem_lite_contour \
 		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.00005 \
+		--simplifyContoursEpsilon=0.000005 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
@@ -880,7 +881,7 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 	mv wuqiu_lite_contour* $@
 
 
-%-pygm_40m.pbf: %_40m-zero.tif
+%_40m-pygm_40t_100_500_1000.pbf: %_40m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--output-prefix=dem_40m_contour \
@@ -896,7 +897,7 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 		-o=$@
 
 
-%-pygm_80m.pbf: %_80m-zero.tif
+%_80m-pygm_80t_100_500_1000.pbf: %_80m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--output-prefix=dem_80m_contour \
@@ -912,7 +913,7 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 		-o=$@
 
 
-%-pygm_160m.pbf: %_160m-zero.tif
+%_160m-pygm_160t_100_500_1000.pbf: %_160m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--output-prefix=dem_160m_contour \
@@ -928,7 +929,7 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 		-o=$@
 
 
-%-pygm_320m.pbf: %_320m-zero.tif
+%_320m-pygm_320t_100_500_1000.pbf: %_320m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--output-prefix=dem_320m_contour \
@@ -944,7 +945,7 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 		-o=$@
 
 
-%-pygm_640m.pbf: %_640m-zero.tif
+%_640m-pygm_640t_100_500_1000.pbf: %_640m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--output-prefix=dem_640m_contour \
@@ -959,7 +960,7 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 		$(@:.pbf=.osm) \
 		-o=$@
 
-%-pygm_1280m.pbf: %_1280m-zero.tif
+%_1280m-pygm_1280t_100_500_1000.pbf: %_1280m-zero.tif
 	phyghtmap \
 		--step=100 \
 		--output-prefix=dem_1280m_contour \
@@ -975,24 +976,13 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 		-o=$@
 
 
-moi-2018/from2016.tif: moi-2016/taiwan_20m-zero.tif
+%/from2016-wgs84.tif: moi-2016/taiwan_20m-wgs84.tif
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
 		-crop_to_cutline \
-		-cutline moi-2018/void_area.shp \
-		$^ \
-		$@
-
-
-moi-2019/from2016.tif: moi-2016/taiwan_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-crop_to_cutline \
-		-cutline moi-2019/void_area.shp \
+		-cutline $(dir $@)/void_area.shp \
 		$^ \
 		$@
 
@@ -1192,17 +1182,6 @@ moi-2022/taiwan16_20m-nodata0.tif: moi-2022/taiwan16_20m-nodata.tif
 	gdalwarp \
 		$(OUTPUTS) \
 		$(GDALWARP_WGS84_OPTIONS) \
-		$^ \
-		$@
-
-
-moi-2020/from2016.tif: moi-2016/taiwan_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-crop_to_cutline \
-		-cutline moi-2020/void_area.shp \
 		$^ \
 		$@
 
