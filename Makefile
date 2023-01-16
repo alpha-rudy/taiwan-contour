@@ -619,7 +619,7 @@ aw3d30-2.1/.unzip:
 		$@
 
 
-%-gdal_40m.pbf: %_40m-c100.shp
+%-gdal_40t_100_500_1000.pbf: %-c100.shp
 	python3 tools/contour-osm.py \
 		-t 'contour_40m' \
 		-m 500 \
@@ -628,7 +628,7 @@ aw3d30-2.1/.unzip:
 		$@
 
 
-%-gdal_80m.pbf: %_80m-c100.shp
+%-gdal_80t_100_500_1000.pbf: %-c100.shp
 	python3 tools/contour-osm.py \
 		-t 'contour_80m' \
 		-m 500 \
@@ -637,7 +637,7 @@ aw3d30-2.1/.unzip:
 		$@
 
 
-%-gdal_160m.pbf: %_160m-c100.shp
+%-gdal_160t_100_500_1000.pbf: %-c100.shp
 	python3 tools/contour-osm.py \
 		-t 'contour_160m' \
 		-m 500 \
@@ -646,7 +646,7 @@ aw3d30-2.1/.unzip:
 		$@
 
 
-%-gdal_320m.pbf: %_320m-c100.shp
+%-gdal_320t_100_500_1000.pbf: %-c100.shp
 	python3 tools/contour-osm.py \
 		-t 'contour_320m' \
 		-m 500 \
@@ -655,7 +655,7 @@ aw3d30-2.1/.unzip:
 		$@
 
 
-%-gdal_640m.pbf: %_640m-c100.shp
+%-gdal_640t_100_500_1000.pbf: %-c100.shp
 	python3 tools/contour-osm.py \
 		-t 'contour_640m' \
 		-m 500 \
@@ -664,7 +664,7 @@ aw3d30-2.1/.unzip:
 		$@
 
 
-%-gdal_1280m.pbf: %_1280m-c100.shp
+%-gdal_1280t_100_500_1000.pbf: %-c100.shp
 	python3 tools/contour-osm.py \
 		-t 'contour_1280m' \
 		-m 500 \
@@ -1152,13 +1152,13 @@ moi-2019/from2016.tif: moi-2016/taiwan_20m-zero.tif
 		$@
 
 
-# moi-2022/taiwan16_20m-nodata0.tif: moi-2022/taiwan16_20m-nodata.tif
-# 	rm -f $@
-# 	gdal_calc.py \
-# 		--NoDataValue=0 \
-# 		--calc="0" \
-# 		-A $^ \
-# 		--outfile=$@
+moi-2022/taiwan16_20m-nodata0.tif: moi-2022/taiwan16_20m-nodata.tif
+	rm -f $@
+	gdal_calc.py \
+		--NoDataValue=0 \
+		--calc="0" \
+		-A $^ \
+		--outfile=$@
 
 %-nodata0.tif: %-nodata.tif
 	rm -f $@
