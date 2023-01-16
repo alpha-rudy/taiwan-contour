@@ -45,36 +45,6 @@ PHYGHT_OPTIONS = \
 	--void-range-max=-50
 
 
-MOI2022_TAIWAN = moi-2022/taiwan
-MOI2022_MARKER = moi-2022/marker
-
-MOI2020_TAIWAN = moi-2020/taiwan
-MOI2020_MARKER = moi-2020/marker
-
-MOI2019_TAIWAN = moi-2019/taiwan
-MOI2019_PENGHU = moi-2019/penghu
-MOI2019_KINMEN = moi-2019/kinmen
-MOI2019_MARKER = moi-2019/marker
-
-MOI2018_TAIWAN = moi-2018/taiwan
-MOI2018_MARKER = moi-2018/marker
-
-MOI2016_TAIWAN = moi-2016/taiwan
-MOI2016_PENGHU = moi-2016/penghu
-MOI2016_MARKER = moi-2016/marker
-
-AW31_N3ISLETS = aw3d30-3.1/n3islets
-AW31_MATSU = aw3d30-3.1/matsu
-AW31_WUQIU = aw3d30-3.1/wuqiu
-AW31_NO_KINMEN = aw3d30-3.1/islands_nokinmen
-
-AW21_N3ISLETS = aw3d30-2.1/n3islets
-AW21_MATSU = aw3d30-2.1/matsu
-AW21_WUQIU = aw3d30-2.1/wuqiu
-AW21_KINMEN = aw3d30-2.1/kinmen
-AW21_NO_KINMEN = aw3d30-2.1/islands_nokinmen
-
-
 ##
 ## Outputs
 ##
@@ -82,12 +52,12 @@ AW21_NO_KINMEN = aw3d30-2.1/islands_nokinmen
 .PHONY: taiwan-contour-2023
 taiwan-contour-2023: ele_taiwan_10_100_500-2023.pbf
 ele_taiwan_10_100_500-2023.pbf: \
-  $(MOI2022_TAIWAN)_20m-ogr_10_100_500.pbf \
-  $(MOI2019_PENGHU)-ogr_10_100_500.pbf \
-  $(MOI2019_KINMEN)-ogr_10_100_500.pbf \
-  $(AW31_MATSU)-ogr_10_100_500.pbf \
-  $(AW31_N3ISLETS)-ogr_10_100_500.pbf \
-  $(AW31_WUQIU)-ogr_10_100_500.pbf
+  moi-2022/taiwan_20m-ogr_10_100_500.pbf \
+  moi-2019/penghu-ogr_10_100_500.pbf \
+  moi-2019/kinmen-ogr_10_100_500.pbf \
+  aw3d30-3.1/matsu-ogr_10_100_500.pbf \
+  aw3d30-3.1/n3islets-ogr_10_100_500.pbf \
+  aw3d30-3.1/wuqiu-ogr_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -100,13 +70,13 @@ ele_taiwan_10_100_500-2023.pbf: \
 taiwan-contour-mix-2023: ele_taiwan_10_100_500_mix-2023.pbf
 ele_taiwan_10_100_500_mix-2023.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2022_TAIWAN)_20m-ogr_10_50_100_500.pbf \
-  $(MOI2019_PENGHU)-ogr_10_50_100_500.pbf \
-  $(MOI2019_KINMEN)-ogr_10_50_100_500.pbf \
-  $(AW31_MATSU)-ogr_10_50_100_500.pbf \
-  $(AW31_N3ISLETS)-ogr_10_50_100_500.pbf \
-  $(AW31_WUQIU)-ogr_10_50_100_500.pbf \
-  $(MOI2022_MARKER)-ogrs.pbf
+  moi-2022/taiwan_20m-ogr_10_50_100_500.pbf \
+  moi-2019/penghu-ogr_10_50_100_500.pbf \
+  moi-2019/kinmen-ogr_10_50_100_500.pbf \
+  aw3d30-3.1/matsu-ogr_10_50_100_500.pbf \
+  aw3d30-3.1/n3islets-ogr_10_50_100_500.pbf \
+  aw3d30-3.1/wuqiu-ogr_10_50_100_500.pbf \
+  moi-2022/marker-ogrs.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -119,13 +89,13 @@ ele_taiwan_10_100_500_mix-2023.pbf: \
 taiwan-lite-contour-mix-2023: ele_taiwan_20_100_500_mix-2023.pbf
 ele_taiwan_20_100_500_mix-2023.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2022_TAIWAN)_40m-ogr_20_100_500.pbf \
-  $(MOI2019_PENGHU)-ogr_20_100_500.pbf \
-  $(MOI2019_KINMEN)-ogr_20_100_500.pbf \
-  $(AW31_MATSU)-ogr_20_100_500.pbf \
-  $(AW31_N3ISLETS)-ogr_20_100_500.pbf \
-  $(AW31_WUQIU)-ogr_20_100_500.pbf \
-  $(MOI2022_MARKER)-ogrs.pbf
+  moi-2022/taiwan_40m-ogr_20_100_500.pbf \
+  moi-2019/penghu-ogr_20_100_500.pbf \
+  moi-2019/kinmen-ogr_20_100_500.pbf \
+  aw3d30-3.1/matsu-ogr_20_100_500.pbf \
+  aw3d30-3.1/n3islets-ogr_20_100_500.pbf \
+  aw3d30-3.1/wuqiu-ogr_20_100_500.pbf \
+  moi-2022/marker-ogrs.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -134,14 +104,14 @@ ele_taiwan_20_100_500_mix-2023.pbf: \
 		$^
 
 
-$(MOI2022_TAIWAN)_20m.tif: moi-2022/.unzip
+moi-2022/taiwan_20m.tif: moi-2022/.unzip
 moi-2022/.unzip: moi-2022/2022dtm20m.7z.001
 	cd moi-2022/ && \
 		7za x 2022dtm20m.7z.001
 	touch $@
 
 
-moi-2022/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+moi-2022/from2016.tif: moi-2016/taiwan_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
@@ -155,12 +125,12 @@ moi-2022/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 .PHONY: taiwan-contour-2022
 taiwan-contour-2022: ele_taiwan_10_100_500-2022.pbf
 ele_taiwan_10_100_500-2022.pbf: \
-  $(MOI2020_TAIWAN)_20m-gdal_10_100_500.pbf \
-  $(MOI2019_PENGHU)-gdal_10_100_500.pbf \
-  $(MOI2019_KINMEN)-gdal_10_100_500.pbf \
-  $(AW31_MATSU)-gdal_10_100_500.pbf \
-  $(AW31_N3ISLETS)-gdal_10_100_500.pbf \
-  $(AW31_WUQIU)-gdal_10_100_500.pbf
+  moi-2020/taiwan_20m-gdal_10_100_500.pbf \
+  moi-2019/penghu-gdal_10_100_500.pbf \
+  moi-2019/kinmen-gdal_10_100_500.pbf \
+  aw3d30-3.1/matsu-gdal_10_100_500.pbf \
+  aw3d30-3.1/n3islets-gdal_10_100_500.pbf \
+  aw3d30-3.1/wuqiu-gdal_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -173,13 +143,13 @@ ele_taiwan_10_100_500-2022.pbf: \
 taiwan-contour-mix-2022: ele_taiwan_10_100_500_mix-2022.pbf
 ele_taiwan_10_100_500_mix-2022.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2020_TAIWAN)_20m-gdal_10_50_100_500.pbf \
-  $(MOI2019_PENGHU)-gdal_10_50_100_500.pbf \
-  $(MOI2019_KINMEN)-gdal_10_50_100_500.pbf \
-  $(AW31_MATSU)-gdal_10_50_100_500.pbf \
-  $(AW31_N3ISLETS)-gdal_10_50_100_500.pbf \
-  $(AW31_WUQIU)-gdal_10_50_100_500.pbf \
-  $(MOI2020_MARKER)-gdal.pbf
+  moi-2020/taiwan_20m-gdal_10_50_100_500.pbf \
+  moi-2019/penghu-gdal_10_50_100_500.pbf \
+  moi-2019/kinmen-gdal_10_50_100_500.pbf \
+  aw3d30-3.1/matsu-gdal_10_50_100_500.pbf \
+  aw3d30-3.1/n3islets-gdal_10_50_100_500.pbf \
+  aw3d30-3.1/wuqiu-gdal_10_50_100_500.pbf \
+  moi-2020/marker-gdal.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -192,13 +162,13 @@ ele_taiwan_10_100_500_mix-2022.pbf: \
 taiwan-lite-contour-mix-2022: ele_taiwan_20_100_500_mix-2022.pbf
 ele_taiwan_20_100_500_mix-2022.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2020_TAIWAN)_40m-gdal_20_100_500.pbf \
-  $(MOI2019_PENGHU)-gdal_20_100_500.pbf \
-  $(MOI2019_KINMEN)-gdal_20_100_500.pbf \
-  $(AW31_MATSU)-gdal_20_100_500.pbf \
-  $(AW21_N3ISLETS)-gdal_20_100_500.pbf \
-  $(AW21_WUQIU)-gdal_20_100_500.pbf \
-  $(MOI2020_MARKER)-gdal.pbf
+  moi-2020/taiwan_40m-gdal_20_100_500.pbf \
+  moi-2019/penghu-gdal_20_100_500.pbf \
+  moi-2019/kinmen-gdal_20_100_500.pbf \
+  aw3d30-3.1/matsu-gdal_20_100_500.pbf \
+  aw3d30-2.1/n3islets-gdal_20_100_500.pbf \
+  aw3d30-2.1/wuqiu-gdal_20_100_500.pbf \
+  moi-2020/marker-gdal.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -210,10 +180,10 @@ ele_taiwan_20_100_500_mix-2022.pbf: \
 .PHONY: taiwan-contour-2021
 taiwan-contour-2021: ele_taiwan_10_100_500-2021.pbf
 ele_taiwan_10_100_500-2021.pbf: \
-  $(MOI2020_TAIWAN)-pygm_10_100_500.pbf \
-  $(MOI2019_PENGHU)-pygm_10_100_500.pbf \
-  $(MOI2019_KINMEN)-pygm_10_100_500.pbf \
-  $(AW31_NO_KINMEN)-pygm_10_100_500.pbf
+  moi-2020/taiwan-pygm_10_100_500.pbf \
+  moi-2019/penghu-pygm_10_100_500.pbf \
+  moi-2019/kinmen-pygm_10_100_500.pbf \
+  aw3d30-3.1/islands_nokinmen-pygm_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -226,11 +196,11 @@ ele_taiwan_10_100_500-2021.pbf: \
 taiwan-contour-mix-2021: ele_taiwan_10_100_500_mix-2021.pbf
 ele_taiwan_10_100_500_mix-2021.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2020_TAIWAN)-pygm_10_50_100_500.pbf \
-  $(MOI2019_PENGHU)-pygm_10_50_100_500.pbf \
-  $(MOI2019_KINMEN)-pygm_10_50_100_500.pbf \
-  $(AW31_NO_KINMEN)-pygm_10_50_100_500.pbf \
-  $(MOI2020_MARKER)-pygm.pbf
+  moi-2020/taiwan-pygm_10_50_100_500.pbf \
+  moi-2019/penghu-pygm_10_50_100_500.pbf \
+  moi-2019/kinmen-pygm_10_50_100_500.pbf \
+  aw3d30-3.1/islands_nokinmen-pygm_10_50_100_500.pbf \
+  moi-2020/marker-pygm.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -243,11 +213,11 @@ ele_taiwan_10_100_500_mix-2021.pbf: \
 taiwan-lite-contour-mix-2021: ele_taiwan_20_100_500_mix-2021.pbf
 ele_taiwan_20_100_500_mix-2021.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2020_TAIWAN)-pygm_20_100_500.pbf \
-  $(MOI2019_PENGHU)-pygm_20_100_500.pbf \
-  $(MOI2019_KINMEN)-pygm_20_100_500.pbf \
-  $(AW31_NO_KINMEN)-pygm_20_100_500.pbf \
-  $(MOI2020_MARKER)-pygm.pbf
+  moi-2020/taiwan-pygm_20_100_500.pbf \
+  moi-2019/penghu-pygm_20_100_500.pbf \
+  moi-2019/kinmen-pygm_20_100_500.pbf \
+  aw3d30-3.1/islands_nokinmen-pygm_20_100_500.pbf \
+  moi-2020/marker-pygm.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -259,10 +229,10 @@ ele_taiwan_20_100_500_mix-2021.pbf: \
 .PHONY: taiwan-contour-2020
 taiwan-contour-2020: ele_taiwan_10_100_500-2020.pbf
 ele_taiwan_10_100_500-2020.pbf: \
-  $(MOI2020_TAIWAN)-pygm_10_100_500.pbf \
-  $(MOI2019_PENGHU)-pygm_10_100_500.pbf \
-  $(MOI2019_KINMEN)-pygm_10_100_500.pbf \
-  $(AW21_NO_KINMEN)-pygm_10_100_500.pbf
+  moi-2020/taiwan-pygm_10_100_500.pbf \
+  moi-2019/penghu-pygm_10_100_500.pbf \
+  moi-2019/kinmen-pygm_10_100_500.pbf \
+  aw3d30-2.1/islands_nokinmen-pygm_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -275,11 +245,11 @@ ele_taiwan_10_100_500-2020.pbf: \
 taiwan-contour-mix-2020: ele_taiwan_10_100_500_mix-2020.pbf
 ele_taiwan_10_100_500_mix-2020.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2020_TAIWAN)-pygm_10_50_100_500.pbf \
-  $(MOI2019_PENGHU)-pygm_10_50_100_500.pbf \
-  $(MOI2019_KINMEN)-pygm_10_50_100_500.pbf \
-  $(AW21_NO_KINMEN)-pygm_10_50_100_500.pbf \
-  $(MOI2020_MARKER)-pygm.pbf
+  moi-2020/taiwan-pygm_10_50_100_500.pbf \
+  moi-2019/penghu-pygm_10_50_100_500.pbf \
+  moi-2019/kinmen-pygm_10_50_100_500.pbf \
+  aw3d30-2.1/islands_nokinmen-pygm_10_50_100_500.pbf \
+  moi-2020/marker-pygm.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -292,11 +262,11 @@ ele_taiwan_10_100_500_mix-2020.pbf: \
 taiwan-lite-contour-mix-2020: ele_taiwan_20_100_500_mix-2020.pbf
 ele_taiwan_20_100_500_mix-2020.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2020_TAIWAN)-pygm_20_100_500.pbf \
-  $(MOI2019_PENGHU)-pygm_20_100_500.pbf \
-  $(MOI2019_KINMEN)-pygm_20_100_500.pbf \
-  $(AW21_NO_KINMEN)-pygm_20_100_500.pbf \
-  $(MOI2020_MARKER)-pygm.pbf
+  moi-2020/taiwan-pygm_20_100_500.pbf \
+  moi-2019/penghu-pygm_20_100_500.pbf \
+  moi-2019/kinmen-pygm_20_100_500.pbf \
+  aw3d30-2.1/islands_nokinmen-pygm_20_100_500.pbf \
+  moi-2020/marker-pygm.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -308,10 +278,10 @@ ele_taiwan_20_100_500_mix-2020.pbf: \
 .PHONY: taiwan-contour-2019
 taiwan-contour-2019: ele_taiwan_10_100_500-2019.pbf
 ele_taiwan_10_100_500-2019.pbf: \
-  $(MOI2019_TAIWAN)-pygm_10_100_500.pbf \
-  $(MOI2019_PENGHU)-pygm_10_100_500.pbf \
-  $(MOI2019_KINMEN)-pygm_10_100_500.pbf \
-  $(AW21_NO_KINMEN)-pygm_10_100_500.pbf
+  moi-2019/taiwan-pygm_10_100_500.pbf \
+  moi-2019/penghu-pygm_10_100_500.pbf \
+  moi-2019/kinmen-pygm_10_100_500.pbf \
+  aw3d30-2.1/islands_nokinmen-pygm_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -324,11 +294,11 @@ ele_taiwan_10_100_500-2019.pbf: \
 taiwan-contour-mix-2019: ele_taiwan_10_100_500_mix-2019.pbf
 ele_taiwan_10_100_500_mix-2019.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2019_TAIWAN)-pygm_10_50_100_500.pbf \
-  $(MOI2019_PENGHU)-pygm_10_50_100_500.pbf \
-  $(MOI2019_KINMEN)-pygm_10_50_100_500.pbf \
-  $(AW21_NO_KINMEN)-pygm_10_50_100_500.pbf \
-  $(MOI2019_MARKER)-pygm.pbf
+  moi-2019/taiwan-pygm_10_50_100_500.pbf \
+  moi-2019/penghu-pygm_10_50_100_500.pbf \
+  moi-2019/kinmen-pygm_10_50_100_500.pbf \
+  aw3d30-2.1/islands_nokinmen-pygm_10_50_100_500.pbf \
+  moi-2019/marker-pygm.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -341,11 +311,11 @@ ele_taiwan_10_100_500_mix-2019.pbf: \
 taiwan-lite-contour-mix-2019: ele_taiwan_20_100_500_mix-2019.pbf
 ele_taiwan_20_100_500_mix-2019.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2019_TAIWAN)-pygm_20_100_500.pbf \
-  $(MOI2019_PENGHU)-pygm_20_100_500.pbf \
-  $(MOI2019_KINMEN)-pygm_20_100_500.pbf \
-  $(AW21_NO_KINMEN)-pygm_20_100_500.pbf \
-  $(MOI2019_MARKER)-pygm.pbf
+  moi-2019/taiwan-pygm_20_100_500.pbf \
+  moi-2019/penghu-pygm_20_100_500.pbf \
+  moi-2019/kinmen-pygm_20_100_500.pbf \
+  aw3d30-2.1/islands_nokinmen-pygm_20_100_500.pbf \
+  moi-2019/marker-pygm.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -357,8 +327,8 @@ ele_taiwan_20_100_500_mix-2019.pbf: \
 .PHONY: taiwan-contour-2018
 taiwan-contour-2018: ele_taiwan_10_100_500-2018.pbf
 ele_taiwan_10_100_500-2018.pbf: \
-  $(MOI2018_TAIWAN)-pygm_10_100_500.pbf \
-  $(MOI2016_PENGHU)-pygm_10_100_500.pbf \
+  moi-2018/taiwan-pygm_10_100_500.pbf \
+  moi-2016/penghu-pygm_10_100_500.pbf \
   aw3d30-2.1/islands-pygm_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
@@ -372,10 +342,10 @@ ele_taiwan_10_100_500-2018.pbf: \
 taiwan-contour-mix-2018: ele_taiwan_10_100_500_mix-2018.pbf
 ele_taiwan_10_100_500_mix-2018.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2018_TAIWAN)-pygm_10_50_100_500.pbf \
-  $(MOI2016_PENGHU)-pygm_10_50_100_500.pbf \
+  moi-2018/taiwan-pygm_10_50_100_500.pbf \
+  moi-2016/penghu-pygm_10_50_100_500.pbf \
   aw3d30-2.1/islands-pygm_10_50_100_500.pbf \
-  $(MOI2018_MARKER)-pygm.pbf
+  moi-2018/marker-pygm.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -388,10 +358,10 @@ ele_taiwan_10_100_500_mix-2018.pbf: \
 taiwan-lite-contour-mix-2018: ele_taiwan_20_100_500_mix-2018.pbf
 ele_taiwan_20_100_500_mix-2018.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2018_TAIWAN)-pygm_20_100_500.pbf \
-  $(MOI2016_PENGHU)-pygm_20_100_500.pbf \
+  moi-2018/taiwan-pygm_20_100_500.pbf \
+  moi-2016/penghu-pygm_20_100_500.pbf \
   aw3d30-2.1/islands-pygm_20_100_500.pbf \
-  $(MOI2018_MARKER)-pygm.pbf
+  moi-2018/marker-pygm.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -403,8 +373,8 @@ ele_taiwan_20_100_500_mix-2018.pbf: \
 .PHONY: taiwan-contour-2016
 taiwan-contour-2016: ele_taiwan_10_100_500-2016.pbf
 ele_taiwan_10_100_500-2016.pbf: \
-  $(MOI2016_TAIWAN)-pygm_10_100_500.pbf \
-  $(MOI2016_PENGHU)-pygm_10_100_500.pbf \
+  moi-2016/taiwan-pygm_10_100_500.pbf \
+  moi-2016/penghu-pygm_10_100_500.pbf \
   aw3d30-2.1/islands-pygm_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
@@ -418,10 +388,10 @@ ele_taiwan_10_100_500-2016.pbf: \
 taiwan-contour-mix-2016: ele_taiwan_10_50_100_500_mix-2016.pbf
 ele_taiwan_10_50_100_500_mix-2016.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2016_TAIWAN)-pygm_10_50_100_500.pbf \
-  $(MOI2016_PENGHU)-pygm_10_50_100_500.pbf \
+  moi-2016/taiwan-pygm_10_50_100_500.pbf \
+  moi-2016/penghu-pygm_10_50_100_500.pbf \
   aw3d30-2.1/islands-pygm_10_50_100_500.pbf \
-  $(MOI2016_MARKER)-pygm.pbf
+  moi-2016/marker-pygm.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -434,10 +404,10 @@ ele_taiwan_10_50_100_500_mix-2016.pbf: \
 taiwan-lite-contour-mix-2016: ele_taiwan_20_100_500_mix-2016.pbf
 ele_taiwan_20_100_500_mix-2016.pbf: \
   precompiled/taiwan-sealand.pbf \
-  $(MOI2016_TAIWAN)-pygm_20_100_500.pbf \
-  $(MOI2016_PENGHU)-pygm_20_100_500.pbf \
+  moi-2016/taiwan-pygm_20_100_500.pbf \
+  moi-2016/penghu-pygm_20_100_500.pbf \
   aw3d30-2.1/islands-pygm_20_100_500.pbf \
-  $(MOI2016_MARKER)-pygm.pbf
+  moi-2016/marker-pygm.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -450,7 +420,7 @@ ele_taiwan_20_100_500_mix-2016.pbf: \
 ## Inputs 
 ##
 
-$(MOI2020_TAIWAN)_20m.tif: moi-2020/.unzip
+moi-2020/taiwan_20m.tif: moi-2020/.unzip
 moi-2020/.unzip: moi-2020/2020dtm20m.7z.001
 	cd moi-2020/ && \
 		7za x 2020dtm20m.7z.001 && \
@@ -458,9 +428,9 @@ moi-2020/.unzip: moi-2020/2020dtm20m.7z.001
 	touch $@
 
 
-$(MOI2019_TAIWAN)_20m.tif: moi-2019/.unzip
-$(MOI2019_PENGHU).tif: moi-2019/.unzip
-$(MOI2019_KINMEN).tif: moi-2019/.unzip
+moi-2019/taiwan_20m.tif: moi-2019/.unzip
+moi-2019/penghu.tif: moi-2019/.unzip
+moi-2019/kinmen.tif: moi-2019/.unzip
 moi-2019/.unzip: moi-2019/DEMg_20m.7z.001
 	cd moi-2019/ && \
 		7za x DEMg_20m.7z.001 && \
@@ -470,7 +440,7 @@ moi-2019/.unzip: moi-2019/DEMg_20m.7z.001
 	touch $@
 
 
-$(MOI2018_TAIWAN)_20m.tif: moi-2018/.unzip
+moi-2018/taiwan_20m.tif: moi-2018/.unzip
 moi-2018/.unzip:
 	cd moi-2018/ && \
 		7za x DEM_20m.7z.001 && \
@@ -478,8 +448,8 @@ moi-2018/.unzip:
 	touch $@
 
 
-$(MOI2016_TAIWAN)_20m.tif: moi-2016/.unzip
-$(MOI2016_PENGHU).tif: moi-2016/.unzip
+moi-2016/taiwan_20m.tif: moi-2016/.unzip
+moi-2016/penghu.tif: moi-2016/.unzip
 moi-2016/.unzip: moi-2016/dem_20m.7z.001
 	cd moi-2016/ && \
 		7za x dem_20m.7z.001 && \
@@ -707,7 +677,7 @@ aw3d30-2.1/.unzip:
 ## zero tif ==phyghtmap==> contour pbf
 ## 
 
-$(MOI2020_TAIWAN)-pygm_10_100_500.pbf: $(MOI2020_TAIWAN)_15m-zero.tif
+moi-2020/taiwan-pygm_10_100_500.pbf: moi-2020/taiwan_15m-zero.tif
 	phyghtmap \
 		--step=10 \
 		--output-prefix=dem_contour \
@@ -731,7 +701,7 @@ $(MOI2020_TAIWAN)-pygm_10_100_500.pbf: $(MOI2020_TAIWAN)_15m-zero.tif
 	mv dem_contour* $@
 
 
-$(MOI2016_TAIWAN)-pygm_10_100_500.pbf: $(MOI2016_TAIWAN)_20m-zero.tif
+moi-2016/taiwan-pygm_10_100_500.pbf: moi-2016/taiwan_20m-zero.tif
 	phyghtmap \
 		--step=10 \
 		--output-prefix=dem_contour \
@@ -755,7 +725,7 @@ $(MOI2016_TAIWAN)-pygm_10_100_500.pbf: $(MOI2016_TAIWAN)_20m-zero.tif
 	mv dem_lite_contour* $@
 
 
-$(MOI2016_TAIWAN)-pygm_20_100_500.pbf: $(MOI2016_TAIWAN)_20m-zero.tif
+moi-2016/taiwan-pygm_20_100_500.pbf: moi-2016/taiwan_20m-zero.tif
 	phyghtmap \
 		--step=20 \
 		--output-prefix=dem_lite_contour \
@@ -791,7 +761,7 @@ $(MOI2016_TAIWAN)-pygm_20_100_500.pbf: $(MOI2016_TAIWAN)_20m-zero.tif
 	mv penghu_lite_contour* $@
 
 
-$(MOI2019_KINMEN)-pygm_10_100_500.pbf: $(MOI2019_KINMEN)-zero.tif
+moi-2019/kinmen-pygm_10_100_500.pbf: moi-2019/kinmen-zero.tif
 	phyghtmap \
 		--step=10 \
 		--output-prefix=kinmen_contour \
@@ -803,7 +773,7 @@ $(MOI2019_KINMEN)-pygm_10_100_500.pbf: $(MOI2019_KINMEN)-zero.tif
 	mv kinmen_contour* $@
 
 
-$(MOI2019_KINMEN)-pygm_20_100_500.pbf: $(MOI2019_KINMEN)-zero.tif
+moi-2019/kinmen-pygm_20_100_500.pbf: moi-2019/kinmen-zero.tif
 	phyghtmap \
 		--step=20 \
 		--output-prefix=kinmen_lite_contour \
@@ -815,7 +785,7 @@ $(MOI2019_KINMEN)-pygm_20_100_500.pbf: $(MOI2019_KINMEN)-zero.tif
 	mv kinmen_lite_contour* $@
 
 
-$(AW21_KINMEN)-pygm_10_100_500.pbf: $(AW21_KINMEN)-zero.tif
+aw3d30-2.1/kinmen-pygm_10_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 	phyghtmap \
 		--step=10 \
 		--output-prefix=kinmen_contour \
@@ -827,7 +797,7 @@ $(AW21_KINMEN)-pygm_10_100_500.pbf: $(AW21_KINMEN)-zero.tif
 	mv kinmen_contour* $@
 
 
-$(AW21_KINMEN)-pygm_20_100_500.pbf: $(AW21_KINMEN)-zero.tif
+aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 	phyghtmap \
 		--step=20 \
 		--output-prefix=kinmen_lite_contour \
@@ -1005,7 +975,7 @@ $(AW21_KINMEN)-pygm_20_100_500.pbf: $(AW21_KINMEN)-zero.tif
 		-o=$@
 
 
-moi-2018/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+moi-2018/from2016.tif: moi-2016/taiwan_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
@@ -1016,7 +986,7 @@ moi-2018/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 		$@
 
 
-moi-2019/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+moi-2019/from2016.tif: moi-2016/taiwan_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
@@ -1056,13 +1026,13 @@ moi-2019/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 		$^
 
 
-$(MOI2020_MARKER)-pygm.pbf: \
-  $(MOI2020_TAIWAN)-pygm_40m.pbf \
-  $(MOI2020_TAIWAN)-pygm_80m.pbf \
-  $(MOI2020_TAIWAN)-pygm_160m.pbf \
-  $(MOI2020_TAIWAN)-pygm_320m.pbf \
-  $(MOI2020_TAIWAN)-pygm_640m.pbf \
-  $(MOI2020_TAIWAN)-pygm_1280m.pbf
+moi-2020/marker-pygm.pbf: \
+  moi-2020/taiwan-pygm_40m.pbf \
+  moi-2020/taiwan-pygm_80m.pbf \
+  moi-2020/taiwan-pygm_160m.pbf \
+  moi-2020/taiwan-pygm_320m.pbf \
+  moi-2020/taiwan-pygm_640m.pbf \
+  moi-2020/taiwan-pygm_1280m.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1202,7 +1172,7 @@ $(MOI2020_MARKER)-pygm.pbf: \
 		$@
 
 
-moi-2020/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+moi-2020/from2016.tif: moi-2016/taiwan_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
@@ -1213,34 +1183,34 @@ moi-2020/from2016.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 		$@
 
 
-$(AW31_N3ISLETS)-nodata0.tif: aw3d30-3.1/.unzip
+aw3d30-3.1/n3islets-nodata0.tif: aw3d30-3.1/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline $(AW31_N3ISLETS).shp \
+		-cutline aw3d30-3.1/n3islets.shp \
 		-dstnodata 0 \
 		aw3d30-3.1/ALPSMLC30_N025E122_DSM.tif \
 		$@
 
 
-$(AW21_N3ISLETS)-nodata0.tif: aw3d30-2.1/.unzip
+aw3d30-2.1/n3islets-nodata0.tif: aw3d30-2.1/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline $(AW21_N3ISLETS).shp \
+		-cutline aw3d30-2.1/n3islets.shp \
 		-dstnodata 0 \
 		aw3d30-2.1/N025E122_AVE_DSM.tif \
 		$@
 
 
-$(AW31_MATSU)-nodata0.tif: aw3d30-3.1/.unzip
+aw3d30-3.1/matsu-nodata0.tif: aw3d30-3.1/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline $(AW31_MATSU).shp \
+		-cutline aw3d30-3.1/matsu.shp \
 		-dstnodata 0 \
 		aw3d30-3.1/ALPSMLC30_N026E119_DSM.tif \
 		aw3d30-3.1/ALPSMLC30_N026E120_DSM.tif \
@@ -1248,12 +1218,12 @@ $(AW31_MATSU)-nodata0.tif: aw3d30-3.1/.unzip
 		$@
 
 
-$(AW21_MATSU)-nodata0.tif: aw3d30-2.1/.unzip
+aw3d30-2.1/matsu-nodata0.tif: aw3d30-2.1/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline $(AW21_MATSU).shp \
+		-cutline aw3d30-2.1/matsu.shp \
 		-dstnodata 0 \
 		aw3d30-2.1/N026E119_AVE_DSM.tif \
 		aw3d30-2.1/N026E120_AVE_DSM.tif \
@@ -1261,40 +1231,40 @@ $(AW21_MATSU)-nodata0.tif: aw3d30-2.1/.unzip
 		$@
 
 
-$(AW31_WUQIU)-nodata0.tif: aw3d30-3.1/.unzip
+aw3d30-3.1/wuqiu-nodata0.tif: aw3d30-3.1/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline $(AW31_WUQIU).shp \
+		-cutline aw3d30-3.1/wuqiu.shp \
 		-dstnodata 0 \
 		aw3d30-3.1/ALPSMLC30_N024E119_DSM.tif \
 		$@
 
 
-$(AW21_WUQIU)-nodata0.tif: aw3d30-2.1/.unzip
+aw3d30-2.1/wuqiu-nodata0.tif: aw3d30-2.1/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline $(AW21_WUQIU).shp \
+		-cutline aw3d30-2.1/wuqiu.shp \
 		-dstnodata 0 \
 		aw3d30-2.1/N024E119_AVE_DSM.tif \
 		$@
 
 
-$(AW21_KINMEN)-nodata0.tif: aw3d30-2.1/.unzip
+aw3d30-2.1/kinmen-nodata0.tif: aw3d30-2.1/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline $(AW21_KINMEN).shp \
+		-cutline aw3d30-2.1/kinmen.shp \
 		-dstnodata 0 \
 		aw3d30-2.1/N024E118_AVE_DSM.tif \
 		$@
 
 
-$(MOI2016_TAIWAN)_40m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+moi-2016/taiwan_40m-zero.tif: moi-2016/taiwan_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1305,7 +1275,7 @@ $(MOI2016_TAIWAN)_40m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 		$^ \
 		$@
 
-$(MOI2016_TAIWAN)_80m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+moi-2016/taiwan_80m-zero.tif: moi-2016/taiwan_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1316,7 +1286,7 @@ $(MOI2016_TAIWAN)_80m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 		$^ \
 		$@
 
-$(MOI2016_TAIWAN)_160m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+moi-2016/taiwan_160m-zero.tif: moi-2016/taiwan_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1327,7 +1297,7 @@ $(MOI2016_TAIWAN)_160m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 		$^ \
 		$@
 
-$(MOI2016_TAIWAN)_320m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+moi-2016/taiwan_320m-zero.tif: moi-2016/taiwan_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1338,7 +1308,7 @@ $(MOI2016_TAIWAN)_320m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 		$^ \
 		$@
 
-$(MOI2016_TAIWAN)_640m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+moi-2016/taiwan_640m-zero.tif: moi-2016/taiwan_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1350,7 +1320,7 @@ $(MOI2016_TAIWAN)_640m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 		$@
 
 
-$(MOI2016_TAIWAN)_1280m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
+moi-2016/taiwan_1280m-zero.tif: moi-2016/taiwan_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1363,10 +1333,10 @@ $(MOI2016_TAIWAN)_1280m-zero.tif: $(MOI2016_TAIWAN)_20m-zero.tif
 
 
 aw3d30-2.1/islands-pygm_10_100_500.pbf: \
-  $(AW21_KINMEN)-pygm_10_100_500.pbf \
-  $(AW21_MATSU)-pygm_10_100_500.pbf \
-  $(AW21_N3ISLETS)-pygm_10_100_500.pbf \
-  $(AW21_WUQIU)-pygm_10_100_500.pbf
+  aw3d30-2.1/kinmen-pygm_10_100_500.pbf \
+  aw3d30-2.1/matsu-pygm_10_100_500.pbf \
+  aw3d30-2.1/n3islets-pygm_10_100_500.pbf \
+  aw3d30-2.1/wuqiu-pygm_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1376,10 +1346,10 @@ aw3d30-2.1/islands-pygm_10_100_500.pbf: \
 
 
 aw3d30-2.1/islands-pygm_20_100_500.pbf: \
-  $(AW21_KINMEN)-pygm_20_100_500.pbf \
-  $(AW21_MATSU)-pygm_20_100_500.pbf \
-  $(AW21_N3ISLETS)-pygm_20_100_500.pbf \
-  $(AW21_WUQIU)-pygm_20_100_500.pbf
+  aw3d30-2.1/kinmen-pygm_20_100_500.pbf \
+  aw3d30-2.1/matsu-pygm_20_100_500.pbf \
+  aw3d30-2.1/n3islets-pygm_20_100_500.pbf \
+  aw3d30-2.1/wuqiu-pygm_20_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1412,13 +1382,13 @@ aw3d30-2.1/islands-pygm_20_100_500.pbf: \
 		$^
 
 
-$(MOI2016_MARKER)-pygm.pbf: \
-  $(MOI2016_TAIWAN)-pygm_40m.pbf \
-  $(MOI2016_TAIWAN)-pygm_80m.pbf \
-  $(MOI2016_TAIWAN)-pygm_160m.pbf \
-  $(MOI2016_TAIWAN)-pygm_320m.pbf \
-  $(MOI2016_TAIWAN)-pygm_640m.pbf \
-  $(MOI2016_TAIWAN)-pygm_1280m.pbf
+moi-2016/marker-pygm.pbf: \
+  moi-2016/taiwan-pygm_40m.pbf \
+  moi-2016/taiwan-pygm_80m.pbf \
+  moi-2016/taiwan-pygm_160m.pbf \
+  moi-2016/taiwan-pygm_320m.pbf \
+  moi-2016/taiwan-pygm_640m.pbf \
+  moi-2016/taiwan-pygm_1280m.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1427,13 +1397,13 @@ $(MOI2016_MARKER)-pygm.pbf: \
 		$^
 
 
-$(MOI2018_MARKER)-pygm.pbf: \
-  $(MOI2018_TAIWAN)-pygm_40m.pbf \
-  $(MOI2018_TAIWAN)-pygm_80m.pbf \
-  $(MOI2018_TAIWAN)-pygm_160m.pbf \
-  $(MOI2018_TAIWAN)-pygm_320m.pbf \
-  $(MOI2018_TAIWAN)-pygm_640m.pbf \
-  $(MOI2018_TAIWAN)-pygm_1280m.pbf
+moi-2018/marker-pygm.pbf: \
+  moi-2018/taiwan-pygm_40m.pbf \
+  moi-2018/taiwan-pygm_80m.pbf \
+  moi-2018/taiwan-pygm_160m.pbf \
+  moi-2018/taiwan-pygm_320m.pbf \
+  moi-2018/taiwan-pygm_640m.pbf \
+  moi-2018/taiwan-pygm_1280m.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1442,13 +1412,13 @@ $(MOI2018_MARKER)-pygm.pbf: \
 		$^
 
 
-$(MOI2019_MARKER)-pygm.pbf: \
-  $(MOI2019_TAIWAN)-pygm_40m.pbf \
-  $(MOI2019_TAIWAN)-pygm_80m.pbf \
-  $(MOI2019_TAIWAN)-pygm_160m.pbf \
-  $(MOI2019_TAIWAN)-pygm_320m.pbf \
-  $(MOI2019_TAIWAN)-pygm_640m.pbf \
-  $(MOI2019_TAIWAN)-pygm_1280m.pbf
+moi-2019/marker-pygm.pbf: \
+  moi-2019/taiwan-pygm_40m.pbf \
+  moi-2019/taiwan-pygm_80m.pbf \
+  moi-2019/taiwan-pygm_160m.pbf \
+  moi-2019/taiwan-pygm_320m.pbf \
+  moi-2019/taiwan-pygm_640m.pbf \
+  moi-2019/taiwan-pygm_1280m.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
