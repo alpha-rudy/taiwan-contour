@@ -52,12 +52,12 @@ PHYGHT_OPTIONS = \
 .PHONY: taiwan-contour-2023
 taiwan-contour-2023: ele_taiwan_10_100_500-2023.pbf
 ele_taiwan_10_100_500-2023.pbf: \
-  moi-2022/taiwan16_20m-pygm_10_100_500.pbf \
-  moi-2019/penghu-pygm_10_100_500.pbf \
-  moi-2019/kinmen-pygm_10_100_500.pbf \
-  aw3d30-3.1/matsu-pygm_10_100_500.pbf \
-  aw3d30-3.1/n3islets-pygm_10_100_500.pbf \
-  aw3d30-3.1/wuqiu-pygm_10_100_500.pbf
+  moi-2022/taiwan16_20m-ogr_10_100_500.pbf \
+  moi-2019/penghu-ogr_10_100_500.pbf \
+  moi-2019/kinmen-ogr_10_100_500.pbf \
+  aw3d30-3.1/matsu-ogr_10_100_500.pbf \
+  aw3d30-3.1/n3islets-ogr_10_100_500.pbf \
+  aw3d30-3.1/wuqiu-ogr_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -70,12 +70,21 @@ ele_taiwan_10_100_500-2023.pbf: \
 taiwan-contour-mix-2023: ele_taiwan_10_100_500_mix-2023.pbf
 ele_taiwan_10_100_500_mix-2023.pbf: \
   precompiled/taiwan-sealand.pbf \
+<<<<<<< HEAD
   moi-2022/taiwan16_15m-pygm_10_50_100_500.pbf \
   moi-2019/penghu-pygm_10_50_100_500.pbf \
   moi-2019/kinmen-pygm_10_50_100_500.pbf \
   aw3d30-3.1/matsu-pygm_10_50_100_500.pbf \
   aw3d30-3.1/n3islets-pygm_10_50_100_500.pbf \
   aw3d30-3.1/wuqiu-pygm_10_50_100_500.pbf \
+=======
+  moi-2022/taiwan16_20m-ogr_10_50_100_500.pbf \
+  moi-2019/penghu-ogr_10_50_100_500.pbf \
+  moi-2019/kinmen-ogr_10_50_100_500.pbf \
+  aw3d30-3.1/matsu-ogr_10_50_100_500.pbf \
+  aw3d30-3.1/n3islets-ogr_10_50_100_500.pbf \
+  aw3d30-3.1/wuqiu-ogr_10_50_100_500.pbf \
+>>>>>>> c831368 (finalized)
   moi-2022/taiwan16-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
@@ -89,12 +98,12 @@ ele_taiwan_10_100_500_mix-2023.pbf: \
 taiwan-lite-contour-mix-2023: ele_taiwan_20_100_500_mix-2023.pbf
 ele_taiwan_20_100_500_mix-2023.pbf: \
   precompiled/taiwan-sealand.pbf \
-  moi-2022/taiwan16_40m-pygm_20_100_500.pbf \
-  moi-2019/penghu-pygm_20_100_500.pbf \
-  moi-2019/kinmen-pygm_20_100_500.pbf \
-  aw3d30-3.1/matsu-pygm_20_100_500.pbf \
-  aw3d30-3.1/n3islets-pygm_20_100_500.pbf \
-  aw3d30-3.1/wuqiu-pygm_20_100_500.pbf \
+  moi-2022/taiwan16_80m-ogr_20_100_500.pbf \
+  moi-2019/penghu-ogr_20_100_500.pbf \
+  moi-2019/kinmen-ogr_20_100_500.pbf \
+  aw3d30-3.1/matsu-ogr_20_100_500.pbf \
+  aw3d30-3.1/n3islets-ogr_20_100_500.pbf \
+  aw3d30-3.1/wuqiu-ogr_20_100_500.pbf \
   moi-2022/taiwan16-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
