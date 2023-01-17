@@ -52,12 +52,12 @@ PHYGHT_OPTIONS = \
 .PHONY: taiwan-contour-2023
 taiwan-contour-2023: ele_taiwan_10_100_500-2023.pbf
 ele_taiwan_10_100_500-2023.pbf: \
-  moi-2022/taiwan16_20m-ogr_10_100_500.pbf \
-  moi-2019/penghu-ogr_10_100_500.pbf \
-  moi-2019/kinmen-ogr_10_100_500.pbf \
-  aw3d30-3.1/matsu-ogr_10_100_500.pbf \
-  aw3d30-3.1/n3islets-ogr_10_100_500.pbf \
-  aw3d30-3.1/wuqiu-ogr_10_100_500.pbf
+  moi-2022/taiwan16_20m-pygm_10_100_500.pbf \
+  moi-2019/penghu-pygm_10_100_500.pbf \
+  moi-2019/kinmen-pygm_10_100_500.pbf \
+  aw3d30-3.1/matsu-pygm_10_100_500.pbf \
+  aw3d30-3.1/n3islets-pygm_10_100_500.pbf \
+  aw3d30-3.1/wuqiu-pygm_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -70,12 +70,12 @@ ele_taiwan_10_100_500-2023.pbf: \
 taiwan-contour-mix-2023: ele_taiwan_10_100_500_mix-2023.pbf
 ele_taiwan_10_100_500_mix-2023.pbf: \
   precompiled/taiwan-sealand.pbf \
-  moi-2022/taiwan16_20m-ogr_10_50_100_500.pbf \
-  moi-2019/penghu-ogr_10_50_100_500.pbf \
-  moi-2019/kinmen-ogr_10_50_100_500.pbf \
-  aw3d30-3.1/matsu-ogr_10_50_100_500.pbf \
-  aw3d30-3.1/n3islets-ogr_10_50_100_500.pbf \
-  aw3d30-3.1/wuqiu-ogr_10_50_100_500.pbf \
+  moi-2022/taiwan16_15m-pygm_10_50_100_500.pbf \
+  moi-2019/penghu-pygm_10_50_100_500.pbf \
+  moi-2019/kinmen-pygm_10_50_100_500.pbf \
+  aw3d30-3.1/matsu-pygm_10_50_100_500.pbf \
+  aw3d30-3.1/n3islets-pygm_10_50_100_500.pbf \
+  aw3d30-3.1/wuqiu-pygm_10_50_100_500.pbf \
   moi-2022/taiwan16-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
@@ -89,12 +89,12 @@ ele_taiwan_10_100_500_mix-2023.pbf: \
 taiwan-lite-contour-mix-2023: ele_taiwan_20_100_500_mix-2023.pbf
 ele_taiwan_20_100_500_mix-2023.pbf: \
   precompiled/taiwan-sealand.pbf \
-  moi-2022/taiwan16_40m-ogr_20_100_500.pbf \
-  moi-2019/penghu-ogr_20_100_500.pbf \
-  moi-2019/kinmen-ogr_20_100_500.pbf \
-  aw3d30-3.1/matsu-ogr_20_100_500.pbf \
-  aw3d30-3.1/n3islets-ogr_20_100_500.pbf \
-  aw3d30-3.1/wuqiu-ogr_20_100_500.pbf \
+  moi-2022/taiwan16_40m-pygm_20_100_500.pbf \
+  moi-2019/penghu-pygm_20_100_500.pbf \
+  moi-2019/kinmen-pygm_20_100_500.pbf \
+  aw3d30-3.1/matsu-pygm_20_100_500.pbf \
+  aw3d30-3.1/n3islets-pygm_20_100_500.pbf \
+  aw3d30-3.1/wuqiu-pygm_20_100_500.pbf \
   moi-2022/taiwan16-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
@@ -666,230 +666,147 @@ aw3d30-2.1/.unzip:
 ## zero tif ==phyghtmap==> contour pbf
 ## 
 
-moi-2020/taiwan16_15m-pygm_10_100_500.pbf: moi-2020/taiwan16_15m-zero.tif
+%/taiwan16_15m-pygm_10_100_500.pbf: %/taiwan16_15m-zero.tif
 	phyghtmap \
 		--step=10 \
-		--output-prefix=dem_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000001 \
+		--simplifyContoursEpsilon=0.00001 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
-	mv dem_contour* $@
+	mv $(basename $(notdir $@))* $@
 
 
 %/taiwan16_20m-pygm_10_100_500.pbf: %/taiwan16_20m-zero.tif
 	phyghtmap \
 		--step=10 \
-		--output-prefix=dem_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000001 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv dem_contour* $@
-
-
-%-pygm_10_100_500.pbf: %-zero.tif
-	phyghtmap \
-		--step=10 \
-		--output-prefix=dem_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
 		--simplifyContoursEpsilon=0.00001 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
-	mv dem_contour* $@
-
-
-moi-2016/taiwan-pygm_10_100_500.pbf: moi-2016/taiwan_20m-zero.tif
-	phyghtmap \
-		--step=10 \
-		--output-prefix=dem_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000002 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv dem_contour* $@
+	mv $(basename $(notdir $@))* $@
 
 
 %/taiwan16_40m-pygm_20_100_500.pbf: %/taiwan16_40m-zero.tif
 	phyghtmap \
 		--step=20 \
-		--output-prefix=dem_lite_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000005 \
+		--simplifyContoursEpsilon=0.00005 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
-	mv dem_lite_contour* $@
+	mv $(basename $(notdir $@))* $@
+
+
+moi-2016/taiwan-pygm_10_100_500.pbf: moi-2016/taiwan_20m-zero.tif
+	phyghtmap \
+		--step=10 \
+		--output-prefix=$(basename $(notdir $@)) \
+		--line-cat=500,100 \
+		--simplifyContoursEpsilon=0.00001 \
+		$(PHYGHT_OPTIONS) \
+		--pbf \
+		$^
+	mv $(basename $(notdir $@))* $@
 
 
 moi-2016/taiwan-pygm_20_100_500.pbf: moi-2016/taiwan_20m-zero.tif
 	phyghtmap \
 		--step=20 \
-		--output-prefix=dem_lite_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000005 \
+		--simplifyContoursEpsilon=0.00005 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
-	mv dem_lite_contour* $@
+	mv $(basename $(notdir $@))* $@
 
 
 %/penghu-pygm_10_100_500.pbf: %/penghu-zero.tif
 	phyghtmap \
 		--step=10 \
-		--output-prefix=penghu_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
 		--simplifyContoursEpsilon=0.00001 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
-	mv penghu_contour* $@
+	mv $(basename $(notdir $@))* $@
 
 
 %/penghu-pygm_20_100_500.pbf: %/penghu-zero.tif
 	phyghtmap \
 		--step=20 \
-		--output-prefix=penghu_lite_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
 		--simplifyContoursEpsilon=0.00005 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
-	mv penghu_lite_contour* $@
+	mv $(basename $(notdir $@))* $@
 
 
 moi-2019/kinmen-pygm_10_100_500.pbf: moi-2019/kinmen-zero.tif
 	phyghtmap \
 		--step=10 \
-		--output-prefix=kinmen_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
 		--simplifyContoursEpsilon=0.00001 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
-	mv kinmen_contour* $@
+	mv $(basename $(notdir $@))* $@
 
 
 moi-2019/kinmen-pygm_20_100_500.pbf: moi-2019/kinmen-zero.tif
 	phyghtmap \
 		--step=20 \
-		--output-prefix=kinmen_lite_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
 		--simplifyContoursEpsilon=0.00005 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
-	mv kinmen_lite_contour* $@
+	mv $(basename $(notdir $@))* $@
 
 
-aw3d30-2.1/kinmen-pygm_10_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
+%-pygm_10_100_500.pbf: %-zero.tif
 	phyghtmap \
 		--step=10 \
-		--output-prefix=kinmen_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
 		--simplifyContoursEpsilon=0.000025 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
-	mv kinmen_contour* $@
+	mv $(basename $(notdir $@))* $@
 
 
-aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
+%-pygm_20_100_500.pbf: %-zero.tif
 	phyghtmap \
 		--step=20 \
-		--output-prefix=kinmen_lite_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
 		--simplifyContoursEpsilon=0.000125 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
-	mv kinmen_lite_contour* $@
-
-
-%/matsu-pygm_10_100_500.pbf: %/matsu-zero.tif
-	phyghtmap \
-		--step=10 \
-		--output-prefix=matsu_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000025 \
-		--pbf \
-		$^
-	mv matsu_contour* $@
-
-
-%/matsu-pygm_20_100_500.pbf: %/matsu-zero.tif
-	phyghtmap \
-		--step=20 \
-		--output-prefix=matsu_lite_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000125 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv matsu_lite_contour* $@
-
-
-%/n3islets-pygm_10_100_500.pbf: %/n3islets-zero.tif
-	phyghtmap \
-		--step=10 \
-		--output-prefix=n3islets_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000025 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv n3islets_contour* $@
-
-
-%/n3islets-pygm_20_100_500.pbf: %/n3islets-zero.tif
-	phyghtmap \
-		--step=20 \
-		--output-prefix=n3islets_lite_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000125 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv n3islets_lite_contour* $@
-
-
-%/wuqiu-pygm_10_100_500.pbf: %/wuqiu-zero.tif
-	phyghtmap \
-		--step=10 \
-		--output-prefix=wuqiu_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000025 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv wuqiu_contour* $@
-
-
-%/wuqiu-pygm_20_100_500.pbf: %/wuqiu-zero.tif
-	phyghtmap \
-		--step=20 \
-		--output-prefix=wuqiu_lite_contour \
-		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000125 \
-		$(PHYGHT_OPTIONS) \
-		--pbf \
-		$^
-	mv wuqiu_lite_contour* $@
+	mv $(basename $(notdir $@))* $@
 
 
 %_40m-pygm_40t_100_500_1000.pbf: %_40m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--output-prefix=dem_40m_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=1000,500 \
 		--simplifyContoursEpsilon=0.00005 \
 		$(PHYGHT_OPTIONS) \
 		$^
-	mv dem_40m_contour* $(@:.pbf=.osm)
+	mv $(basename $(notdir $@))* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_40m/g' -i $(@:.pbf=.osm)
 	osmconvert \
 		--out-pbf \
@@ -900,12 +817,12 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 %_80m-pygm_80t_100_500_1000.pbf: %_80m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--output-prefix=dem_80m_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=1000,500 \
 		--simplifyContoursEpsilon=0.00005 \
 		$(PHYGHT_OPTIONS) \
 		$^
-	mv dem_80m_contour* $(@:.pbf=.osm)
+	mv $(basename $(notdir $@))* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_80m/g' -i $(@:.pbf=.osm)
 	osmconvert \
 		--out-pbf \
@@ -916,12 +833,12 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 %_160m-pygm_160t_100_500_1000.pbf: %_160m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--output-prefix=dem_160m_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=1000,500 \
 		--simplifyContoursEpsilon=0.00005 \
 		$(PHYGHT_OPTIONS) \
 		$^
-	mv dem_160m_contour* $(@:.pbf=.osm)
+	mv $(basename $(notdir $@))* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_160m/g' -i $(@:.pbf=.osm)
 	osmconvert \
 		--out-pbf \
@@ -932,12 +849,12 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 %_320m-pygm_320t_100_500_1000.pbf: %_320m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--output-prefix=dem_320m_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=1000,500 \
 		--simplifyContoursEpsilon=0.00005 \
 		$(PHYGHT_OPTIONS) \
 		$^
-	mv dem_320m_contour* $(@:.pbf=.osm)
+	mv $(basename $(notdir $@))* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_320m/g' -i $(@:.pbf=.osm)
 	osmconvert \
 		--out-pbf \
@@ -948,12 +865,12 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 %_640m-pygm_640t_100_500_1000.pbf: %_640m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--output-prefix=dem_640m_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=1000,500 \
 		--simplifyContoursEpsilon=0.00005 \
 		$(PHYGHT_OPTIONS) \
 		$^
-	mv dem_640m_contour* $(@:.pbf=.osm)
+	mv $(basename $(notdir $@))* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_640m/g' -i $(@:.pbf=.osm)
 	osmconvert \
 		--out-pbf \
@@ -963,12 +880,12 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 %_1280m-pygm_1280t_100_500_1000.pbf: %_1280m-zero.tif
 	phyghtmap \
 		--step=100 \
-		--output-prefix=dem_1280m_contour \
+		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=1000,500 \
 		--simplifyContoursEpsilon=0.00005 \
 		$(PHYGHT_OPTIONS) \
 		$^
-	mv dem_1280m_contour* $(@:.pbf=.osm)
+	mv $(basename $(notdir $@))* $(@:.pbf=.osm)
 	$(SED_CMD) -e 's/contour_ext/contour_1280m/g' -i $(@:.pbf=.osm)
 	osmconvert \
 		--out-pbf \
