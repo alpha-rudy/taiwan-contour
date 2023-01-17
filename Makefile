@@ -76,7 +76,7 @@ ele_taiwan_10_100_500_mix-2023.pbf: \
   aw3d30-3.1/matsu-ogr_10_50_100_500.pbf \
   aw3d30-3.1/n3islets-ogr_10_50_100_500.pbf \
   aw3d30-3.1/wuqiu-ogr_10_50_100_500.pbf \
-  moi-2022/taiwan16-marker-ogrs.pbf
+  moi-2022/taiwan16-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -95,7 +95,7 @@ ele_taiwan_20_100_500_mix-2023.pbf: \
   aw3d30-3.1/matsu-ogr_20_100_500.pbf \
   aw3d30-3.1/n3islets-ogr_20_100_500.pbf \
   aw3d30-3.1/wuqiu-ogr_20_100_500.pbf \
-  moi-2022/taiwan16-marker-ogrs.pbf
+  moi-2022/taiwan16-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1142,13 +1142,13 @@ aw3d30-2.1/kinmen-pygm_20_100_500.pbf: aw3d30-2.1/kinmen-zero.tif
 		$@
 
 
-moi-2022/taiwan16_20m-nodata0.tif: moi-2022/taiwan16_20m-nodata.tif
-	rm -f $@
-	gdal_calc.py \
-		--NoDataValue=0 \
-		--calc="0" \
-		-A $^ \
-		--outfile=$@
+# moi-2022/taiwan16_20m-nodata0.tif: moi-2022/taiwan16_20m-nodata.tif
+# 	rm -f $@
+# 	gdal_calc.py \
+# 		--NoDataValue=0 \
+# 		--calc="0" \
+# 		-A $^ \
+# 		--outfile=$@
 
 %-nodata0.tif: %-nodata.tif
 	rm -f $@
