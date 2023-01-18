@@ -52,12 +52,12 @@ PHYGHT_OPTIONS = \
 .PHONY: taiwan-contour-2023
 taiwan-contour-2023: ele_taiwan_10_100_500-2023.pbf
 ele_taiwan_10_100_500-2023.pbf: \
-  moi-2022/taiwan16_15m-ogr_10_100_500.pbf \
-  moi-2019/penghu-ogr_10_100_500.pbf \
-  moi-2019/kinmen-ogr_10_100_500.pbf \
-  aw3d30-3.1/matsu-ogr_10_100_500.pbf \
-  aw3d30-3.1/n3islets-ogr_10_100_500.pbf \
-  aw3d30-3.1/wuqiu-ogr_10_100_500.pbf
+  moi-2022/taiwan16_15m-pygm_10_100_500.pbf \
+  moi-2019/penghu-pygm_10_100_500.pbf \
+  moi-2019/kinmen-pygm_10_100_500.pbf \
+  aw3d30-3.1/matsu-pygm_10_100_500.pbf \
+  aw3d30-3.1/n3islets-pygm_10_100_500.pbf \
+  aw3d30-3.1/wuqiu-pygm_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -89,12 +89,12 @@ ele_taiwan_10_100_500_mix-2023.pbf: \
 taiwan-lite-contour-mix-2023: ele_taiwan_20_100_500_mix-2023.pbf
 ele_taiwan_20_100_500_mix-2023.pbf: \
   precompiled/taiwan-sealand.pbf \
-  moi-2022/taiwan16_80m-ogr_20_100_500.pbf \
-  moi-2019/penghu-ogr_20_100_500.pbf \
-  moi-2019/kinmen-ogr_20_100_500.pbf \
-  aw3d30-3.1/matsu-ogr_20_100_500.pbf \
-  aw3d30-3.1/n3islets-ogr_20_100_500.pbf \
-  aw3d30-3.1/wuqiu-ogr_20_100_500.pbf \
+  moi-2022/taiwan16_60m-pygm_20_100_500.pbf \
+  moi-2019/penghu-pygm_20_100_500.pbf \
+  moi-2019/kinmen-pygm_20_100_500.pbf \
+  aw3d30-3.1/matsu-pygm_20_100_500.pbf \
+  aw3d30-3.1/n3islets-pygm_20_100_500.pbf \
+  aw3d30-3.1/wuqiu-pygm_20_100_500.pbf \
   moi-2022/taiwan16-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
@@ -984,6 +984,18 @@ moi-2019/kinmen-pygm_20_100_500.pbf: moi-2019/kinmen-zero.tif
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
 		-ts 5413 0 \
+		-r bilinear \
+		-wt $(WORKING_TYPE) \
+		$^ \
+		$@
+
+
+%_60m-zero.tif: %_20m-zero.tif
+	rm -f $@
+	gdalwarp \
+		 $(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-ts 3609 0 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
