@@ -892,6 +892,16 @@ moi-2019/kinmen-pygm_20_100_500.pbf: moi-2019/kinmen-zero.tif
 		$(@:.pbf=.osm) \
 		-o=$@
 
+%/fours-wgs84.tif: moi-2020/taiwan_20m-wgs84.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-crop_to_cutline \
+		-cutline $(dir $@)/four_islands.shp \
+		$^ \
+		$@
+
 
 %/from2016-wgs84.tif: moi-2016/taiwan_20m-wgs84.tif
 	rm -f $@
@@ -1088,6 +1098,7 @@ moi-2019/kinmen-pygm_20_100_500.pbf: moi-2019/kinmen-zero.tif
 		--outfile=$@
 
 
+moi-2022/taiwan16_20m-nodata.tif: moi-2022/taiwan_20m-wgs84.tif moi-2022/from2016-wgs84.tif moi-2022/fours-wgs84.tif
 %/taiwan16_20m-nodata.tif: %/taiwan_20m-wgs84.tif %/from2016-wgs84.tif
 	rm -f $@
 	gdal_merge.py \
