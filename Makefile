@@ -18,8 +18,8 @@ endif
 all: taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
 
 taiwan-contour: taiwan-contour-2024
-taiwan-contour-mix: taiwan-contour-mix-2023
-taiwan-lite-contour-mix: taiwan-lite-contour-mix-2023
+taiwan-contour-mix: taiwan-contour-mix-2024
+taiwan-lite-contour-mix: taiwan-lite-contour-mix-2024
 
 clean:
 	git clean -fdx
@@ -83,6 +83,25 @@ ele_taiwan_10_100_500-2023.pbf: \
 		$^
 
 
+.PHONY: taiwan-contour-mix-2024
+taiwan-contour-mix-2024: ele_taiwan_10_100_500_mix-2024.pbf
+ele_taiwan_10_100_500_mix-2024.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  moi-2024/taiwan16_15m-pygm_10_50_100_500.pbf \
+  moi-2019/penghu-pygm_10_50_100_500.pbf \
+  moi-2019/kinmen-pygm_10_50_100_500.pbf \
+  aw3d30-4.1/matsu-pygm_10_50_100_500.pbf \
+  aw3d30-4.1/n3islets-pygm_10_50_100_500.pbf \
+  aw3d30-4.1/wuqiu-pygm_10_50_100_500.pbf \
+  moi-2024/taiwan16-marker-pygms.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
 .PHONY: taiwan-contour-mix-2023
 taiwan-contour-mix-2023: ele_taiwan_10_100_500_mix-2023.pbf
 ele_taiwan_10_100_500_mix-2023.pbf: \
@@ -94,6 +113,25 @@ ele_taiwan_10_100_500_mix-2023.pbf: \
   aw3d30-3.1/n3islets-pygm_10_50_100_500.pbf \
   aw3d30-3.1/wuqiu-pygm_10_50_100_500.pbf \
   moi-2022/taiwan16-marker-pygms.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-lite-contour-mix-2024
+taiwan-lite-contour-mix-2024: ele_taiwan_20_100_500_mix-2024.pbf
+ele_taiwan_20_100_500_mix-2024.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  moi-2024/taiwan16_60m-pygm_20_100_500.pbf \
+  moi-2019/penghu-pygm_20_100_500.pbf \
+  moi-2019/kinmen-pygm_20_100_500.pbf \
+  aw3d30-4.1/matsu-pygm_20_100_500.pbf \
+  aw3d30-4.1/n3islets-pygm_20_100_500.pbf \
+  aw3d30-4.1/wuqiu-pygm_20_100_500.pbf \
+  moi-2024/taiwan16-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -909,6 +947,17 @@ moi-2019/kinmen-pygm_20_100_500.pbf: moi-2019/kinmen-zero.tif
 		$(@:.pbf=.osm) \
 		-o=$@
 
+%/three-wgs84.tif: moi-2020/taiwan_20m-wgs84.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata $(NODATA_VALUE) \
+		-crop_to_cutline \
+		-cutline $(dir $@)/three_islands.shp \
+		$^ \
+		$@
+
+
 %/fours-wgs84.tif: moi-2020/taiwan_20m-wgs84.tif
 	rm -f $@
 	gdalwarp \
@@ -1115,6 +1164,7 @@ moi-2019/kinmen-pygm_20_100_500.pbf: moi-2019/kinmen-zero.tif
 		--outfile=$@
 
 
+moi-2024/taiwan16_20m-nodata.tif: moi-2024/taiwan_20m-wgs84.tif moi-2024/from2016-wgs84.tif moi-2024/three-wgs84.tif
 moi-2022/taiwan16_20m-nodata.tif: moi-2022/taiwan_20m-wgs84.tif moi-2022/from2016-wgs84.tif moi-2022/fours-wgs84.tif
 %/taiwan16_20m-nodata.tif: %/taiwan_20m-wgs84.tif %/from2016-wgs84.tif
 	rm -f $@
@@ -1143,14 +1193,14 @@ moi-2022/taiwan16_20m-nodata.tif: moi-2022/taiwan_20m-wgs84.tif moi-2022/from201
 		$@
 
 
-aw3d30-3.1/n3islets-nodata0.tif: aw3d30-3.1/.unzip
+aw3d30-%/n3islets-nodata0.tif: aw3d30-%/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline aw3d30-3.1/n3islets.shp \
+		-cutline aw3d30-$*/n3islets.shp \
 		-dstnodata 0 \
-		aw3d30-3.1/ALPSMLC30_N025E122_DSM.tif \
+		aw3d30-$*/ALPSMLC30_N025E122_DSM.tif \
 		$@
 
 
@@ -1165,16 +1215,16 @@ aw3d30-2.1/n3islets-nodata0.tif: aw3d30-2.1/.unzip
 		$@
 
 
-aw3d30-3.1/matsu-nodata0.tif: aw3d30-3.1/.unzip
+aw3d30-%/matsu-nodata0.tif: aw3d30-%/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline aw3d30-3.1/matsu.shp \
+		-cutline aw3d30-$*/matsu.shp \
 		-dstnodata 0 \
-		aw3d30-3.1/ALPSMLC30_N026E119_DSM.tif \
-		aw3d30-3.1/ALPSMLC30_N026E120_DSM.tif \
-		aw3d30-3.1/ALPSMLC30_N025E119_DSM.tif \
+		aw3d30-$*/ALPSMLC30_N026E119_DSM.tif \
+		aw3d30-$*/ALPSMLC30_N026E120_DSM.tif \
+		aw3d30-$*/ALPSMLC30_N025E119_DSM.tif \
 		$@
 
 
@@ -1191,14 +1241,14 @@ aw3d30-2.1/matsu-nodata0.tif: aw3d30-2.1/.unzip
 		$@
 
 
-aw3d30-3.1/wuqiu-nodata0.tif: aw3d30-3.1/.unzip
+aw3d30-%/wuqiu-nodata0.tif: aw3d30-%/.unzip
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
 		-crop_to_cutline \
-		-cutline aw3d30-3.1/wuqiu.shp \
+		-cutline aw3d30-$*/wuqiu.shp \
 		-dstnodata 0 \
-		aw3d30-3.1/ALPSMLC30_N024E119_DSM.tif \
+		aw3d30-$*/ALPSMLC30_N024E119_DSM.tif \
 		$@
 
 
