@@ -454,6 +454,13 @@ moi-2016/.unzip: moi-2016/dem_20m.7z.001
 	touch $@
 
 
+aw3d-orig: aw3d30-4.1/.unzip
+aw3d30-4.1/.unzip:
+	cd aw3d30-4.1/ && \
+	7za x aw3d30-4.1.7z
+	touch $@
+
+
 aw3d-orig: aw3d30-3.1/.unzip
 aw3d30-3.1/.unzip:
 	cd aw3d30-3.1/ && \
