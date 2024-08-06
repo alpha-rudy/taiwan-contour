@@ -17,7 +17,7 @@ endif
 .PHONY: all clean
 all: taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
 
-taiwan-contour: taiwan-contour-2023
+taiwan-contour: taiwan-contour-2024
 taiwan-contour-mix: taiwan-contour-mix-2023
 taiwan-lite-contour-mix: taiwan-lite-contour-mix-2023
 
@@ -48,6 +48,23 @@ PHYGHT_OPTIONS = \
 ##
 ## Outputs
 ##
+
+.PHONY: taiwan-contour-2024
+taiwan-contour-2024: ele_taiwan_10_100_500-2024.pbf
+ele_taiwan_10_100_500-2024.pbf: \
+  moi-2024/taiwan16_15m-pygm_10_100_500.pbf \
+  moi-2019/penghu-pygm_10_100_500.pbf \
+  moi-2019/kinmen-pygm_10_100_500.pbf \
+  aw3d30-4.1/matsu-pygm_10_100_500.pbf \
+  aw3d30-4.1/n3islets-pygm_10_100_500.pbf \
+  aw3d30-4.1/wuqiu-pygm_10_100_500.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
 
 .PHONY: taiwan-contour-2023
 taiwan-contour-2023: ele_taiwan_10_100_500-2023.pbf
