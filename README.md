@@ -5,18 +5,26 @@
     $ make all   ### to make the default targets
 
     History: 
+    * taiwan-contour-2024:
+      * 台灣本島: MOI DLA v2024 20m
+      * 蘭嶼: MOI DLA v2024 20m
+      * 龜山島、小琉球、綠島: MOI DLA v2020 20m
+      * 澎湖群島: MOI DLA v2019 20m
+      * 金門群島: MOI DLA v2019 20m
+      * 樂山基地: MOI DLA v2016 20m
+      * 馬祖、烏坵、北方三島: JAXA AW3D30 v4.1
     * taiwan-contour-2023r2:
       * 台灣本島: MOI DLA v2022 20m
-      * 樂山基地: MOI DLA v2016 20m
-      * 澎湖群島: MOI DLA v2022 20m
-      * 金門群島: MOI DLA v2022 20m
       * 近海四島: MOI DLA v2020 20m
+      * 澎湖群島: MOI DLA v2019 20m
+      * 金門群島: MOI DLA v2019 20m
+      * 樂山基地: MOI DLA v2016 20m
       * 馬祖、烏坵、北方三島: JAXA AW3D30 v3.1
     * taiwan-contour-2023:
       * 台灣本島: MOI DLA v2022 20m
       * 樂山基地: MOI DLA v2016 20m
-      * 澎湖群島: MOI DLA v2022 20m
-      * 金門群島: MOI DLA v2022 20m
+      * 澎湖群島: MOI DLA v2019 20m
+      * 金門群島: MOI DLA v2019 20m
       * 馬祖、烏坵、北方三島: JAXA AW3D30 v3.1
     * taiwan-contour-2021:
       * 台灣本島: MOI DLA v2020 20m
