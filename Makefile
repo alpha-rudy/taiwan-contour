@@ -17,6 +17,18 @@ endif
 .PHONY: all clean
 all: taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
 
+DESTDIR ?= drops
+
+.PHONY: drops
+drops: all
+	mkdir -p $(DESTDIR)/
+	osmconvert ele_taiwan_10_100_500-2024.pbf -o=$(DESTDIR)/ele_taiwan_10_100_500-2024.o5m
+	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_10_100_500-2024.o5m > ele_taiwan_10_100_500-2024.o5m.md5
+	osmconvert ele_taiwan_10_100_500_mix-2024.pbf -o=$(DESTDIR)/ele_taiwan_10_50_100_500_marker-2024.o5m
+	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_10_50_100_500_marker-2024.o5m > ele_taiwan_10_50_100_500_marker-2024.o5m.md5
+	osmconvert ele_taiwan_20_100_500_mix-2024.pbf -o=$(DESTDIR)/ele_taiwan_20_100_500_marker-2024.o5m
+	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_20_100_500_marker-2024.o5m > ele_taiwan_20_100_500_marker-2024.o5m.md5
+
 taiwan-contour: taiwan-contour-2024
 taiwan-contour-mix: taiwan-contour-mix-2024
 taiwan-lite-contour-mix: taiwan-lite-contour-mix-2024

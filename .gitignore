@@ -12,3 +12,4 @@
 *.prj
 *.shp
 *.dbf
+/drops/
