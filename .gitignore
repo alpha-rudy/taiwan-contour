@@ -13,3 +13,6 @@
 *.shp
 *.dbf
 /drops/
+/output/
+/input/
+input.vrt

@@ -1,0 +1,19 @@
+# Taiwan HGT 90m (v2024)
+
+Composition
+* MOI DTM 20m v2024
+  * Taiwan main island
+  * Lanyu island
+* MOI DTM 20m v2020
+  * Green island
+  * Liuqiu island
+  * Guishan island 
+* MOI DTM 20m v2019
+  * Penghu
+  * Kinmen
+* MOI DTM 20m v2016
+  * Yaoshan military base
+* AJAX AW3D30 v4.1
+  * Matsu
+  * Wuqiu
+  * N3 islets

@@ -29,6 +29,31 @@ drops: all
 	osmconvert ele_taiwan_20_100_500_mix-2024.pbf -o=$(DESTDIR)/ele_taiwan_20_100_500_marker-2024.o5m
 	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_20_100_500_marker-2024.o5m > ele_taiwan_20_100_500_marker-2024.o5m.md5
 
+.PHONY: hgts
+hgts: moi-2024/taiwan16_20m-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n3islets-zero.tif aw3d30-4.1/wuqiu-zero.tif
+	rm -rf input output
+	mkdir -p input output
+	ln -sf ../moi-2024/taiwan16_20m-zero.tif input/N025E121_AVE_DSM.tif
+	ln -sf ../moi-2024/taiwan16_20m-zero.tif input/N024E121_AVE_DSM.tif
+	ln -sf ../moi-2024/taiwan16_20m-zero.tif input/N024E120_AVE_DSM.tif
+	ln -sf ../moi-2024/taiwan16_20m-zero.tif input/N023E121_AVE_DSM.tif
+	ln -sf ../moi-2024/taiwan16_20m-zero.tif input/N023E120_AVE_DSM.tif
+	ln -sf ../moi-2024/taiwan16_20m-zero.tif input/N022E121_AVE_DSM.tif
+	ln -sf ../moi-2024/taiwan16_20m-zero.tif input/N022E120_AVE_DSM.tif
+	ln -sf ../moi-2024/taiwan16_20m-zero.tif input/N021E121_AVE_DSM.tif
+	ln -sf ../moi-2024/taiwan16_20m-zero.tif input/N021E120_AVE_DSM.tif
+	ln -sf ../aw3d30-4.1/matsu-zero.tif input/N026E120_AVE_DSM.tif
+	ln -sf ../aw3d30-4.1/matsu-zero.tif input/N026E119_AVE_DSM.tif
+	ln -sf ../aw3d30-4.1/matsu-zero.tif input/N025E119_AVE_DSM.tif
+	ln -sf ../aw3d30-4.1/n3islets-zero.tif input/N025E122_AVE_DSM.tif
+	ln -sf ../aw3d30-4.1/wuqiu-zero.tif input/N024E119_AVE_DSM.tif
+	./tools/aw3d2srtm30.sh
+	cat precompiled/VERSION-hgtmix.txt > output/VERSION
+	cd output && unzip ../precompiled/hgtmix-void.zip && 7z a -tzip hgtmix.zip *.hgt VERSION && rm -f *.hgt VERSION *.xml
+	./tools/aw3d2srtm90.sh
+	cat precompiled/VERSION-hgt90.txt > output/VERSION
+	cd output && unzip ../precompiled/hgt90-void.zip && 7z a -tzip hgt90.zip *.hgt VERSION && rm -f *.hgt VERSION *.xml
+
 taiwan-contour: taiwan-contour-2024
 taiwan-contour-mix: taiwan-contour-mix-2024
 taiwan-lite-contour-mix: taiwan-lite-contour-mix-2024
