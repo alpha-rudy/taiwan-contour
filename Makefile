@@ -196,6 +196,14 @@ ele_taiwan_20_100_500_mix-2023.pbf: \
 		$^
 
 
+moi-2025/taiwan_20m.tif: moi-2025/.unzip
+moi-2025/penghu_20m.tif: moi-2025/.unzip
+moi-2025/kinmen_20m.tif: moi-2025/.unzip
+moi-2025/.unzip: moi-2025/2025dtm20m.7z.001
+	cd moi-2025/ && \
+		7za x 2025dtm20m.7z.001
+	touch $@
+
 moi-2024/taiwan_20m.tif: moi-2024/.unzip
 moi-2024/.unzip: moi-2024/2024dtm20m.7z.001
 	cd moi-2024/ && \
