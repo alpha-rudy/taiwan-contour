@@ -8,7 +8,7 @@
     * taiwan-contour-2025:
       * 台灣本島(taiwan)、蘭嶼(lanyu)、琉球(liuqiu): MOI DLA v2025 20m
       * 龜山島(guishan)、綠島(ludao): MOI DLA v2020 20m
-      * 澎湖群島(penhu): MOI DLA v2025 20m
+      * 澎湖群島(penghu): MOI DLA v2025 20m
       * 金門群島(kinmen): MOI DLA v2025 20m
       * 樂山基地(leshan): MOI DLA v2016 20m
       * 馬祖(matsu)、烏坵(wuqiu)、北方三島(n3islets): JAXA AW3D30 v4.1
