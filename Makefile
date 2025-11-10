@@ -22,12 +22,12 @@ DESTDIR ?= drops
 .PHONY: drops
 drops: all
 	mkdir -p $(DESTDIR)/
-	osmconvert ele_taiwan_10_100_500-2024.pbf -o=$(DESTDIR)/ele_taiwan_10_100_500-2024.o5m
-	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_10_100_500-2024.o5m > ele_taiwan_10_100_500-2024.o5m.md5
-	osmconvert ele_taiwan_10_100_500_mix-2024.pbf -o=$(DESTDIR)/ele_taiwan_10_50_100_500_marker-2024.o5m
-	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_10_50_100_500_marker-2024.o5m > ele_taiwan_10_50_100_500_marker-2024.o5m.md5
-	osmconvert ele_taiwan_20_100_500_mix-2024.pbf -o=$(DESTDIR)/ele_taiwan_20_100_500_marker-2024.o5m
-	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_20_100_500_marker-2024.o5m > ele_taiwan_20_100_500_marker-2024.o5m.md5
+	osmconvert ele_taiwan_10_100_500-2025.pbf -o=$(DESTDIR)/ele_taiwan_10_100_500-2025.o5m
+	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_10_100_500-2025.o5m > ele_taiwan_10_100_500-2025.o5m.md5
+	osmconvert ele_taiwan_10_100_500_mix-2025.pbf -o=$(DESTDIR)/ele_taiwan_10_50_100_500_marker-2025.o5m
+	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_10_50_100_500_marker-2025.o5m > ele_taiwan_10_50_100_500_marker-2025.o5m.md5
+	osmconvert ele_taiwan_20_100_500_mix-2025.pbf -o=$(DESTDIR)/ele_taiwan_20_100_500_marker-2025.o5m
+	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_20_100_500_marker-2025.o5m > ele_taiwan_20_100_500_marker-2025.o5m.md5
 
 .PHONY: hgts-2025
 hgts-2025: moi-2025/taiwan16_20m-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n3islets-zero.tif aw3d30-4.1/wuqiu-zero.tif
@@ -111,6 +111,23 @@ PHYGHT_OPTIONS = \
 ## Outputs
 ##
 
+.PHONY: taiwan-contour-2025
+taiwan-contour-2025: ele_taiwan_10_100_500-2025.pbf
+ele_taiwan_10_100_500-2025.pbf: \
+  moi-2025/taiwan16_15m-pygm_10_100_500.pbf \
+  moi-2025/penghu-pygm_10_100_500.pbf \
+  moi-2025/kinmen-pygm_10_100_500.pbf \
+  aw3d30-4.1/matsu-pygm_10_100_500.pbf \
+  aw3d30-4.1/n3islets-pygm_10_100_500.pbf \
+  aw3d30-4.1/wuqiu-pygm_10_100_500.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
 .PHONY: taiwan-contour-2024
 taiwan-contour-2024: ele_taiwan_10_100_500-2024.pbf
 ele_taiwan_10_100_500-2024.pbf: \
@@ -137,6 +154,25 @@ ele_taiwan_10_100_500-2023.pbf: \
   aw3d30-3.1/matsu-pygm_10_100_500.pbf \
   aw3d30-3.1/n3islets-pygm_10_100_500.pbf \
   aw3d30-3.1/wuqiu-pygm_10_100_500.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-contour-mix-2025
+taiwan-contour-mix-2025: ele_taiwan_10_100_500_mix-2025.pbf
+ele_taiwan_10_100_500_mix-2025.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  moi-2025/taiwan16_15m-pygm_10_50_100_500.pbf \
+  moi-2025/penghu-pygm_10_50_100_500.pbf \
+  moi-2025/kinmen-pygm_10_50_100_500.pbf \
+  aw3d30-4.1/matsu-pygm_10_50_100_500.pbf \
+  aw3d30-4.1/n3islets-pygm_10_50_100_500.pbf \
+  aw3d30-4.1/wuqiu-pygm_10_50_100_500.pbf \
+  moi-2025/taiwan16-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -175,6 +211,25 @@ ele_taiwan_10_100_500_mix-2023.pbf: \
   aw3d30-3.1/n3islets-pygm_10_50_100_500.pbf \
   aw3d30-3.1/wuqiu-pygm_10_50_100_500.pbf \
   moi-2022/taiwan16-marker-pygms.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		7000000000 \
+		4000000000 \
+		$^
+
+
+.PHONY: taiwan-lite-contour-mix-2025
+taiwan-lite-contour-mix-2025: ele_taiwan_20_100_500_mix-2025.pbf
+ele_taiwan_20_100_500_mix-2025.pbf: \
+  precompiled/taiwan-sealand.pbf \
+  moi-2025/taiwan16_60m-pygm_20_100_500.pbf \
+  moi-2025/penghu-pygm_20_100_500.pbf \
+  moi-2025/kinmen-pygm_20_100_500.pbf \
+  aw3d30-4.1/matsu-pygm_20_100_500.pbf \
+  aw3d30-4.1/n3islets-pygm_20_100_500.pbf \
+  aw3d30-4.1/wuqiu-pygm_20_100_500.pbf \
+  moi-2025/taiwan16-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -224,6 +279,10 @@ ele_taiwan_20_100_500_mix-2023.pbf: \
 moi-2025/taiwan_20m.tif: moi-2025/.unzip
 moi-2025/penghu_20m.tif: moi-2025/.unzip
 moi-2025/kinmen_20m.tif: moi-2025/.unzip
+moi-2025/penghu.tif: moi-2025/penghu_20m.tif
+	ln -sf penghu_20m.tif $@
+moi-2025/kinmen.tif: moi-2025/kinmen_20m.tif
+	ln -sf kinmen_20m.tif $@
 moi-2025/.unzip: moi-2025/2025dtm20m.7z.001
 	cd moi-2025/ && \
 		7za x 2025dtm20m.7z.001
@@ -875,7 +934,7 @@ moi-2016/taiwan-pygm_20_100_500.pbf: moi-2016/taiwan_20m-zero.tif
 	mv $(basename $(notdir $@))* $@
 
 
-moi-2019/kinmen-pygm_10_100_500.pbf: moi-2019/kinmen-zero.tif
+moi-%/kinmen-pygm_10_100_500.pbf: moi-%/kinmen-zero.tif
 	phyghtmap \
 		--step=10 \
 		--output-prefix=$(basename $(notdir $@)) \
@@ -887,7 +946,7 @@ moi-2019/kinmen-pygm_10_100_500.pbf: moi-2019/kinmen-zero.tif
 	mv $(basename $(notdir $@))* $@
 
 
-moi-2019/kinmen-pygm_20_100_500.pbf: moi-2019/kinmen-zero.tif
+moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	phyghtmap \
 		--step=20 \
 		--output-prefix=$(basename $(notdir $@)) \
