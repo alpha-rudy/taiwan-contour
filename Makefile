@@ -29,8 +29,8 @@ drops: all
 	osmconvert ele_taiwan_20_100_500_mix-2024.pbf -o=$(DESTDIR)/ele_taiwan_20_100_500_marker-2024.o5m
 	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_20_100_500_marker-2024.o5m > ele_taiwan_20_100_500_marker-2024.o5m.md5
 
-.PHONY: hgts
-hgts: moi-2024/taiwan16_20m-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n3islets-zero.tif aw3d30-4.1/wuqiu-zero.tif
+.PHONY: hgts-2024
+hgts-2024: moi-2024/taiwan16_20m-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n3islets-zero.tif aw3d30-4.1/wuqiu-zero.tif
 	rm -rf input output
 	mkdir -p input output
 	ln -sf ../moi-2024/taiwan16_20m-zero.tif input/N025E121_AVE_DSM.tif
