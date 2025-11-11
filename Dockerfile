@@ -41,22 +41,38 @@ RUN apt-get update && apt-get install -y \
 
 # Install Python packages
 RUN pip3 install --no-cache-dir --break-system-packages \
-    pyosmium \
+    osmium \
     ogr2osm \
-    pyhgtmap \
+    pyhgtmap[geotiff] \
     numpy
 
 # Create builder user with sudo permissions
-RUN useradd -m -s /bin/bash builder && \
+# Use ARG to allow customization of UID/GID at build time
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+RUN set -e && \
+    # Create or modify group
+    if getent group ${GROUP_ID} >/dev/null; then \
+        GROUP_NAME=$(getent group ${GROUP_ID} | cut -d: -f1); \
+    else \
+        groupadd -g ${GROUP_ID} builder; \
+        GROUP_NAME=builder; \
+    fi && \
+    # Create user with the group
+    if id -u ${USER_ID} >/dev/null 2>&1; then \
+        USER_NAME=$(id -un ${USER_ID}); \
+        usermod -l builder -d /home/builder -m ${USER_NAME} 2>/dev/null || true; \
+    else \
+        useradd -m -s /bin/bash -u ${USER_ID} -g ${GROUP_ID} builder; \
+    fi && \
+    # Set password and sudo permissions
     echo "builder:builder" | chpasswd && \
     usermod -aG sudo builder && \
     echo "builder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Set working directory
 WORKDIR /workspace
-
-# Change ownership of workspace to builder
-RUN chown -R builder:builder /workspace
 
 # Switch to builder user
 USER builder

@@ -2,6 +2,17 @@
 
 ## Building the Docker Image
 
+Build with your user ID to avoid permission issues:
+
+```bash
+docker build \
+  --build-arg USER_ID=$(id -u) \
+  --build-arg GROUP_ID=$(id -g) \
+  -t taiwan-contour:latest .
+```
+
+Or build with default UID/GID (1000:1000):
+
 ```bash
 docker build -t taiwan-contour:latest .
 ```
@@ -62,27 +73,25 @@ sudo apt-get install <package>
 
 ## Docker Compose (Optional)
 
-Create a `docker-compose.yml` file:
+The `docker-compose.yml` file is already configured to use your host user's UID/GID.
 
-```yaml
-version: '3.8'
+Set your user ID in environment (or it will default to 1000):
 
-services:
-  taiwan-contour:
-    build: .
-    image: taiwan-contour:latest
-    volumes:
-      - .:/workspace
-    user: builder
-    stdin_open: true
-    tty: true
-    command: /bin/bash
+```bash
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
 ```
 
 Run with:
 
 ```bash
 docker-compose run --rm taiwan-contour
+```
+
+Or in one command:
+
+```bash
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose run --rm taiwan-contour
 ```
 
 ## Installed Tools
@@ -103,8 +112,11 @@ The Docker image includes:
 ## Example Workflow
 
 ```bash
-# Build the image
-docker build -t taiwan-contour:latest .
+# Build the image with your user ID
+docker build \
+  --build-arg USER_ID=$(id -u) \
+  --build-arg GROUP_ID=$(id -g) \
+  -t taiwan-contour:latest .
 
 # Run interactively
 docker run -it --rm -v $(pwd):/workspace -u builder taiwan-contour:latest
@@ -112,13 +124,27 @@ docker run -it --rm -v $(pwd):/workspace -u builder taiwan-contour:latest
 # Inside container, run make commands
 make taiwan-lite-contour-mix
 make drops
+
+# Or use docker-compose
+USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose run --rm taiwan-contour
 ```
 
 ## Troubleshooting
 
 ### Permission Issues
 
-If you encounter permission issues with generated files:
+The Dockerfile now supports matching your host user's UID/GID. **Always build with your user ID:**
+
+```bash
+docker build \
+  --build-arg USER_ID=$(id -u) \
+  --build-arg GROUP_ID=$(id -g) \
+  -t taiwan-contour:latest .
+```
+
+If you already built the image without the correct UID/GID, rebuild it with the command above.
+
+Alternatively, you can run as your host user directly (without the builder user):
 
 ```bash
 # Run as your host user ID
