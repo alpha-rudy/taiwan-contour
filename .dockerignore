@@ -1,0 +1,34 @@
+# Build outputs
+*.pbf
+*.o5m
+*.tif
+*.shp
+*.shx
+*.dbf
+*.prj
+*.qpj
+*.cpg
+*.hgt
+*.zip
+output/
+input/
+drops/
+
+# Archives
+*.7z
+*.7z.*
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  taiwan-contour:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: taiwan-contour:latest
+    container_name: taiwan-contour-builder
+    volumes:
+      - .:/workspace
+    user: builder
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    command: /bin/bash
