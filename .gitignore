@@ -1,4 +1,5 @@
 .DS_Store
+/.venv
 /.idea
 /.vscode/*.log
 *.tif
