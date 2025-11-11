@@ -27,5 +27,5 @@ osmium renumber \
     -Oo "$target"
 
 for i in $rest; do 
-  ./tools/osmium-append.sh "$target" "$i" || break
+  ./tools/osmium-append-bash.sh "$target" "$i" || break
 done
