@@ -1187,8 +1187,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		# -ts 21652 0 \
-		-tr 0.000092054560070 0.000092054560070
+		-tr 0.000092054560070 0.000092054560070 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1200,8 +1199,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		# -ts 14435 0 \
-		-tr 0.000138081840105 0.000138081840105
+		-tr 0.000138081840105 0.000138081840105 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1213,8 +1211,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		# -ts 5413 0 \
-		-tr 0.000368218240280 0.000368218240280
+		-tr 0.000368218240280 0.000368218240280 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1226,8 +1223,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		# -ts 3609 0 \
-		-tr 0.000552327360420 0.000552327360420
+		-tr 0.000552327360420 0.000552327360420 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1239,8 +1235,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		# -ts 2707 0 \
-		-tr 0.000736436480560 0.000736436480560
+		-tr 0.000736436480560 0.000736436480560 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1252,8 +1247,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		# -ts 1353 0 \
-		-tr 0.001472872961120 0.001472872961120
+		-tr 0.001472872961120 0.001472872961120 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1265,8 +1259,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		# -ts 677 0 \
-		-tr 0.002945745922240 0.002945745922240
+		-tr 0.002945745922240 0.002945745922240 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1278,8 +1271,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		# -ts 338 0 \
-		-tr 0.005891491844480 0.005891491844480
+		-tr 0.005891491844480 0.005891491844480 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1291,8 +1283,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		# -ts 169 0 \
-		-tr 0.011782983688960 0.011782983688960
+		-tr 0.011782983688960 0.011782983688960 \
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
