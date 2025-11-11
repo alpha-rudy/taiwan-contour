@@ -5,11 +5,11 @@
 .SECONDARY:
 
 ifeq ($(shell uname),Darwin)
-MD5_CMD := md5 -q $$EXAM_FILE
+MD5_CMD := md5 -q
 JMC_CMD := jmc/osx/jmc_cli
 SED_CMD := gsed
 else
-MD5_CMD := md5sum $$EXAM_FILE | cut -d' ' -f1
+MD5_CMD := md5sum
 JMC_CMD := jmc/linux/jmc_cli
 SED_CMD := sed
 endif
@@ -25,17 +25,23 @@ taiwan-lite-contour-mix: taiwan-lite-contour-mix-2025
 DESTDIR ?= drops
 
 .PHONY: drops
-drops: all
+drops: $(DESTDIR)/.drops
+$(DESTDIR)/.drops: ele_taiwan_10_100_500-2025.pbf ele_taiwan_10_100_500_mix-2025.pbf ele_taiwan_20_100_500_mix-2025.pbf moi-2025/output/hgtmix.zip moi-2025/output/hgt90.zip
 	mkdir -p $(DESTDIR)/
 	osmconvert ele_taiwan_10_100_500-2025.pbf -o=$(DESTDIR)/ele_taiwan_10_100_500-2025.o5m
-	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_10_100_500-2025.o5m > ele_taiwan_10_100_500-2025.o5m.md5
+	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_10_100_500-2025.o5m | cut -d' ' -f1 > ele_taiwan_10_100_500-2025.o5m.md5
 	osmconvert ele_taiwan_10_100_500_mix-2025.pbf -o=$(DESTDIR)/ele_taiwan_10_50_100_500_marker-2025.o5m
-	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_10_50_100_500_marker-2025.o5m > ele_taiwan_10_50_100_500_marker-2025.o5m.md5
+	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_10_50_100_500_marker-2025.o5m | cut -d' ' -f1 > ele_taiwan_10_50_100_500_marker-2025.o5m.md5
 	osmconvert ele_taiwan_20_100_500_mix-2025.pbf -o=$(DESTDIR)/ele_taiwan_20_100_500_marker-2025.o5m
-	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_20_100_500_marker-2025.o5m > ele_taiwan_20_100_500_marker-2025.o5m.md5
+	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_20_100_500_marker-2025.o5m | cut -d' ' -f1 > ele_taiwan_20_100_500_marker-2025.o5m.md5
+	cp moi-2025/output/hgt*.zip $(DESTDIR)
+	cd $(DESTDIR) && $(MD5_CMD) hgtmix.zip | cut -d' ' -f1 > hgtmix.zip.md5
+	cd $(DESTDIR) && $(MD5_CMD) hgt90.zip | cut -d' ' -f1 > hgt90.zip.md5
+	touch $@
 
 .PHONY: hgts-2025
-hgts-2025: moi-2025/taiwan16_20m-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n3islets-zero.tif aw3d30-4.1/wuqiu-zero.tif
+hgts-2025: moi-2025/.hgt
+moi-2025/.hgt: moi-2025/taiwan16_20m-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n3islets-zero.tif aw3d30-4.1/wuqiu-zero.tif
 	rm -rf input output
 	mkdir -p input output
 	ln -sf ../moi-2025/taiwan16_20m-zero.tif input/N025E121_AVE_DSM.tif
@@ -58,9 +64,12 @@ hgts-2025: moi-2025/taiwan16_20m-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n
 	./tools/aw3d2srtm90.sh
 	cat precompiled/VERSION-hgt90.txt > output/VERSION
 	cd output && unzip ../precompiled/hgt90-void.zip && 7z a -tzip hgt90.zip *.hgt VERSION && rm -f *.hgt VERSION *.xml
+	mv output/ moi-2025/
+	touch $@
 
 .PHONY: hgts-2024
-hgts-2024: moi-2024/taiwan16_20m-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n3islets-zero.tif aw3d30-4.1/wuqiu-zero.tif
+hgts-2024: moi-2024/.hgt
+moi-2024/.hgt: moi-2024/taiwan16_20m-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n3islets-zero.tif aw3d30-4.1/wuqiu-zero.tif
 	rm -rf input output
 	mkdir -p input output
 	ln -sf ../moi-2024/taiwan16_20m-zero.tif input/N025E121_AVE_DSM.tif
@@ -83,6 +92,8 @@ hgts-2024: moi-2024/taiwan16_20m-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n
 	./tools/aw3d2srtm90.sh
 	cat precompiled/VERSION-hgt90.txt > output/VERSION
 	cd output && unzip ../precompiled/hgt90-void.zip && 7z a -tzip hgt90.zip *.hgt VERSION && rm -f *.hgt VERSION *.xml
+	mv output/ moi-2024/
+	touch $@
 
 clean:
 	git clean -fdx
