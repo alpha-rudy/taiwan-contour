@@ -662,7 +662,7 @@ aw3d30-%/.unzip:
 
 
 %-ogr_10_100_500.pbf: %-c10-ogr.pbf
-	python3 tools/gdal2phyghtmap.py \
+	python3 tools/gdal2pyhgtmap.py \
 		-t 'contour_ext' \
 		-m 100 \
 		-M 500 \
@@ -671,7 +671,7 @@ aw3d30-%/.unzip:
 
 
 %-ogr_20_100_500.pbf: %-c20-ogr.pbf
-	python3 tools/gdal2phyghtmap.py \
+	python3 tools/gdal2pyhgtmap.py \
 		-t 'contour_ext' \
 		-m 100 \
 		-M 500 \
@@ -680,7 +680,7 @@ aw3d30-%/.unzip:
 
 
 %-ogr_100_500_1000.pbf: %-c100-ogr.pbf
-	python3 tools/gdal2phyghtmap.py \
+	python3 tools/gdal2pyhgtmap.py \
 		-t 'contour_ext' \
 		-m 500 \
 		-M 1000 \
@@ -689,7 +689,7 @@ aw3d30-%/.unzip:
 
 
 %-ogr_40t_100_500_1000.pbf: %-c100-ogr.pbf
-	python3 tools/gdal2phyghtmap.py \
+	python3 tools/gdal2pyhgtmap.py \
 		-t 'contour_40m' \
 		-m 500 \
 		-M 1000 \
@@ -698,7 +698,7 @@ aw3d30-%/.unzip:
 
 
 %-ogr_80t_100_500_1000.pbf: %-c100-ogr.pbf
-	python3 tools/gdal2phyghtmap.py \
+	python3 tools/gdal2pyhgtmap.py \
 		-t 'contour_80m' \
 		-m 500 \
 		-M 1000 \
@@ -707,7 +707,7 @@ aw3d30-%/.unzip:
 
 
 %-ogr_160t_100_500_1000.pbf: %-c100-ogr.pbf
-	python3 tools/gdal2phyghtmap.py \
+	python3 tools/gdal2pyhgtmap.py \
 		-t 'contour_160m' \
 		-m 500 \
 		-M 1000 \
@@ -716,7 +716,7 @@ aw3d30-%/.unzip:
 
 
 %-ogr_320t_100_500_1000.pbf: %-c100-ogr.pbf
-	python3 tools/gdal2phyghtmap.py \
+	python3 tools/gdal2pyhgtmap.py \
 		-t 'contour_320m' \
 		-m 500 \
 		-M 1000 \
@@ -725,7 +725,7 @@ aw3d30-%/.unzip:
 
 
 %-ogr_640t_100_500_1000.pbf: %-c100-ogr.pbf
-	python3 tools/gdal2phyghtmap.py \
+	python3 tools/gdal2pyhgtmap.py \
 		-t 'contour_640m' \
 		-m 500 \
 		-M 1000 \
@@ -734,7 +734,7 @@ aw3d30-%/.unzip:
 
 
 %-ogr_1280t_100_500_1000.pbf: %-c100-ogr.pbf
-	python3 tools/gdal2phyghtmap.py \
+	python3 tools/gdal2pyhgtmap.py \
 		-t 'contour_1280m' \
 		-m 500 \
 		-M 1000 \
@@ -848,11 +848,11 @@ aw3d30-%/.unzip:
 
 
 ##
-## zero tif ==phyghtmap==> contour pbf
+## zero tif ==pyhgtmap==> contour pbf
 ## 
 
 %/taiwan16_15m-pygm_10_100_500.pbf: %/taiwan16_15m-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=10 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
@@ -864,7 +864,7 @@ aw3d30-%/.unzip:
 
 
 %/taiwan16_20m-pygm_10_100_500.pbf: %/taiwan16_20m-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=10 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
@@ -876,7 +876,7 @@ aw3d30-%/.unzip:
 
 
 %/taiwan16_40m-pygm_20_100_500.pbf: %/taiwan16_40m-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=20 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
@@ -888,7 +888,7 @@ aw3d30-%/.unzip:
 
 
 moi-2016/taiwan-pygm_10_100_500.pbf: moi-2016/taiwan_20m-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=10 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
@@ -900,7 +900,7 @@ moi-2016/taiwan-pygm_10_100_500.pbf: moi-2016/taiwan_20m-zero.tif
 
 
 moi-2016/taiwan-pygm_20_100_500.pbf: moi-2016/taiwan_20m-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=20 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
@@ -912,7 +912,7 @@ moi-2016/taiwan-pygm_20_100_500.pbf: moi-2016/taiwan_20m-zero.tif
 
 
 %/penghu-pygm_10_100_500.pbf: %/penghu-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=10 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
@@ -924,7 +924,7 @@ moi-2016/taiwan-pygm_20_100_500.pbf: moi-2016/taiwan_20m-zero.tif
 
 
 %/penghu-pygm_20_100_500.pbf: %/penghu-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=20 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
@@ -936,7 +936,7 @@ moi-2016/taiwan-pygm_20_100_500.pbf: moi-2016/taiwan_20m-zero.tif
 
 
 moi-%/kinmen-pygm_10_100_500.pbf: moi-%/kinmen-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=10 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
@@ -948,7 +948,7 @@ moi-%/kinmen-pygm_10_100_500.pbf: moi-%/kinmen-zero.tif
 
 
 moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=20 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
@@ -960,7 +960,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 
 
 %-pygm_10_100_500.pbf: %-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=10 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
@@ -972,7 +972,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 
 
 %-pygm_20_100_500.pbf: %-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=20 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
@@ -984,7 +984,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 
 
 %_40m-pygm_40t_100_500_1000.pbf: %_40m-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=100 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=1000,500 \
@@ -1000,7 +1000,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 
 
 %_80m-pygm_80t_100_500_1000.pbf: %_80m-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=100 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=1000,500 \
@@ -1016,7 +1016,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 
 
 %_160m-pygm_160t_100_500_1000.pbf: %_160m-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=100 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=1000,500 \
@@ -1032,7 +1032,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 
 
 %_320m-pygm_320t_100_500_1000.pbf: %_320m-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=100 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=1000,500 \
@@ -1048,7 +1048,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 
 
 %_640m-pygm_640t_100_500_1000.pbf: %_640m-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=100 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=1000,500 \
@@ -1063,7 +1063,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		-o=$@
 
 %_1280m-pygm_1280t_100_500_1000.pbf: %_1280m-zero.tif
-	phyghtmap \
+	pyhgtmap \
 		--step=100 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=1000,500 \

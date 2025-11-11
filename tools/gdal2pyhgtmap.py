@@ -38,7 +38,7 @@ class ElevationSubHandler(osmium.SimpleHandler):
         return
 
 def parse_commandline():
-    parser = argparse.ArgumentParser(description='Translate gdal_contour tags to phyghtmap')
+    parser = argparse.ArgumentParser(description='Translate gdal_contour tags to pyhgtmap')
     parser.add_argument('-M', '--major', dest='majorcat', metavar='CATEGORY',
                         type=int, default=500,
                         help='Major elevation category (default=%(default)s)')
@@ -48,7 +48,7 @@ def parse_commandline():
     parser.add_argument('-t', '--cat_tag', dest='cat_tag', metavar='CATEGORY_TAG',
                         default='contour_ext', help='category tag (default=%(default)s)')
     parser.add_argument("infile", metavar="INPUT", help="Input from ogr2osm-ed gdal_contour tagging")
-    parser.add_argument("outfile", metavar="OUTPUT", help="Output phyghtmap-tagging")
+    parser.add_argument("outfile", metavar="OUTPUT", help="Output pyhgtmap-tagging")
     return parser.parse_args()
 
 def main():
