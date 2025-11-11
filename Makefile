@@ -15,7 +15,7 @@ SED_CMD := sed
 endif
 
 .PHONY: all clean
-all: hgt taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
+all: hgts taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
 
 hgts: hgts-2025
 taiwan-contour: taiwan-contour-2025
