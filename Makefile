@@ -29,6 +29,11 @@ drops: all
 	osmconvert ele_taiwan_20_100_500_mix-2025.pbf -o=$(DESTDIR)/ele_taiwan_20_100_500_marker-2025.o5m
 	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_20_100_500_marker-2025.o5m > ele_taiwan_20_100_500_marker-2025.o5m.md5
 
+hgts: hgts-2025
+taiwan-contour: taiwan-contour-2025
+taiwan-contour-mix: taiwan-contour-mix-2025
+taiwan-lite-contour-mix: taiwan-lite-contour-mix-2025
+
 .PHONY: hgts-2025
 hgts-2025: moi-2025/taiwan16_20m-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n3islets-zero.tif aw3d30-4.1/wuqiu-zero.tif
 	rm -rf input output
@@ -78,10 +83,6 @@ hgts-2024: moi-2024/taiwan16_20m-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n
 	./tools/aw3d2srtm90.sh
 	cat precompiled/VERSION-hgt90.txt > output/VERSION
 	cd output && unzip ../precompiled/hgt90-void.zip && 7z a -tzip hgt90.zip *.hgt VERSION && rm -f *.hgt VERSION *.xml
-
-taiwan-contour: taiwan-contour-2025
-taiwan-contour-mix: taiwan-contour-mix-2025
-taiwan-lite-contour-mix: taiwan-lite-contour-mix-2025
 
 clean:
 	git clean -fdx
