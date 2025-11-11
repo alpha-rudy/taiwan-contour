@@ -1170,12 +1170,25 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		$^
 
 
+# meter to degree in Taiwan area
+#   10m: -tr 0.000092054560070 0.000092054560070
+#   15m: -tr 0.000138081840105 0.000138081840105
+#   20m: -tr 0.000184109120140 0.000184109120140 (20.4m roughly)
+#   40m: -tr 0.000368218240280 0.000368218240280
+#   60m: -tr 0.000552327360420 0.000552327360420
+#   80m: -tr 0.000736436480560 0.000736436480560
+#  160m: -tr 0.001472872961120 0.001472872961120
+#  320m: -tr 0.002945745922240 0.002945745922240
+#  640m: -tr 0.005891491844480 0.005891491844480
+# 1280m: -tr 0.011782983688960 0.011782983688960
+
 %_10m-zero.tif: %_20m-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		-ts 21652 0 \
+		# -ts 21652 0 \
+		-tr 0.000092054560070 0.000092054560070
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1187,7 +1200,8 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		-ts 14435 0 \
+		# -ts 14435 0 \
+		-tr 0.000138081840105 0.000138081840105
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1199,7 +1213,8 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		-ts 5413 0 \
+		# -ts 5413 0 \
+		-tr 0.000368218240280 0.000368218240280
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1211,7 +1226,8 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		-ts 3609 0 \
+		# -ts 3609 0 \
+		-tr 0.000552327360420 0.000552327360420
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1223,7 +1239,8 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		-ts 2707 0 \
+		# -ts 2707 0 \
+		-tr 0.000736436480560 0.000736436480560
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1235,7 +1252,8 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		-ts 1353 0 \
+		# -ts 1353 0 \
+		-tr 0.001472872961120 0.001472872961120
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1247,7 +1265,8 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		-ts 677 0 \
+		# -ts 677 0 \
+		-tr 0.002945745922240 0.002945745922240
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1259,7 +1278,8 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		-ts 338 0 \
+		# -ts 338 0 \
+		-tr 0.005891491844480 0.005891491844480
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1271,7 +1291,8 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 	gdalwarp \
 		 $(OUTPUTS) \
 		-dstnodata $(NODATA_VALUE) \
-		-ts 169 0 \
+		# -ts 169 0 \
+		-tr 0.011782983688960 0.011782983688960
 		-r bilinear \
 		-wt $(WORKING_TYPE) \
 		$^ \
@@ -1413,75 +1434,6 @@ aw3d30-2.1/kinmen-nodata0.tif: aw3d30-2.1/.unzip
 		-dstnodata 0 \
 		aw3d30-2.1/N024E118_AVE_DSM.tif \
 		$@
-
-
-moi-2016/taiwan_40m-zero.tif: moi-2016/taiwan_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 5490 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-		$^ \
-		$@
-
-moi-2016/taiwan_80m-zero.tif: moi-2016/taiwan_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 2745 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-		$^ \
-		$@
-
-moi-2016/taiwan_160m-zero.tif: moi-2016/taiwan_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 1372 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-		$^ \
-		$@
-
-moi-2016/taiwan_320m-zero.tif: moi-2016/taiwan_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 686 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-		$^ \
-		$@
-
-moi-2016/taiwan_640m-zero.tif: moi-2016/taiwan_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 343 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-		$^ \
-		$@
-
-
-moi-2016/taiwan_1280m-zero.tif: moi-2016/taiwan_20m-zero.tif
-	rm -f $@
-	gdalwarp \
-		 $(OUTPUTS) \
-		-dstnodata $(NODATA_VALUE) \
-		-ts 172 0 \
-		-r bilinear \
-		-wt $(WORKING_TYPE) \
-		$^ \
-		$@
-
 
 aw3d30-2.1/islands-pygm_10_100_500.pbf: \
   aw3d30-2.1/kinmen-pygm_10_100_500.pbf \
