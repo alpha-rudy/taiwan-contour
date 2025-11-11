@@ -10,6 +10,7 @@ ENV LANG=C.UTF-8 \
 # Install system dependencies and tools
 RUN apt-get update && apt-get install -y \
     # Build essentials
+    bc \
     build-essential \
     make \
     git \
