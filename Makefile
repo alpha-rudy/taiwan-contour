@@ -34,7 +34,7 @@ $(DESTDIR)/.drops: ele_taiwan_10_100_500-2025.pbf ele_taiwan_10_100_500_mix-2025
 	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_10_50_100_500_marker-2025.o5m | cut -d' ' -f1 > ele_taiwan_10_50_100_500_marker-2025.o5m.md5
 	osmconvert ele_taiwan_20_100_500_mix-2025.pbf -o=$(DESTDIR)/ele_taiwan_20_100_500_marker-2025.o5m
 	cd $(DESTDIR) && $(MD5_CMD) ele_taiwan_20_100_500_marker-2025.o5m | cut -d' ' -f1 > ele_taiwan_20_100_500_marker-2025.o5m.md5
-	cp moi-2025/output/hgt*.zip $(DESTDIR)
+	cp moi-2025/hgt*.zip $(DESTDIR)
 	cd $(DESTDIR) && $(MD5_CMD) hgtmix.zip | cut -d' ' -f1 > hgtmix.zip.md5
 	cd $(DESTDIR) && $(MD5_CMD) hgt90.zip | cut -d' ' -f1 > hgt90.zip.md5
 	touch $@
@@ -44,22 +44,23 @@ hgts-2025: moi-2025/.hgt
 moi-2025/.hgt: moi-2025/taiwan16_20m-zero.tif moi-2025/penghu-zero.tif moi-2025/kinmen-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n3islets-zero.tif aw3d30-4.1/wuqiu-zero.tif
 	rm -rf moi-2025/input moi-2025/output
 	mkdir -p moi-2025/input moi-2025/output
-	ln -sf ../taiwan16_20m-zero.tif moi-2025/input/N025E121_AVE_DSM.tif
-	ln -sf ../taiwan16_20m-zero.tif moi-2025/input/N024E121_AVE_DSM.tif
-	ln -sf ../taiwan16_20m-zero.tif moi-2025/input/N024E120_AVE_DSM.tif
-	ln -sf ../taiwan16_20m-zero.tif moi-2025/input/N023E121_AVE_DSM.tif
-	ln -sf ../taiwan16_20m-zero.tif moi-2025/input/N023E120_AVE_DSM.tif
-	ln -sf ../taiwan16_20m-zero.tif moi-2025/input/N022E121_AVE_DSM.tif
-	ln -sf ../taiwan16_20m-zero.tif moi-2025/input/N022E120_AVE_DSM.tif
-	ln -sf ../taiwan16_20m-zero.tif moi-2025/input/N021E121_AVE_DSM.tif
-	ln -sf ../taiwan16_20m-zero.tif moi-2025/input/N021E120_AVE_DSM.tif
-	ln -sf ../penghu-zero.tif moi-2025/input/N023E119_AVE_DSM.tif
-	ln -sf ../kinmen-zero.tif moi-2025/input/N024E118_AVE_DSM.tif
-	ln -sf ../../aw3d30-4.1/matsu-zero.tif moi-2025/input/N026E120_AVE_DSM.tif
-	ln -sf ../../aw3d30-4.1/matsu-zero.tif moi-2025/input/N026E119_AVE_DSM.tif
-	ln -sf ../../aw3d30-4.1/matsu-zero.tif moi-2025/input/N025E119_AVE_DSM.tif
-	ln -sf ../../aw3d30-4.1/n3islets-zero.tif moi-2025/input/N025E122_AVE_DSM.tif
-	ln -sf ../../aw3d30-4.1/wuqiu-zero.tif moi-2025/input/N024E119_AVE_DSM.tif
+	cd moi-2025/input && \
+		ln -sf ../taiwan16_20m-zero.tif N025E121_AVE_DSM.tif && \
+		ln -sf ../taiwan16_20m-zero.tif N024E121_AVE_DSM.tif && \
+		ln -sf ../taiwan16_20m-zero.tif N024E120_AVE_DSM.tif && \
+		ln -sf ../taiwan16_20m-zero.tif N023E121_AVE_DSM.tif && \
+		ln -sf ../taiwan16_20m-zero.tif N023E120_AVE_DSM.tif && \
+		ln -sf ../taiwan16_20m-zero.tif N022E121_AVE_DSM.tif && \
+		ln -sf ../taiwan16_20m-zero.tif N022E120_AVE_DSM.tif && \
+		ln -sf ../taiwan16_20m-zero.tif N021E121_AVE_DSM.tif && \
+		ln -sf ../taiwan16_20m-zero.tif N021E120_AVE_DSM.tif && \
+		ln -sf ../penghu-zero.tif N023E119_AVE_DSM.tif && \
+		ln -sf ../kinmen-zero.tif N024E118_AVE_DSM.tif && \
+		ln -sf ../../aw3d30-4.1/matsu-zero.tif N026E120_AVE_DSM.tif && \
+		ln -sf ../../aw3d30-4.1/matsu-zero.tif N026E119_AVE_DSM.tif && \
+		ln -sf ../../aw3d30-4.1/matsu-zero.tif N025E119_AVE_DSM.tif && \
+		ln -sf ../../aw3d30-4.1/n3islets-zero.tif N025E122_AVE_DSM.tif && \
+		ln -sf ../../aw3d30-4.1/wuqiu-zero.tif N024E119_AVE_DSM.tif
 	cd moi-2025 && \
 		../tools/aw3d2srtm30.sh && \
 		echo '# Taiwan HGT 30m (v2025)' > output/VERSION && \
