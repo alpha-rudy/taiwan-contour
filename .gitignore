@@ -17,5 +17,6 @@
 /output/
 /input/
 input.vrt
-moi-2025/.hgt
-moi-2025/hgt*.zip
+/moi-2025/.hgt
+/moi-2025/hgt*.zip
+/*.zip
