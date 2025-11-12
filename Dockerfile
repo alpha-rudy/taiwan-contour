@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     bc \
     build-essential \
     make \
+    gawk \
     git \
     curl \
     wget \

@@ -18,5 +18,4 @@
 /input/
 input.vrt
 moi-2025/.hgt
-moi-2025/output/hgt90.zip
-moi-2025/output/hgtmix.zip
+moi-2025/hgt*.zip
