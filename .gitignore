@@ -13,7 +13,7 @@
 *.prj
 *.shp
 *.dbf
-/drops/
+/drops*/
 /output/
 /input/
 input.vrt
