@@ -14,13 +14,17 @@ JMC_CMD := jmc/linux/jmc_cli
 SED_CMD := sed
 endif
 
-.PHONY: all clean
-all: hgts taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
+.PHONY: all taiwan-all kumanno_kodo-all clean
+taiwan-all: taiwan-hgts taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
+kumanno_kodo-all: kumano_kodo-hgts kumano_kodo-contour kumano_kodo-contour-mix
 
-hgts: hgts-2025
+taiwan-hgts: taiwan-hgts-2025
 taiwan-contour: taiwan-contour-2025
 taiwan-contour-mix: taiwan-contour-mix-2025
 taiwan-lite-contour-mix: taiwan-lite-contour-mix-2025
+kumano_kodo-contour: ele_kumano_kodo_10_100_500.pbf
+kumano_kodo-contour-mix: ele_kumano_kodo_10_100_500_mix.pbf
+kumano_kodo-hgts: aw3d30-4.1/.kumano_hgt
 
 DESTDIR ?= drops
 
@@ -39,8 +43,8 @@ $(DESTDIR)/.drops: ele_taiwan_10_100_500-2025.pbf ele_taiwan_10_100_500_mix-2025
 	cd $(DESTDIR) && $(MD5_CMD) hgt90.zip | cut -d' ' -f1 > hgt90.zip.md5
 	touch $@
 
-.PHONY: hgts-2025
-hgts-2025: moi-2025/.hgt
+.PHONY: taiwan-hgts-2025
+taiwan-hgts-2025: moi-2025/.hgt
 moi-2025/.hgt: moi-2025/taiwan16_20m-zero.tif moi-2025/penghu-zero.tif moi-2025/kinmen-zero.tif aw3d30-4.1/matsu-zero.tif aw3d30-4.1/n3islets-zero.tif aw3d30-4.1/wuqiu-zero.tif
 	rm -rf moi-2025/input moi-2025/output
 	mkdir -p moi-2025/input moi-2025/output
@@ -80,6 +84,31 @@ moi-2025/.hgt: moi-2025/taiwan16_20m-zero.tif moi-2025/penghu-zero.tif moi-2025/
 	rm -rf moi-2025/input moi-2025/output
 	touch $@
 
+.PHONY: kumano_kodo-hgts
+kumano_kodo-hgts: aw3d30-4.1/.kumano_hgt
+aw3d30-4.1/.kumano_hgt: aw3d30-4.1/kumano_kodo-zero.tif
+	rm -rf aw3d30-4.1/input aw3d30-4.1/output
+	mkdir -p aw3d30-4.1/input aw3d30-4.1/output
+	cd aw3d30-4.1/input && \
+		ln -sf ../kumano_kodo-zero.tif N033E135_AVE_DSM.tif && \
+		ln -sf ../kumano_kodo-zero.tif N033E136_AVE_DSM.tif && \
+		ln -sf ../kumano_kodo-zero.tif N034E135_AVE_DSM.tif && \
+		ln -sf ../kumano_kodo-zero.tif N034E136_AVE_DSM.tif
+	cd aw3d30-4.1 && \
+		../tools/aw3d2srtm30.sh && \
+		echo '# Kumano Kodo HGT 30m' > output/VERSION
+	cd aw3d30-4.1/output && \
+		7z a -tzip ../kumano_hgtmix.zip *.hgt VERSION && \
+		rm *
+	cd aw3d30-4.1 && \
+		../tools/aw3d2srtm90.sh && \
+		echo '# Kumano Kodo HGT 90m' > output/VERSION
+	cd aw3d30-4.1/output && \
+		7z a -tzip ../kumano_hgt90.zip *.hgt VERSION && \
+		rm *
+	rm -rf aw3d30-4.1/input aw3d30-4.1/output
+	touch $@
+
 clean:
 	git clean -fdx
 
@@ -107,6 +136,20 @@ PHYGHT_OPTIONS = \
 ##
 ## Outputs
 ##
+
+ele_kumano_kodo_10_100_500.pbf: aw3d30-4.1/kumano_kodo-pygm_10_100_500.pbf
+	cp $^ $@
+
+ele_kumano_kodo_10_100_500_mix.pbf: \
+  aw3d30-4.1/kumano_kodo-pygm_10_50_100_500.pbf \
+  aw3d30-4.1/kumano_kodo-marker-pygms.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
 
 .PHONY: taiwan-contour-2025
 taiwan-contour-2025: ele_taiwan_10_100_500-2025.pbf
@@ -169,7 +212,7 @@ ele_taiwan_10_100_500_mix-2025.pbf: \
   aw3d30-4.1/matsu-pygm_10_50_100_500.pbf \
   aw3d30-4.1/n3islets-pygm_10_50_100_500.pbf \
   aw3d30-4.1/wuqiu-pygm_10_50_100_500.pbf \
-  moi-2025/taiwan16-marker-pygms.pbf
+  moi-2025/taiwan16_20m-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -188,7 +231,7 @@ ele_taiwan_10_100_500_mix-2024.pbf: \
   aw3d30-4.1/matsu-pygm_10_50_100_500.pbf \
   aw3d30-4.1/n3islets-pygm_10_50_100_500.pbf \
   aw3d30-4.1/wuqiu-pygm_10_50_100_500.pbf \
-  moi-2024/taiwan16-marker-pygms.pbf
+  moi-2024/taiwan16_20m-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -207,7 +250,7 @@ ele_taiwan_10_100_500_mix-2023.pbf: \
   aw3d30-3.1/matsu-pygm_10_50_100_500.pbf \
   aw3d30-3.1/n3islets-pygm_10_50_100_500.pbf \
   aw3d30-3.1/wuqiu-pygm_10_50_100_500.pbf \
-  moi-2022/taiwan16-marker-pygms.pbf
+  moi-2022/taiwan16_20m-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -226,7 +269,7 @@ ele_taiwan_20_100_500_mix-2025.pbf: \
   aw3d30-4.1/matsu-pygm_20_100_500.pbf \
   aw3d30-4.1/n3islets-pygm_20_100_500.pbf \
   aw3d30-4.1/wuqiu-pygm_20_100_500.pbf \
-  moi-2025/taiwan16-marker-pygms.pbf
+  moi-2025/taiwan16_20m-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -245,7 +288,7 @@ ele_taiwan_20_100_500_mix-2024.pbf: \
   aw3d30-4.1/matsu-pygm_20_100_500.pbf \
   aw3d30-4.1/n3islets-pygm_20_100_500.pbf \
   aw3d30-4.1/wuqiu-pygm_20_100_500.pbf \
-  moi-2024/taiwan16-marker-pygms.pbf
+  moi-2024/taiwan16_20m-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -264,7 +307,7 @@ ele_taiwan_20_100_500_mix-2023.pbf: \
   aw3d30-3.1/matsu-pygm_20_100_500.pbf \
   aw3d30-3.1/n3islets-pygm_20_100_500.pbf \
   aw3d30-3.1/wuqiu-pygm_20_100_500.pbf \
-  moi-2022/taiwan16-marker-pygms.pbf
+  moi-2022/taiwan16_20m-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -635,6 +678,13 @@ moi-2016/.unzip: moi-2016/dem_20m.7z.001
 	touch $@
 
 
+# Extract individual .tif from .tif.7z on demand
+%.tif: %.tif.7z
+	cd $(dir $@) && \
+	7za x $(notdir $<)
+	touch $@
+
+# Generic pattern for other aw3d30 directories (for backward compatibility)
 aw3d30-%/.unzip:
 	cd aw3d30-$* && \
 	7za x aw3d30-$*.7z
@@ -960,7 +1010,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		--step=10 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000025 \
+		--simplifyContoursEpsilon=0.00001 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
@@ -1179,7 +1229,8 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 #  640m: -tr 0.005891491844480 0.005891491844480
 # 1280m: -tr 0.011782983688960 0.011782983688960
 
-%_10m-zero.tif: %_20m-zero.tif
+# Resolution variant pattern rules (work for all base files: taiwan16_20m, kumano_kodo, etc.)
+%_10m-zero.tif: %-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1191,7 +1242,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		$@
 
 
-%_15m-zero.tif: %_20m-zero.tif
+%_15m-zero.tif: %-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1203,7 +1254,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		$@
 
 
-%_40m-zero.tif: %_20m-zero.tif
+%_40m-zero.tif: %-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1215,7 +1266,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		$@
 
 
-%_60m-zero.tif: %_20m-zero.tif
+%_60m-zero.tif: %-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1227,7 +1278,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		$@
 
 
-%_80m-zero.tif: %_20m-zero.tif
+%_80m-zero.tif: %-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1239,7 +1290,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		$@
 
 
-%_160m-zero.tif: %_20m-zero.tif
+%_160m-zero.tif: %-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1251,7 +1302,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		$@
 
 
-%_320m-zero.tif: %_20m-zero.tif
+%_320m-zero.tif: %-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1263,7 +1314,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		$@
 
 
-%_640m-zero.tif: %_20m-zero.tif
+%_640m-zero.tif: %-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1275,7 +1326,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		$@
 
 
-%_1280m-zero.tif: %_20m-zero.tif
+%_1280m-zero.tif: %-zero.tif
 	rm -f $@
 	gdalwarp \
 		 $(OUTPUTS) \
@@ -1343,7 +1394,7 @@ moi-2022/taiwan16_20m-nodata.tif: moi-2022/taiwan_20m-wgs84.tif moi-2022/from201
 		$@
 
 
-aw3d30-%/n3islets-nodata0.tif: aw3d30-%/.unzip
+aw3d30-%/n3islets-nodata0.tif: aw3d30-%/ALPSMLC30_N025E122_DSM.tif
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
@@ -1365,7 +1416,7 @@ aw3d30-2.1/n3islets-nodata0.tif: aw3d30-2.1/.unzip
 		$@
 
 
-aw3d30-%/matsu-nodata0.tif: aw3d30-%/.unzip
+aw3d30-%/matsu-nodata0.tif: aw3d30-%/ALPSMLC30_N026E119_DSM.tif aw3d30-%/ALPSMLC30_N026E120_DSM.tif aw3d30-%/ALPSMLC30_N025E119_DSM.tif
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
@@ -1391,7 +1442,7 @@ aw3d30-2.1/matsu-nodata0.tif: aw3d30-2.1/.unzip
 		$@
 
 
-aw3d30-%/wuqiu-nodata0.tif: aw3d30-%/.unzip
+aw3d30-%/wuqiu-nodata0.tif: aw3d30-%/ALPSMLC30_N024E119_DSM.tif
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
@@ -1399,6 +1450,18 @@ aw3d30-%/wuqiu-nodata0.tif: aw3d30-%/.unzip
 		-cutline aw3d30-$*/wuqiu.shp \
 		-dstnodata 0 \
 		aw3d30-$*/ALPSMLC30_N024E119_DSM.tif \
+		$@
+
+
+aw3d30-%/kumano_kodo-nodata0.tif: aw3d30-%/ALPSMLC30_N033E135_DSM.tif aw3d30-%/ALPSMLC30_N033E136_DSM.tif aw3d30-%/ALPSMLC30_N034E135_DSM.tif aw3d30-%/ALPSMLC30_N034E136_DSM.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata 0 \
+		aw3d30-$*/ALPSMLC30_N033E135_DSM.tif \
+		aw3d30-$*/ALPSMLC30_N033E136_DSM.tif \
+		aw3d30-$*/ALPSMLC30_N034E135_DSM.tif \
+		aw3d30-$*/ALPSMLC30_N034E136_DSM.tif \
 		$@
 
 
