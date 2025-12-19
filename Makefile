@@ -134,13 +134,36 @@ PHYGHT_OPTIONS = \
 
 
 ##
+## Sea and Land
+##
+land-polygons/.unzip: land-polygons/land-polygons-split-4326.7z.001
+	cd land-polygons/ && \
+		7z x land-polygons-split-4326.7z.001
+	touch $@
+
+land-polygons/kumano_kodo-sealand.pbf: land-polygons/.unzip
+	./tools/sealand-creator.sh -l 135.0 -r 137.0 -b 33.0 -t 35.0 -n kumano_kodo
+
+land-polygons/taiwan-sealand.pbf: land-polygons/.unzip
+	./tools/sealand-creator.sh -l 118.0000 -r 123.0348 -b 20.62439 -t 26.70665 -n taiwan
+
+
+##
 ## Outputs
 ##
+ele_kumano_kodo_10_100_500.pbf: \
+  land-polygons/kumano_kodo-sealand.pbf \
+  aw3d30-4.1/kumano_kodo-pygm_10_100_500.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
 
-ele_kumano_kodo_10_100_500.pbf: aw3d30-4.1/kumano_kodo-pygm_10_100_500.pbf
-	cp $^ $@
 
 ele_kumano_kodo_10_100_500_mix.pbf: \
+  land-polygons/kumano_kodo-sealand.pbf \
   aw3d30-4.1/kumano_kodo-pygm_10_50_100_500.pbf \
   aw3d30-4.1/kumano_kodo-marker-pygms.pbf
 	# combines all dependences
@@ -205,7 +228,7 @@ ele_taiwan_10_100_500-2023.pbf: \
 .PHONY: taiwan-contour-mix-2025
 taiwan-contour-mix-2025: ele_taiwan_10_100_500_mix-2025.pbf
 ele_taiwan_10_100_500_mix-2025.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2025/taiwan16_15m-pygm_10_50_100_500.pbf \
   moi-2025/penghu-pygm_10_50_100_500.pbf \
   moi-2025/kinmen-pygm_10_50_100_500.pbf \
@@ -224,7 +247,7 @@ ele_taiwan_10_100_500_mix-2025.pbf: \
 .PHONY: taiwan-contour-mix-2024
 taiwan-contour-mix-2024: ele_taiwan_10_100_500_mix-2024.pbf
 ele_taiwan_10_100_500_mix-2024.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2024/taiwan16_15m-pygm_10_50_100_500.pbf \
   moi-2019/penghu-pygm_10_50_100_500.pbf \
   moi-2019/kinmen-pygm_10_50_100_500.pbf \
@@ -243,7 +266,7 @@ ele_taiwan_10_100_500_mix-2024.pbf: \
 .PHONY: taiwan-contour-mix-2023
 taiwan-contour-mix-2023: ele_taiwan_10_100_500_mix-2023.pbf
 ele_taiwan_10_100_500_mix-2023.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2022/taiwan16_15m-pygm_10_50_100_500.pbf \
   moi-2019/penghu-pygm_10_50_100_500.pbf \
   moi-2019/kinmen-pygm_10_50_100_500.pbf \
@@ -262,7 +285,7 @@ ele_taiwan_10_100_500_mix-2023.pbf: \
 .PHONY: taiwan-lite-contour-mix-2025
 taiwan-lite-contour-mix-2025: ele_taiwan_20_100_500_mix-2025.pbf
 ele_taiwan_20_100_500_mix-2025.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2025/taiwan16_60m-pygm_20_100_500.pbf \
   moi-2025/penghu-pygm_20_100_500.pbf \
   moi-2025/kinmen-pygm_20_100_500.pbf \
@@ -281,7 +304,7 @@ ele_taiwan_20_100_500_mix-2025.pbf: \
 .PHONY: taiwan-lite-contour-mix-2024
 taiwan-lite-contour-mix-2024: ele_taiwan_20_100_500_mix-2024.pbf
 ele_taiwan_20_100_500_mix-2024.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2024/taiwan16_60m-pygm_20_100_500.pbf \
   moi-2019/penghu-pygm_20_100_500.pbf \
   moi-2019/kinmen-pygm_20_100_500.pbf \
@@ -300,7 +323,7 @@ ele_taiwan_20_100_500_mix-2024.pbf: \
 .PHONY: taiwan-lite-contour-mix-2023
 taiwan-lite-contour-mix-2023: ele_taiwan_20_100_500_mix-2023.pbf
 ele_taiwan_20_100_500_mix-2023.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2022/taiwan16_60m-pygm_20_100_500.pbf \
   moi-2019/penghu-pygm_20_100_500.pbf \
   moi-2019/kinmen-pygm_20_100_500.pbf \
@@ -362,7 +385,7 @@ ele_taiwan_10_100_500-2022.pbf: \
 .PHONY: taiwan-contour-mix-2022
 taiwan-contour-mix-2022: ele_taiwan_10_100_500_mix-2022.pbf
 ele_taiwan_10_100_500_mix-2022.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2020/taiwan16_20m-gdal_10_50_100_500.pbf \
   moi-2019/penghu-gdal_10_50_100_500.pbf \
   moi-2019/kinmen-gdal_10_50_100_500.pbf \
@@ -381,7 +404,7 @@ ele_taiwan_10_100_500_mix-2022.pbf: \
 .PHONY: taiwan-lite-contour-mix-2022
 taiwan-lite-contour-mix-2022: ele_taiwan_20_100_500_mix-2022.pbf
 ele_taiwan_20_100_500_mix-2022.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2020/taiwan16_40m-gdal_20_100_500.pbf \
   moi-2019/penghu-gdal_20_100_500.pbf \
   moi-2019/kinmen-gdal_20_100_500.pbf \
@@ -415,7 +438,7 @@ ele_taiwan_10_100_500-2021.pbf: \
 .PHONY: taiwan-contour-mix-2021
 taiwan-contour-mix-2021: ele_taiwan_10_100_500_mix-2021.pbf
 ele_taiwan_10_100_500_mix-2021.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2020/taiwan-pygm_10_50_100_500.pbf \
   moi-2019/penghu-pygm_10_50_100_500.pbf \
   moi-2019/kinmen-pygm_10_50_100_500.pbf \
@@ -432,7 +455,7 @@ ele_taiwan_10_100_500_mix-2021.pbf: \
 .PHONY: taiwan-lite-contour-mix-2021
 taiwan-lite-contour-mix-2021: ele_taiwan_20_100_500_mix-2021.pbf
 ele_taiwan_20_100_500_mix-2021.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2020/taiwan-pygm_20_100_500.pbf \
   moi-2019/penghu-pygm_20_100_500.pbf \
   moi-2019/kinmen-pygm_20_100_500.pbf \
@@ -464,7 +487,7 @@ ele_taiwan_10_100_500-2020.pbf: \
 .PHONY: taiwan-contour-mix-2020
 taiwan-contour-mix-2020: ele_taiwan_10_100_500_mix-2020.pbf
 ele_taiwan_10_100_500_mix-2020.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2020/taiwan-pygm_10_50_100_500.pbf \
   moi-2019/penghu-pygm_10_50_100_500.pbf \
   moi-2019/kinmen-pygm_10_50_100_500.pbf \
@@ -481,7 +504,7 @@ ele_taiwan_10_100_500_mix-2020.pbf: \
 .PHONY: taiwan-lite-contour-mix-2020
 taiwan-lite-contour-mix-2020: ele_taiwan_20_100_500_mix-2020.pbf
 ele_taiwan_20_100_500_mix-2020.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2020/taiwan-pygm_20_100_500.pbf \
   moi-2019/penghu-pygm_20_100_500.pbf \
   moi-2019/kinmen-pygm_20_100_500.pbf \
@@ -513,7 +536,7 @@ ele_taiwan_10_100_500-2019.pbf: \
 .PHONY: taiwan-contour-mix-2019
 taiwan-contour-mix-2019: ele_taiwan_10_100_500_mix-2019.pbf
 ele_taiwan_10_100_500_mix-2019.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2019/taiwan-pygm_10_50_100_500.pbf \
   moi-2019/penghu-pygm_10_50_100_500.pbf \
   moi-2019/kinmen-pygm_10_50_100_500.pbf \
@@ -530,7 +553,7 @@ ele_taiwan_10_100_500_mix-2019.pbf: \
 .PHONY: taiwan-lite-contour-mix-2019
 taiwan-lite-contour-mix-2019: ele_taiwan_20_100_500_mix-2019.pbf
 ele_taiwan_20_100_500_mix-2019.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2019/taiwan-pygm_20_100_500.pbf \
   moi-2019/penghu-pygm_20_100_500.pbf \
   moi-2019/kinmen-pygm_20_100_500.pbf \
@@ -561,7 +584,7 @@ ele_taiwan_10_100_500-2018.pbf: \
 .PHONY: taiwan-contour-mix-2018
 taiwan-contour-mix-2018: ele_taiwan_10_100_500_mix-2018.pbf
 ele_taiwan_10_100_500_mix-2018.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2018/taiwan-pygm_10_50_100_500.pbf \
   moi-2016/penghu-pygm_10_50_100_500.pbf \
   aw3d30-2.1/islands-pygm_10_50_100_500.pbf \
@@ -577,7 +600,7 @@ ele_taiwan_10_100_500_mix-2018.pbf: \
 .PHONY: taiwan-lite-contour-mix-2018
 taiwan-lite-contour-mix-2018: ele_taiwan_20_100_500_mix-2018.pbf
 ele_taiwan_20_100_500_mix-2018.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2018/taiwan-pygm_20_100_500.pbf \
   moi-2016/penghu-pygm_20_100_500.pbf \
   aw3d30-2.1/islands-pygm_20_100_500.pbf \
@@ -607,7 +630,7 @@ ele_taiwan_10_100_500-2016.pbf: \
 .PHONY: taiwan-contour-mix-2016
 taiwan-contour-mix-2016: ele_taiwan_10_50_100_500_mix-2016.pbf
 ele_taiwan_10_50_100_500_mix-2016.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2016/taiwan-pygm_10_50_100_500.pbf \
   moi-2016/penghu-pygm_10_50_100_500.pbf \
   aw3d30-2.1/islands-pygm_10_50_100_500.pbf \
@@ -623,7 +646,7 @@ ele_taiwan_10_50_100_500_mix-2016.pbf: \
 .PHONY: taiwan-lite-contour-mix-2016
 taiwan-lite-contour-mix-2016: ele_taiwan_20_100_500_mix-2016.pbf
 ele_taiwan_20_100_500_mix-2016.pbf: \
-  precompiled/taiwan-sealand.pbf \
+  land-polygons/taiwan-sealand.pbf \
   moi-2016/taiwan-pygm_20_100_500.pbf \
   moi-2016/penghu-pygm_20_100_500.pbf \
   aw3d30-2.1/islands-pygm_20_100_500.pbf \
