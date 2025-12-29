@@ -92,6 +92,7 @@ moi-2025/.hgt: moi-2025/taiwan16_20m-zero.tif moi-2025/penghu-zero.tif moi-2025/
 	rm -rf moi-2025/input moi-2025/output
 	touch $@
 
+
 .PHONY: kumano_kodo-hgts
 kumano_kodo-hgts: aw3d30-4.1/.kumano_hgt
 aw3d30-4.1/.kumano_hgt: aw3d30-4.1/kumano_kodo-zero.tif
@@ -117,6 +118,7 @@ aw3d30-4.1/.kumano_hgt: aw3d30-4.1/kumano_kodo-zero.tif
 	rm -rf aw3d30-4.1/input aw3d30-4.1/output
 	touch $@
 
+
 .PHONY: annapurna-hgts
 annapurna-hgts: aw3d30-4.1/.annapurna_hgt
 aw3d30-4.1/.annapurna_hgt: aw3d30-4.1/annapurna-zero.tif
@@ -139,6 +141,25 @@ aw3d30-4.1/.annapurna_hgt: aw3d30-4.1/annapurna-zero.tif
 		rm *
 	rm -rf aw3d30-4.1/input aw3d30-4.1/output
 	touch $@
+
+
+aw3d30-%/kumano_kodo-nodata0.tif: aw3d30-%/ALPSMLC30_N033E135_DSM.tif aw3d30-%/ALPSMLC30_N033E136_DSM.tif aw3d30-%/ALPSMLC30_N034E135_DSM.tif aw3d30-%/ALPSMLC30_N034E136_DSM.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata 0 \
+		$^ \
+		$@
+
+
+aw3d30-%/annapurna-nodata0.tif: aw3d30-%/ALPSMLC30_N028E083_DSM.tif aw3d30-%/ALPSMLC30_N028E084_DSM.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata 0 \
+		$^ \
+		$@
+
 
 OUTPUTS=-ot Float64 -co compress=LZW -of GTiff
 NODATA_VALUE=-999
@@ -1521,24 +1542,6 @@ aw3d30-%/wuqiu-nodata0.tif: aw3d30-%/ALPSMLC30_N024E119_DSM.tif
 		-cutline aw3d30-$*/wuqiu.shp \
 		-dstnodata 0 \
 		aw3d30-$*/ALPSMLC30_N024E119_DSM.tif \
-		$@
-
-
-aw3d30-%/kumano_kodo-nodata0.tif: aw3d30-%/ALPSMLC30_N033E135_DSM.tif aw3d30-%/ALPSMLC30_N033E136_DSM.tif aw3d30-%/ALPSMLC30_N034E135_DSM.tif aw3d30-%/ALPSMLC30_N034E136_DSM.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata 0 \
-		$^ \
-		$@
-
-
-aw3d30-%/annapurna-nodata0.tif: aw3d30-%/ALPSMLC30_N028E083_DSM.tif aw3d30-%/ALPSMLC30_N028E084_DSM.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata 0 \
-		$^ \
 		$@
 
 
