@@ -17,6 +17,7 @@ endif
 .PHONY: all taiwan-all kumanno_kodo-all clean
 taiwan-all: taiwan-hgts taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
 kumanno_kodo-all: kumano_kodo-hgts kumano_kodo-contour kumano_kodo-contour-mix
+annapurna-all: annapurna-hgts annapurna-contour annapurna-contour-mix
 
 taiwan-hgts: taiwan-hgts-2025
 taiwan-contour: taiwan-contour-2025
@@ -25,6 +26,12 @@ taiwan-lite-contour-mix: taiwan-lite-contour-mix-2025
 kumano_kodo-contour: ele_kumano_kodo_10_100_500.pbf
 kumano_kodo-contour-mix: ele_kumano_kodo_10_100_500_mix.pbf
 kumano_kodo-hgts: aw3d30-4.1/.kumano_hgt
+annapurna-contour: ele_annapurna_10_100_500.pbf
+annapurna-contour-mix: ele_annapurna_10_100_500_mix.pbf
+annapurna-hgts: aw3d30-4.1/.annapurna_hgt
+
+clean:
+	git clean -fdx
 
 DESTDIR ?= drops
 
@@ -94,13 +101,13 @@ aw3d30-4.1/.kumano_hgt: aw3d30-4.1/kumano_kodo-zero.tif
 		ln -sf ../kumano_kodo-zero.tif N033E136_AVE_DSM.tif && \
 		ln -sf ../kumano_kodo-zero.tif N034E135_AVE_DSM.tif && \
 		ln -sf ../kumano_kodo-zero.tif N034E136_AVE_DSM.tif
-	cd aw3d30-4.1 && \
+	cd aw3d30-4.1/ && \
 		../tools/aw3d2srtm30.sh && \
 		echo '# Kumano Kodo HGT 30m' > output/VERSION
 	cd aw3d30-4.1/output && \
 		7z a -tzip ../kumano_hgtmix.zip *.hgt VERSION && \
 		rm *
-	cd aw3d30-4.1 && \
+	cd aw3d30-4.1/ && \
 		../tools/aw3d2srtm90.sh && \
 		echo '# Kumano Kodo HGT 90m' > output/VERSION
 	cd aw3d30-4.1/output && \
@@ -109,8 +116,28 @@ aw3d30-4.1/.kumano_hgt: aw3d30-4.1/kumano_kodo-zero.tif
 	rm -rf aw3d30-4.1/input aw3d30-4.1/output
 	touch $@
 
-clean:
-	git clean -fdx
+.PHONY: annapurna-hgts
+annapurna-hgts: aw3d30-4.1/.annapurna_hgt
+aw3d30-4.1/.annapurna_hgt: aw3d30-4.1/annapurna-zero.tif
+	rm -rf aw3d30-4.1/input aw3d30-4.1/output
+	mkdir -p aw3d30-4.1/input aw3d30-4.1/output
+	cd aw3d30-4.1/input && \
+		ln -sf ../annapurna-zero.tif N028E083_AVE_DSM.tif && \
+		ln -sf ../annapurna-zero.tif N028E084_AVE_DSM.tif
+	cd aw3d30-4.1/ && \
+		../tools/aw3d2srtm30.sh && \
+		echo '# Annapurna HGT 30m' > output/VERSION
+	cd aw3d30-4.1/output && \
+		7z a -tzip ../annapurna_hgtmix.zip *.hgt VERSION && \
+		rm *
+	cd aw3d30-4.1/ && \
+		../tools/aw3d2srtm90.sh && \
+		echo '# Annapurna Kodo HGT 90m' > output/VERSION
+	cd aw3d30-4.1/output && \
+		7z a -tzip ../annapurna_hgt90.zip *.hgt VERSION && \
+		rm *
+	rm -rf aw3d30-4.1/input aw3d30-4.1/output
+	touch $@
 
 OUTPUTS=-ot Float64 -co compress=LZW -of GTiff
 NODATA_VALUE=-999
@@ -166,6 +193,26 @@ ele_kumano_kodo_10_100_500_mix.pbf: \
   land-polygons/kumano_kodo-sealand.pbf \
   aw3d30-4.1/kumano_kodo-pygm_10_50_100_500.pbf \
   aw3d30-4.1/kumano_kodo-marker-pygms.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+ele_annapurna_10_100_500.pbf: \
+  aw3d30-4.1/annapurna-pygm_10_100_500.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
+ele_annapurna_10_100_500_mix.pbf: \
+  aw3d30-4.1/annapurna-pygm_10_50_100_500.pbf \
+  aw3d30-4.1/annapurna-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
@@ -1252,7 +1299,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 #  640m: -tr 0.005891491844480 0.005891491844480
 # 1280m: -tr 0.011782983688960 0.011782983688960
 
-# Resolution variant pattern rules (work for all base files: taiwan16_20m, kumano_kodo, etc.)
+# Resolution variant pattern rules (work for all base files: taiwan16_20m, kumano_kodo, annapurna, etc.)
 %_10m-zero.tif: %-zero.tif
 	rm -f $@
 	gdalwarp \
@@ -1481,10 +1528,16 @@ aw3d30-%/kumano_kodo-nodata0.tif: aw3d30-%/ALPSMLC30_N033E135_DSM.tif aw3d30-%/A
 	gdalwarp \
 		$(OUTPUTS) \
 		-dstnodata 0 \
-		aw3d30-$*/ALPSMLC30_N033E135_DSM.tif \
-		aw3d30-$*/ALPSMLC30_N033E136_DSM.tif \
-		aw3d30-$*/ALPSMLC30_N034E135_DSM.tif \
-		aw3d30-$*/ALPSMLC30_N034E136_DSM.tif \
+		$^ \
+		$@
+
+
+aw3d30-%/annapurna-nodata0.tif: aw3d30-%/ALPSMLC30_N028E083_DSM.tif aw3d30-%/ALPSMLC30_N028E084_DSM.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata 0 \
+		$^ \
 		$@
 
 
