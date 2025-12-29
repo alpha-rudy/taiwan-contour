@@ -15,6 +15,7 @@ SED_CMD := sed
 endif
 
 .PHONY: all taiwan-all kumanno_kodo-all clean
+all: taiwan-all kumanno_kodo-all annapurna-all
 taiwan-all: taiwan-hgts taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
 kumanno_kodo-all: kumano_kodo-hgts kumano_kodo-contour kumano_kodo-contour-mix
 annapurna-all: annapurna-hgts annapurna-contour annapurna-contour-mix
