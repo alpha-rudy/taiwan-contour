@@ -15,10 +15,11 @@ SED_CMD := sed
 endif
 
 .PHONY: all taiwan-all kumanno_kodo-all clean
-all: taiwan-all kumanno_kodo-all annapurna-all
+all: taiwan-all kumanno_kodo-all annapurna-all kashmir-all
 taiwan-all: taiwan-hgts taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
 kumanno_kodo-all: kumano_kodo-hgts kumano_kodo-contour kumano_kodo-contour-mix
 annapurna-all: annapurna-hgts annapurna-contour annapurna-contour-mix
+kashmir-all: kashmir-hgts kashmir-contour kashmir-contour-mix
 
 taiwan-hgts: taiwan-hgts-2025
 taiwan-contour: taiwan-contour-2025
@@ -30,6 +31,9 @@ kumano_kodo-hgts: aw3d30-4.1/.kumano_hgt
 annapurna-contour: ele_annapurna_10_100_500.pbf
 annapurna-contour-mix: ele_annapurna_10_100_500_mix.pbf
 annapurna-hgts: aw3d30-4.1/.annapurna_hgt
+kashmir-contour: ele_kashmir_10_100_500.pbf
+kashmir-contour-mix: ele_kashmir_10_100_500_mix.pbf
+kashmir-hgts: aw3d30-4.1/.kashmir_hgt
 
 clean:
 	git clean -fdx
@@ -98,7 +102,7 @@ moi-2025/.hgt: moi-2025/taiwan16_20m-zero.tif moi-2025/penghu-zero.tif moi-2025/
 define make-hgt-rule
     rm -rf aw3d30-4.1/input aw3d30-4.1/output
     mkdir -p aw3d30-4.1/input aw3d30-4.1/output
-    $(foreach tile,$(3),cd aw3d30-4.1/input && ln -sf ../$(1)-zero.tif $(tile) && ) true
+    cd aw3d30-4.1/input && $(foreach tile,$(3),ln -sf ../$(1)-zero.tif $(tile) && ) true
     cd aw3d30-4.1/ && \
         ../tools/aw3d2srtm30.sh && \
         echo '# $(2) HGT 30m' > output/VERSION
@@ -119,13 +123,19 @@ KUMANO_TILES = N033E135_AVE_DSM.tif N033E136_AVE_DSM.tif N034E135_AVE_DSM.tif N0
 .PHONY: kumano_kodo-hgts
 kumano_kodo-hgts: aw3d30-4.1/.kumano_hgt
 aw3d30-4.1/.kumano_hgt: aw3d30-4.1/kumano_kodo-zero.tif
-    $(call make-hgt-rule,kumano_kodo,Kumano Kodo,$(KUMANO_TILES))
+	$(call make-hgt-rule,kumano_kodo,Kumano Kodo,$(KUMANO_TILES))
 
 ANNAPURNA_TILES = N028E083_AVE_DSM.tif N028E084_AVE_DSM.tif
 .PHONY: annapurna-hgts
 annapurna-hgts: aw3d30-4.1/.annapurna_hgt
 aw3d30-4.1/.annapurna_hgt: aw3d30-4.1/annapurna-zero.tif
-    $(call make-hgt-rule,annapurna,Annapurna,$(ANNAPURNA_TILES))
+	$(call make-hgt-rule,annapurna,Annapurna,$(ANNAPURNA_TILES))
+
+KASHMIR_TILES = N034E074_AVE_DSM.tif N034E075_AVE_DSM.tif
+.PHONY: kashmir-hgts
+kashmir-hgts: aw3d30-4.1/.kashmir_hgt
+aw3d30-4.1/.kashmir_hgt: aw3d30-4.1/kashmir-zero.tif
+	$(call make-hgt-rule,kashmir,Kashmir,$(KASHMIR_TILES))
 
 aw3d30-%/kumano_kodo-nodata0.tif: aw3d30-%/ALPSMLC30_N033E135_DSM.tif aw3d30-%/ALPSMLC30_N033E136_DSM.tif aw3d30-%/ALPSMLC30_N034E135_DSM.tif aw3d30-%/ALPSMLC30_N034E136_DSM.tif
 	rm -f $@
@@ -137,6 +147,15 @@ aw3d30-%/kumano_kodo-nodata0.tif: aw3d30-%/ALPSMLC30_N033E135_DSM.tif aw3d30-%/A
 
 
 aw3d30-%/annapurna-nodata0.tif: aw3d30-%/ALPSMLC30_N028E083_DSM.tif aw3d30-%/ALPSMLC30_N028E084_DSM.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata 0 \
+		$^ \
+		$@
+
+
+aw3d30-%/kashmir-nodata0.tif: aw3d30-%/ALPSMLC30_N034E074_DSM.tif aw3d30-%/ALPSMLC30_N034E075_DSM.tif
 	rm -f $@
 	gdalwarp \
 		$(OUTPUTS) \
@@ -219,6 +238,27 @@ ele_annapurna_10_100_500.pbf: \
 ele_annapurna_10_100_500_mix.pbf: \
   aw3d30-4.1/annapurna-pygm_10_50_100_500.pbf \
   aw3d30-4.1/annapurna-marker-pygms.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
+ele_kashmir_10_100_500.pbf: \
+  aw3d30-4.1/kashmir-pygm_10_100_500.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
+ele_kashmir_10_100_500_mix.pbf: \
+  aw3d30-4.1/kashmir-pygm_10_50_100_500.pbf \
+  aw3d30-4.1/kashmir-marker-pygms.pbf
 	# combines all dependences
 	./tools/combine.sh \
 		$@ \
