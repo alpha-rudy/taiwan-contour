@@ -93,55 +93,39 @@ moi-2025/.hgt: moi-2025/taiwan16_20m-zero.tif moi-2025/penghu-zero.tif moi-2025/
 	touch $@
 
 
+# Macro to generate HGT files for a region
+# Usage: $(call make-hgt-rule,region_name,display_name,tiles)
+define make-hgt-rule
+    rm -rf aw3d30-4.1/input aw3d30-4.1/output
+    mkdir -p aw3d30-4.1/input aw3d30-4.1/output
+    $(foreach tile,$(3),cd aw3d30-4.1/input && ln -sf ../$(1)-zero.tif $(tile) && ) true
+    cd aw3d30-4.1/ && \
+        ../tools/aw3d2srtm30.sh && \
+        echo '# $(2) HGT 30m' > output/VERSION
+    cd aw3d30-4.1/output && \
+        7z a -tzip ../$(1)_hgtmix.zip *.hgt VERSION && \
+        rm *
+    cd aw3d30-4.1/ && \
+        ../tools/aw3d2srtm90.sh && \
+        echo '# $(2) HGT 90m' > output/VERSION
+    cd aw3d30-4.1/output && \
+        7z a -tzip ../$(1)_hgt90.zip *.hgt VERSION && \
+        rm *
+    rm -rf aw3d30-4.1/input aw3d30-4.1/output
+    touch $@
+endef
+
+KUMANO_TILES = N033E135_AVE_DSM.tif N033E136_AVE_DSM.tif N034E135_AVE_DSM.tif N034E136_AVE_DSM.tif
 .PHONY: kumano_kodo-hgts
 kumano_kodo-hgts: aw3d30-4.1/.kumano_hgt
 aw3d30-4.1/.kumano_hgt: aw3d30-4.1/kumano_kodo-zero.tif
-	rm -rf aw3d30-4.1/input aw3d30-4.1/output
-	mkdir -p aw3d30-4.1/input aw3d30-4.1/output
-	cd aw3d30-4.1/input && \
-		ln -sf ../kumano_kodo-zero.tif N033E135_AVE_DSM.tif && \
-		ln -sf ../kumano_kodo-zero.tif N033E136_AVE_DSM.tif && \
-		ln -sf ../kumano_kodo-zero.tif N034E135_AVE_DSM.tif && \
-		ln -sf ../kumano_kodo-zero.tif N034E136_AVE_DSM.tif
-	cd aw3d30-4.1/ && \
-		../tools/aw3d2srtm30.sh && \
-		echo '# Kumano Kodo HGT 30m' > output/VERSION
-	cd aw3d30-4.1/output && \
-		7z a -tzip ../kumano_hgtmix.zip *.hgt VERSION && \
-		rm *
-	cd aw3d30-4.1/ && \
-		../tools/aw3d2srtm90.sh && \
-		echo '# Kumano Kodo HGT 90m' > output/VERSION
-	cd aw3d30-4.1/output && \
-		7z a -tzip ../kumano_hgt90.zip *.hgt VERSION && \
-		rm *
-	rm -rf aw3d30-4.1/input aw3d30-4.1/output
-	touch $@
+    $(call make-hgt-rule,kumano_kodo,Kumano Kodo,$(KUMANO_TILES))
 
-
+ANNAPURNA_TILES = N028E083_AVE_DSM.tif N028E084_AVE_DSM.tif
 .PHONY: annapurna-hgts
 annapurna-hgts: aw3d30-4.1/.annapurna_hgt
 aw3d30-4.1/.annapurna_hgt: aw3d30-4.1/annapurna-zero.tif
-	rm -rf aw3d30-4.1/input aw3d30-4.1/output
-	mkdir -p aw3d30-4.1/input aw3d30-4.1/output
-	cd aw3d30-4.1/input && \
-		ln -sf ../annapurna-zero.tif N028E083_AVE_DSM.tif && \
-		ln -sf ../annapurna-zero.tif N028E084_AVE_DSM.tif
-	cd aw3d30-4.1/ && \
-		../tools/aw3d2srtm30.sh && \
-		echo '# Annapurna HGT 30m' > output/VERSION
-	cd aw3d30-4.1/output && \
-		7z a -tzip ../annapurna_hgtmix.zip *.hgt VERSION && \
-		rm *
-	cd aw3d30-4.1/ && \
-		../tools/aw3d2srtm90.sh && \
-		echo '# Annapurna Kodo HGT 90m' > output/VERSION
-	cd aw3d30-4.1/output && \
-		7z a -tzip ../annapurna_hgt90.zip *.hgt VERSION && \
-		rm *
-	rm -rf aw3d30-4.1/input aw3d30-4.1/output
-	touch $@
-
+    $(call make-hgt-rule,annapurna,Annapurna,$(ANNAPURNA_TILES))
 
 aw3d30-%/kumano_kodo-nodata0.tif: aw3d30-%/ALPSMLC30_N033E135_DSM.tif aw3d30-%/ALPSMLC30_N033E136_DSM.tif aw3d30-%/ALPSMLC30_N034E135_DSM.tif aw3d30-%/ALPSMLC30_N034E136_DSM.tif
 	rm -f $@
