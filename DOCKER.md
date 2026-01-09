@@ -118,6 +118,12 @@ docker build \
   --build-arg GROUP_ID=$(id -g) \
   -t taiwan-contour:latest .
 
+# Or Rebuild withou caches
+docker build --no-cache \
+  --build-arg USER_ID=$(id -u) \
+  --build-arg GROUP_ID=$(id -g) \
+  -t taiwan-contour:latest .
+
 # Run interactively
 docker run -it --rm -v $(pwd):/workspace -u builder taiwan-contour:latest
 
