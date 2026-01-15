@@ -199,6 +199,11 @@ land-polygons/kumano_kodo-sealand.pbf: land-polygons/.unzip
 land-polygons/taiwan-sealand.pbf: land-polygons/.unzip
 	./tools/sealand-creator.sh -l 118.0000 -r 123.0348 -b 20.62439 -t 26.70665 -n taiwan
 
+land-polygons/annapurna-sealand.pbf: land-polygons/.unzip
+	./tools/sealand-creator.sh -l 83.0 -r 85.0 -b 28.0 -t 29.0 -n annapurna
+
+land-polygons/kashmir-sealand.pbf: land-polygons/.unzip
+	./tools/sealand-creator.sh -l 74.0 -r 76.0 -b 34.0 -t 35.0 -n kashmir
 
 ##
 ## Outputs
@@ -226,6 +231,7 @@ ele_kumano_kodo_10_100_500_mix.pbf: \
 		$^
 
 ele_annapurna_10_100_500.pbf: \
+  land-polygons/annapurna-sealand.pbf \
   aw3d30-4.1/annapurna-pygm_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
@@ -236,6 +242,7 @@ ele_annapurna_10_100_500.pbf: \
 
 
 ele_annapurna_10_100_500_mix.pbf: \
+  land-polygons/annapurna-sealand.pbf \
   aw3d30-4.1/annapurna-pygm_10_50_100_500.pbf \
   aw3d30-4.1/annapurna-marker-pygms.pbf
 	# combines all dependences
@@ -247,6 +254,7 @@ ele_annapurna_10_100_500_mix.pbf: \
 
 
 ele_kashmir_10_100_500.pbf: \
+  land-polygons/kashmir-sealand.pbf \
   aw3d30-4.1/kashmir-pygm_10_100_500.pbf
 	# combines all dependences
 	./tools/combine.sh \
@@ -257,6 +265,7 @@ ele_kashmir_10_100_500.pbf: \
 
 
 ele_kashmir_10_100_500_mix.pbf: \
+  land-polygons/kashmir-sealand.pbf \
   aw3d30-4.1/kashmir-pygm_10_50_100_500.pbf \
   aw3d30-4.1/kashmir-marker-pygms.pbf
 	# combines all dependences

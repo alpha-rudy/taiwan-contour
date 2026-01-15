@@ -3,6 +3,9 @@ FROM ubuntu:24.04
 # Prevent interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Java
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+
 # Set locale to UTF-8
 ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8
@@ -12,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     # Build essentials
     bc \
     build-essential \
+    default-jre \
     make \
     gawk \
     git \
