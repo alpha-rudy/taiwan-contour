@@ -17,6 +17,7 @@ endif
 .PHONY: all taiwan-all kumanno_kodo-all clean
 all: taiwan-all kumanno_kodo-all annapurna-all kashmir-all
 taiwan-all: taiwan-hgts taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
+fujisan-all: fujisan-hgts fujisan-contour fujisan-contour-mix
 kumanno_kodo-all: kumano_kodo-hgts kumano_kodo-contour kumano_kodo-contour-mix
 annapurna-all: annapurna-hgts annapurna-contour annapurna-contour-mix
 kashmir-all: kashmir-hgts kashmir-contour kashmir-contour-mix
@@ -25,6 +26,9 @@ taiwan-hgts: taiwan-hgts-2025
 taiwan-contour: taiwan-contour-2025
 taiwan-contour-mix: taiwan-contour-mix-2025
 taiwan-lite-contour-mix: taiwan-lite-contour-mix-2025
+fujisan-contour: ele_fujisan_10_100_500.pbf
+fujisan-contour-mix: ele_fujisan_10_100_500_mix.pbf
+fujisan-hgts: aw3d30-4.1/.fujisan-hgt
 kumano_kodo-contour: ele_kumano_kodo_10_100_500.pbf
 kumano_kodo-contour-mix: ele_kumano_kodo_10_100_500_mix.pbf
 kumano_kodo-hgts: aw3d30-4.1/.kumano_hgt
@@ -119,6 +123,12 @@ define make-hgt-rule
     touch $@
 endef
 
+FUJISAN_TILES = N034E138_AVE_DSM.tif N034E139_AVE_DSM.tif N035E138_AVE_DSM.tif N035E139_AVE_DSM.tif
+.PHONY: fujisan-hgts
+fujisan-hgts: aw3d30-4.1/.fujisan-hgt
+aw3d30-4.1/.fujisan-hgt: aw3d30-4.1/fujisan-zero.tif
+	$(call make-hgt-rule,fujisan,Fujisan,$(FUJISAN_TILES))
+
 KUMANO_TILES = N033E135_AVE_DSM.tif N033E136_AVE_DSM.tif N034E135_AVE_DSM.tif N034E136_AVE_DSM.tif
 .PHONY: kumano_kodo-hgts
 kumano_kodo-hgts: aw3d30-4.1/.kumano_hgt
@@ -136,6 +146,16 @@ KASHMIR_TILES = N034E074_AVE_DSM.tif N034E075_AVE_DSM.tif
 kashmir-hgts: aw3d30-4.1/.kashmir_hgt
 aw3d30-4.1/.kashmir_hgt: aw3d30-4.1/kashmir-zero.tif
 	$(call make-hgt-rule,kashmir,Kashmir,$(KASHMIR_TILES))
+
+
+aw3d30-%/fujisan-nodata0.tif: aw3d30-%/ALPSMLC30_N034E138_DSM.tif aw3d30-%/ALPSMLC30_N034E139_DSM.tif aw3d30-%/ALPSMLC30_N035E138_DSM.tif aw3d30-%/ALPSMLC30_N035E139_DSM.tif
+	rm -f $@
+	gdalwarp \
+		$(OUTPUTS) \
+		-dstnodata 0 \
+		$^ \
+		$@
+
 
 aw3d30-%/kumano_kodo-nodata0.tif: aw3d30-%/ALPSMLC30_N033E135_DSM.tif aw3d30-%/ALPSMLC30_N033E136_DSM.tif aw3d30-%/ALPSMLC30_N034E135_DSM.tif aw3d30-%/ALPSMLC30_N034E136_DSM.tif
 	rm -f $@
@@ -193,6 +213,9 @@ land-polygons/.unzip: land-polygons/land-polygons-split-4326.7z.001
 		7z x land-polygons-split-4326.7z.001
 	touch $@
 
+land-polygons/fujisan-sealand.pbf: land-polygons/.unzip
+	./tools/sealand-creator.sh -l 138.0 -r 140.0 -b 34.0 -t 36.0 -n fujisan
+
 land-polygons/kumano_kodo-sealand.pbf: land-polygons/.unzip
 	./tools/sealand-creator.sh -l 135.0 -r 137.0 -b 33.0 -t 35.0 -n kumano_kodo
 
@@ -208,6 +231,29 @@ land-polygons/kashmir-sealand.pbf: land-polygons/.unzip
 ##
 ## Outputs
 ##
+ele_fujisan_10_100_500.pbf: \
+  land-polygons/fujisan-sealand.pbf \
+  aw3d30-4.1/fujisan-pygm_10_100_500.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
+ele_fujisan_10_100_500_mix.pbf: \
+  land-polygons/fujisan-sealand.pbf \
+  aw3d30-4.1/fujisan-pygm_10_50_100_500.pbf \
+  aw3d30-4.1/fujisan-marker-pygms.pbf
+	# combines all dependences
+	./tools/combine.sh \
+		$@ \
+		1 \
+		1 \
+		$^
+
+
 ele_kumano_kodo_10_100_500.pbf: \
   land-polygons/kumano_kodo-sealand.pbf \
   aw3d30-4.1/kumano_kodo-pygm_10_100_500.pbf
