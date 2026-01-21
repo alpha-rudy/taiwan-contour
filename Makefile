@@ -14,34 +14,30 @@ JMC_CMD := jmc/linux/jmc_cli
 SED_CMD := sed
 endif
 
-.PHONY: all taiwan-all kumanno_kodo-all clean
-all: taiwan-all kumanno_kodo-all annapurna-all kashmir-all
-taiwan-all: taiwan-hgts taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
-fujisan-all: fujisan-hgts fujisan-contour fujisan-contour-mix
-nikko_oze-all: nikko_oze-hgts nikko_oze-contour nikko_oze-contour-mix
-kumanno_kodo-all: kumano_kodo-hgts kumano_kodo-contour kumano_kodo-contour-mix
-annapurna-all: annapurna-hgts annapurna-contour annapurna-contour-mix
-kashmir-all: kashmir-hgts kashmir-contour kashmir-contour-mix
+##############################################################################
+# Foreign Region Includes
+# Each region is defined in a separate file under regions/
+# See regions/README.md for how to add new regions
+##############################################################################
+include regions/common.mk
+include regions/fujisan.mk
+include regions/nikko_oze.mk
+include regions/kumano_kodo.mk
+include regions/annapurna.mk
+include regions/kashmir.mk
 
+##############################################################################
+# Main Targets
+##############################################################################
+.PHONY: all taiwan-all clean
+all: taiwan-all kumano_kodo-all annapurna-all kashmir-all
+taiwan-all: taiwan-hgts taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
+
+# Taiwan aliases
 taiwan-hgts: taiwan-hgts-2025
 taiwan-contour: taiwan-contour-2025
 taiwan-contour-mix: taiwan-contour-mix-2025
 taiwan-lite-contour-mix: taiwan-lite-contour-mix-2025
-fujisan-contour: ele_fujisan_10_100_500.pbf
-fujisan-contour-mix: ele_fujisan_10_100_500_mix.pbf
-fujisan-hgts: aw3d30-4.1/.fujisan-hgt
-nikko_oze-contour: ele_nikko_oze_10_100_500.pbf
-nikko_oze-contour-mix: ele_nikko_oze_10_100_500_mix.pbf
-nikko_oze-hgts: aw3d30-4.1/.nikko_oze-hgt
-kumano_kodo-contour: ele_kumano_kodo_10_100_500.pbf
-kumano_kodo-contour-mix: ele_kumano_kodo_10_100_500_mix.pbf
-kumano_kodo-hgts: aw3d30-4.1/.kumano_hgt
-annapurna-contour: ele_annapurna_10_100_500.pbf
-annapurna-contour-mix: ele_annapurna_10_100_500_mix.pbf
-annapurna-hgts: aw3d30-4.1/.annapurna_hgt
-kashmir-contour: ele_kashmir_10_100_500.pbf
-kashmir-contour-mix: ele_kashmir_10_100_500_mix.pbf
-kashmir-hgts: aw3d30-4.1/.kashmir_hgt
 
 clean:
 	git clean -fdx
@@ -105,102 +101,12 @@ moi-2025/.hgt: moi-2025/taiwan16_20m-zero.tif moi-2025/penghu-zero.tif moi-2025/
 	touch $@
 
 
-# Macro to generate HGT files for a region
-# Usage: $(call make-hgt-rule,region_name,display_name,tiles)
-define make-hgt-rule
-    rm -rf aw3d30-4.1/input aw3d30-4.1/output
-    mkdir -p aw3d30-4.1/input aw3d30-4.1/output
-    cd aw3d30-4.1/input && $(foreach tile,$(3),ln -sf ../$(1)-zero.tif $(tile) && ) true
-    cd aw3d30-4.1/ && \
-        ../tools/aw3d2srtm30.sh && \
-        echo '# $(2) HGT 30m' > output/VERSION
-    cd aw3d30-4.1/output && \
-        7z a -tzip ../$(1)_hgtmix.zip *.hgt VERSION && \
-        rm *
-    cd aw3d30-4.1/ && \
-        ../tools/aw3d2srtm90.sh && \
-        echo '# $(2) HGT 90m' > output/VERSION
-    cd aw3d30-4.1/output && \
-        7z a -tzip ../$(1)_hgt90.zip *.hgt VERSION && \
-        rm *
-    rm -rf aw3d30-4.1/input aw3d30-4.1/output
-    touch $@
-endef
-
-FUJISAN_TILES = N034E138_AVE_DSM.tif N034E139_AVE_DSM.tif N035E138_AVE_DSM.tif N035E139_AVE_DSM.tif
-.PHONY: fujisan-hgts
-fujisan-hgts: aw3d30-4.1/.fujisan-hgt
-aw3d30-4.1/.fujisan-hgt: aw3d30-4.1/fujisan-zero.tif
-	$(call make-hgt-rule,fujisan,Fujisan,$(FUJISAN_TILES))
-
-NIKKO_OZE_TILES = N036E138_AVE_DSM.tif N036E139_AVE_DSM.tif N036E140_AVE_DSM.tif N037E138_AVE_DSM.tif N037E139_AVE_DSM.tif N037E140_AVE_DSM.tif
-.PHONY: nikko_oze-hgts
-nikko_oze-hgts: aw3d30-4.1/.nikko_oze-hgt
-aw3d30-4.1/.nikko_oze-hgt: aw3d30-4.1/nikko_oze-zero.tif
-	$(call make-hgt-rule,nikko_oze,Nikko-Oze,$(NIKKO_OZE_TILES))
-
-KUMANO_TILES = N033E135_AVE_DSM.tif N033E136_AVE_DSM.tif N034E135_AVE_DSM.tif N034E136_AVE_DSM.tif
-.PHONY: kumano_kodo-hgts
-kumano_kodo-hgts: aw3d30-4.1/.kumano_hgt
-aw3d30-4.1/.kumano_hgt: aw3d30-4.1/kumano_kodo-zero.tif
-	$(call make-hgt-rule,kumano_kodo,Kumano Kodo,$(KUMANO_TILES))
-
-ANNAPURNA_TILES = N028E083_AVE_DSM.tif N028E084_AVE_DSM.tif
-.PHONY: annapurna-hgts
-annapurna-hgts: aw3d30-4.1/.annapurna_hgt
-aw3d30-4.1/.annapurna_hgt: aw3d30-4.1/annapurna-zero.tif
-	$(call make-hgt-rule,annapurna,Annapurna,$(ANNAPURNA_TILES))
-
-KASHMIR_TILES = N034E074_AVE_DSM.tif N034E075_AVE_DSM.tif
-.PHONY: kashmir-hgts
-kashmir-hgts: aw3d30-4.1/.kashmir_hgt
-aw3d30-4.1/.kashmir_hgt: aw3d30-4.1/kashmir-zero.tif
-	$(call make-hgt-rule,kashmir,Kashmir,$(KASHMIR_TILES))
+# Note: HGT generation macros and rules for foreign regions are now in
+# regions/common.mk and regions/<region>.mk files
 
 
-aw3d30-%/fujisan-nodata0.tif: aw3d30-%/ALPSMLC30_N034E138_DSM.tif aw3d30-%/ALPSMLC30_N034E139_DSM.tif aw3d30-%/ALPSMLC30_N035E138_DSM.tif aw3d30-%/ALPSMLC30_N035E139_DSM.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata 0 \
-		$^ \
-		$@
-
-
-aw3d30-%/nikko_oze-nodata0.tif: aw3d30-%/ALPSMLC30_N036E138_DSM.tif aw3d30-%/ALPSMLC30_N036E139_DSM.tif aw3d30-%/ALPSMLC30_N036E140_DSM.tif aw3d30-%/ALPSMLC30_N037E138_DSM.tif aw3d30-%/ALPSMLC30_N037E139_DSM.tif aw3d30-%/ALPSMLC30_N037E140_DSM.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata 0 \
-		$^ \
-		$@
-
-
-aw3d30-%/kumano_kodo-nodata0.tif: aw3d30-%/ALPSMLC30_N033E135_DSM.tif aw3d30-%/ALPSMLC30_N033E136_DSM.tif aw3d30-%/ALPSMLC30_N034E135_DSM.tif aw3d30-%/ALPSMLC30_N034E136_DSM.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata 0 \
-		$^ \
-		$@
-
-
-aw3d30-%/annapurna-nodata0.tif: aw3d30-%/ALPSMLC30_N028E083_DSM.tif aw3d30-%/ALPSMLC30_N028E084_DSM.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata 0 \
-		$^ \
-		$@
-
-
-aw3d30-%/kashmir-nodata0.tif: aw3d30-%/ALPSMLC30_N034E074_DSM.tif aw3d30-%/ALPSMLC30_N034E075_DSM.tif
-	rm -f $@
-	gdalwarp \
-		$(OUTPUTS) \
-		-dstnodata 0 \
-		$^ \
-		$@
+# Note: Foreign region nodata0.tif rules are now generated by
+# the define-foreign-region macro in regions/<region>.mk files
 
 
 OUTPUTS=-ot Float64 -co compress=LZW -of GTiff
@@ -232,139 +138,18 @@ land-polygons/.unzip: land-polygons/land-polygons-split-4326.7z.001
 		7z x land-polygons-split-4326.7z.001
 	touch $@
 
-land-polygons/fujisan-sealand.pbf: land-polygons/.unzip
-	./tools/sealand-creator.sh -l 138.15 -r 139.55 -b 34.30 -t 35.95 -n fujisan
+# Note: Foreign region sealand rules are now generated by
+# the define-foreign-region macro in regions/<region>.mk files
 
-land-polygons/nikko_oze-sealand.pbf: land-polygons/.unzip
-	./tools/sealand-creator.sh -l 138.68 -r 139.86 -b 36.50 -t 37.47 -n nikko_oze
-
-land-polygons/kumano_kodo-sealand.pbf: land-polygons/.unzip
-	./tools/sealand-creator.sh -l 135.0 -r 137.0 -b 33.0 -t 35.0 -n kumano_kodo
-
+# Taiwan sealand (not a foreign region)
 land-polygons/taiwan-sealand.pbf: land-polygons/.unzip
 	./tools/sealand-creator.sh -l 118.0000 -r 123.0348 -b 20.62439 -t 26.70665 -n taiwan
-
-land-polygons/annapurna-sealand.pbf: land-polygons/.unzip
-	./tools/sealand-creator.sh -l 83.0 -r 85.0 -b 28.0 -t 29.0 -n annapurna
-
-land-polygons/kashmir-sealand.pbf: land-polygons/.unzip
-	./tools/sealand-creator.sh -l 74.5 -r 75.5 -b 34.0 -t 34.75 -n kashmir
 
 ##
 ## Outputs
 ##
-ele_fujisan_10_100_500.pbf: \
-  land-polygons/fujisan-sealand.pbf \
-  aw3d30-4.1/fujisan-pygm_10_100_500.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
-		$^
-
-
-ele_fujisan_10_100_500_mix.pbf: \
-  land-polygons/fujisan-sealand.pbf \
-  aw3d30-4.1/fujisan-pygm_10_50_100_500.pbf \
-  aw3d30-4.1/fujisan-marker-pygms.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
-		$^
-
-
-ele_nikko_oze_10_100_500.pbf: \
-  land-polygons/nikko_oze-sealand.pbf \
-  aw3d30-4.1/nikko_oze-pygm_10_100_500.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
-		$^
-
-
-ele_nikko_oze_10_100_500_mix.pbf: \
-  land-polygons/nikko_oze-sealand.pbf \
-  aw3d30-4.1/nikko_oze-pygm_10_50_100_500.pbf \
-  aw3d30-4.1/nikko_oze-marker-pygms.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
-		$^
-
-
-ele_kumano_kodo_10_100_500.pbf: \
-  land-polygons/kumano_kodo-sealand.pbf \
-  aw3d30-4.1/kumano_kodo-pygm_10_100_500.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
-		$^
-
-
-ele_kumano_kodo_10_100_500_mix.pbf: \
-  land-polygons/kumano_kodo-sealand.pbf \
-  aw3d30-4.1/kumano_kodo-pygm_10_50_100_500.pbf \
-  aw3d30-4.1/kumano_kodo-marker-pygms.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
-		$^
-
-ele_annapurna_10_100_500.pbf: \
-  land-polygons/annapurna-sealand.pbf \
-  aw3d30-4.1/annapurna-pygm_10_100_500.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
-		$^
-
-
-ele_annapurna_10_100_500_mix.pbf: \
-  land-polygons/annapurna-sealand.pbf \
-  aw3d30-4.1/annapurna-pygm_10_50_100_500.pbf \
-  aw3d30-4.1/annapurna-marker-pygms.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
-		$^
-
-
-ele_kashmir_10_100_500.pbf: \
-  land-polygons/kashmir-sealand.pbf \
-  aw3d30-4.1/kashmir-pygm_10_100_500.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
-		$^
-
-
-ele_kashmir_10_100_500_mix.pbf: \
-  land-polygons/kashmir-sealand.pbf \
-  aw3d30-4.1/kashmir-pygm_10_50_100_500.pbf \
-  aw3d30-4.1/kashmir-marker-pygms.pbf
-	# combines all dependences
-	./tools/combine.sh \
-		$@ \
-		1 \
-		1 \
-		$^
+# Note: Foreign region output rules (ele_*_10_100_500.pbf, ele_*_10_100_500_mix.pbf)
+# are now generated by the define-foreign-region macro in regions/<region>.mk files
 
 
 .PHONY: taiwan-contour-2025
