@@ -233,10 +233,10 @@ land-polygons/.unzip: land-polygons/land-polygons-split-4326.7z.001
 	touch $@
 
 land-polygons/fujisan-sealand.pbf: land-polygons/.unzip
-	./tools/sealand-creator.sh -l 138.0 -r 140.0 -b 34.0 -t 36.0 -n fujisan
+	./tools/sealand-creator.sh -l 138.15 -r 139.55 -b 34.30 -t 35.95 -n fujisan
 
 land-polygons/nikko_oze-sealand.pbf: land-polygons/.unzip
-	./tools/sealand-creator.sh -l 138.0 -r 141.0 -b 36.0 -t 38.0 -n nikko_oze
+	./tools/sealand-creator.sh -l 138.68 -r 139.86 -b 36.50 -t 37.47 -n nikko_oze
 
 land-polygons/kumano_kodo-sealand.pbf: land-polygons/.unzip
 	./tools/sealand-creator.sh -l 135.0 -r 137.0 -b 33.0 -t 35.0 -n kumano_kodo
@@ -248,7 +248,7 @@ land-polygons/annapurna-sealand.pbf: land-polygons/.unzip
 	./tools/sealand-creator.sh -l 83.0 -r 85.0 -b 28.0 -t 29.0 -n annapurna
 
 land-polygons/kashmir-sealand.pbf: land-polygons/.unzip
-	./tools/sealand-creator.sh -l 74.0 -r 76.0 -b 34.0 -t 35.0 -n kashmir
+	./tools/sealand-creator.sh -l 74.5 -r 75.5 -b 34.0 -t 34.75 -n kashmir
 
 ##
 ## Outputs
