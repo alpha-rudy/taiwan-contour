@@ -26,22 +26,22 @@
 #       $(call make-hgt-rule,fujisan,Fujisan,$(FUJISAN_TILES))
 ##############################################################################
 define make-hgt-rule
-    rm -rf aw3d30-4.1/input aw3d30-4.1/output
-    mkdir -p aw3d30-4.1/input aw3d30-4.1/output
-    cd aw3d30-4.1/input && $(foreach tile,$(3),ln -sf ../$(1)-zero.tif $(tile) && ) true
-    cd aw3d30-4.1/ && \
-        ../tools/aw3d2srtm30.sh && \
+    rm -rf aw3d30-4.1/$(1)/input aw3d30-4.1/$(1)/output
+    mkdir -p aw3d30-4.1/$(1)/input aw3d30-4.1/$(1)/output
+    cd aw3d30-4.1/$(1)/input && $(foreach tile,$(3),ln -sf ../$(1)-zero.tif $(tile) && ) true
+    cd aw3d30-4.1/$(1) && \
+        ../../tools/aw3d2srtm30.sh && \
         echo '# $(2) HGT 30m' > output/VERSION
-    cd aw3d30-4.1/output && \
-        7z a -tzip ../$(1)_hgtmix.zip *.hgt VERSION && \
+    cd aw3d30-4.1/$(1)/output && \
+        7z a -tzip ../../$(1)_hgtmix.zip *.hgt VERSION && \
         rm *
-    cd aw3d30-4.1/ && \
-        ../tools/aw3d2srtm90.sh && \
+    cd aw3d30-4.1/$(1) && \
+        ../../tools/aw3d2srtm90.sh && \
         echo '# $(2) HGT 90m' > output/VERSION
-    cd aw3d30-4.1/output && \
-        7z a -tzip ../$(1)_hgt90.zip *.hgt VERSION && \
+    cd aw3d30-4.1/$(1)/output && \
+        7z a -tzip ../../$(1)_hgt90.zip *.hgt VERSION && \
         rm *
-    rm -rf aw3d30-4.1/input aw3d30-4.1/output
+    rm -rf aw3d30-4.1/$(1)/input aw3d30-4.1/$(1)/output
     touch $@
 endef
 
@@ -116,21 +116,27 @@ $(1)-contour-mix: ele_$(1)_10_100_500_mix.pbf
 ele_$(1)_10_100_500.pbf: \
   land-polygons/$(1)-sealand.pbf \
   aw3d30-4.1/$(1)-pygm_10_100_500.pbf
+	rm -f tmp-$$@ 
 	./tools/combine.sh \
-		$$@ \
+		tmp-$$@ \
 		1 \
 		1 \
 		$$^
+	osmconvert tmp-$$@ -b=$(2),$(4),$(3),$(5) --complete-ways --complete-multipolygons --complete-boundaries --drop-broken-refs -o=$$@
+	rm tmp-$$@
 
 ele_$(1)_10_100_500_mix.pbf: \
   land-polygons/$(1)-sealand.pbf \
   aw3d30-4.1/$(1)-pygm_10_50_100_500.pbf \
   aw3d30-4.1/$(1)-marker-pygms.pbf
+	rm -f tmp-$$@ 
 	./tools/combine.sh \
-		$$@ \
+		tmp-$$@ \
 		1 \
 		1 \
 		$$^
+	osmconvert tmp-$$@ -b=$(2),$(4),$(3),$(5) --complete-ways --complete-multipolygons --complete-boundaries --drop-broken-refs -o=$$@
+	rm tmp-$$@
 endef
 
 
