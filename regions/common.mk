@@ -122,7 +122,7 @@ ele_$(1)_10_100_500.pbf: \
 		1 \
 		1 \
 		$$^
-	osmconvert tmp-$$@ -b=$(2),$(4),$(3),$(5) --complete-ways --complete-multipolygons --complete-boundaries -o=$$@
+	osmconvert tmp-$$@ -b=$(2),$(4),$(3),$(5) --complete-ways --complete-multipolygons --complete-boundaries --drop-broken-refs -o=$$@
 	rm tmp-$$@
 
 ele_$(1)_10_100_500_mix.pbf: \
@@ -135,7 +135,7 @@ ele_$(1)_10_100_500_mix.pbf: \
 		1 \
 		1 \
 		$$^
-	osmconvert tmp-$$@ -b=$(2),$(4),$(3),$(5) --complete-ways --complete-multipolygons --complete-boundaries -o=$$@
+	osmconvert tmp-$$@ -b=$(2),$(4),$(3),$(5) --complete-ways --complete-multipolygons --complete-boundaries --drop-broken-refs -o=$$@
 	rm tmp-$$@
 endef
 
