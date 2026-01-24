@@ -28,7 +28,7 @@
 define make-hgt-rule
     rm -rf aw3d30-4.1/$(1)/input aw3d30-4.1/$(1)/output
     mkdir -p aw3d30-4.1/$(1)/input aw3d30-4.1/$(1)/output
-    cd aw3d30-4.1/$(1)/input && $(foreach tile,$(3),ln -sf ../$(1)-zero.tif $(tile) && ) true
+    cd aw3d30-4.1/$(1)/input && $(foreach tile,$(3),ln -sf ../../$(1)-zero.tif $(tile) && ) true
     cd aw3d30-4.1/$(1) && \
         ../../tools/aw3d2srtm30.sh && \
         echo '# $(2) HGT 30m' > output/VERSION
