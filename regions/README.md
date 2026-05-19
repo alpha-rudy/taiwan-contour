@@ -101,7 +101,8 @@ taiwan-contour/
 │   ├── nikko_oze.mk      # Nikko-Oze region
 │   ├── kumano_kodo.mk    # Kumano Kodo region
 │   ├── annapurna.mk      # Annapurna region
-│   └── kashmir.mk        # Kashmir region
+│   ├── kashmir.mk        # Kashmir region
+│   └── elbrus.mk         # Elbrus region
 ├── aw3d30-4.1/           # ALOS source tiles and outputs
 ├── land-polygons/        # Sea/land boundary data
 └── tools/                # Processing scripts
