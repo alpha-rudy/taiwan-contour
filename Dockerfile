@@ -49,7 +49,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install --no-cache-dir --break-system-packages \
     osmium \
     ogr2osm \
-    pyhgtmap[geotiff] \
+    "pyhgtmap[geotiff]==4.1" \
     numpy
 
 # Create builder user with sudo permissions
