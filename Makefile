@@ -26,6 +26,10 @@ include regions/kumano_kodo.mk
 include regions/annapurna.mk
 include regions/kashmir.mk
 include regions/elbrus.mk
+include regions/alps_core.mk
+include regions/alps_eastern.mk
+include regions/alps_pyrenees.mk
+include regions/alps_julian.mk
 
 ##############################################################################
 # Main Targets
