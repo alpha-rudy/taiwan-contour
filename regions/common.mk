@@ -103,6 +103,27 @@ endef
 
 
 ##############################################################################
+# Macro: define-inland-region-sealand
+# Define sea/land boundary generation for an INLAND foreign region using
+# a fine grid of rectangular nosea tiles (no land polygon shapefile needed).
+# The entire bounding box is covered with small tiles so mapsforge renders
+# the area as land without the rendering artifacts caused by large rectangles.
+#
+# Parameters:
+#   $(1) - region_name: The identifier for the region
+#   $(2) - left_lon: Left boundary longitude
+#   $(3) - right_lon: Right boundary longitude
+#   $(4) - bottom_lat: Bottom boundary latitude
+#   $(5) - top_lat: Top boundary latitude
+##############################################################################
+define define-inland-region-sealand
+$(LAND_POLYGONS_DIR)/$(1)-sealand.pbf:
+	mkdir -p $(LAND_POLYGONS_DIR)
+	./tools/sealand-creator.sh -l $(2) -r $(3) -b $(4) -t $(5) -n $(1) -g 0.1
+endef
+
+
+##############################################################################
 # Macro: define-coastal-region-outputs
 # Define final PBF output targets for a COASTAL foreign region
 # (has actual sea within bounding box, e.g. Japan coast, Mediterranean)
@@ -150,7 +171,9 @@ endef
 # Define final PBF output targets for an INLAND foreign region
 # (no sea within bounding box, e.g. Elbrus, Annapurna, Alps core)
 # - Standard pbf: no sealand (mkgmap adds its own sea/bound)
-# - Mix pbf:      no sealand (rectangular nosea tiles break mapsforge rendering)
+# - Mix pbf:      fine-grid sealand (0.1° nosea tiles cover entire bbox so
+#                 mapsforge renders land correctly without rendering artifacts
+#                 caused by large rectangular nosea polygons)
 #
 # Parameters:
 #   $(1) - region_name: The identifier for the region
@@ -174,6 +197,7 @@ ele_$(1)_10_100_500.pbf: \
 	rm tmp-$$@
 
 ele_$(1)_10_100_500_mix.pbf: \
+  $(LAND_POLYGONS_DIR)/$(1)-sealand.pbf \
   aw3d30-4.1/$(1)-pygm_10_50_100_500.pbf \
   aw3d30-4.1/$(1)-marker-pygms.pbf
 	rm -f tmp-$$@

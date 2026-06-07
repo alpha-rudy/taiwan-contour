@@ -40,4 +40,5 @@ KASHMIR_BBOX_TOP    := 34.75
 $(eval $(call define-foreign-region-all,$(KASHMIR_REGION)))
 $(eval $(call define-foreign-region-hgt,$(KASHMIR_REGION),$(KASHMIR_DISPLAY_NAME),$(KASHMIR_TILES)))
 $(eval $(call define-foreign-region-nodata,$(KASHMIR_REGION),$(KASHMIR_ALPSMLC_TILES)))
+$(eval $(call define-inland-region-sealand,$(KASHMIR_REGION),$(KASHMIR_BBOX_LEFT),$(KASHMIR_BBOX_RIGHT),$(KASHMIR_BBOX_BOTTOM),$(KASHMIR_BBOX_TOP)))
 $(eval $(call define-inland-region-outputs,$(KASHMIR_REGION),$(KASHMIR_BBOX_LEFT),$(KASHMIR_BBOX_RIGHT),$(KASHMIR_BBOX_BOTTOM),$(KASHMIR_BBOX_TOP)))

@@ -19,7 +19,7 @@
 # ======================================================================
 
 print_usage() {
-  echo "Usage: $0 -l LEFT -r RIGHT -b BOTTOM -t TOP [-n NAME] [-o OUTPUT_PATH]"
+  echo "Usage: $0 -l LEFT -r RIGHT -b BOTTOM -t TOP [-n NAME] [-o OUTPUT_PATH] [-g GRID_SIZE]"
   echo ""
   echo "Required arguments:"
   echo "  -l LEFT     Left longitude (min longitude)"
@@ -30,8 +30,12 @@ print_usage() {
   echo "Optional arguments:"
   echo "  -n NAME     Output file name prefix (default: sealand)"
   echo "  -o OUTPUT   Output directory path (default: $OUTPUT_PATH)"
+  echo "  -g GRID     Grid size in degrees for inland fine-grid nosea tiles (e.g. 0.1)"
+  echo "              When set, skips land polygon shapefile and covers entire bbox"
+  echo "              with small rectangular nosea tiles of the given size."
   echo ""
   echo "Example: $0 -l -74.3 -r -73.7 -b 40.5 -t 40.9 -n newyork"
+  echo "Example: $0 -l 41.89 -r 43.81 -b 43.09 -t 43.76 -n elbrus -g 0.1"
   exit 1
 }
 
@@ -42,8 +46,9 @@ RIGHT=""
 BOTTOM=""
 TOP=""
 NAME="sealand"
+GRID=""
 
-while getopts "l:r:b:t:n:o:h" opt; do
+while getopts "l:r:b:t:n:o:g:h" opt; do
   case $opt in
     l) LEFT="$OPTARG" ;;
     r) RIGHT="$OPTARG" ;;
@@ -51,6 +56,7 @@ while getopts "l:r:b:t:n:o:h" opt; do
     t) TOP="$OPTARG" ;;
     n) NAME="$OPTARG" ;;
     o) OUTPUT_PATH="$OPTARG" ;;
+    g) GRID="$OPTARG" ;;
     h) print_usage ;;
     *) print_usage ;;
   esac
@@ -95,54 +101,75 @@ mkdir -p "$OUTPUT_PATH"
 
 # ========== Land (nosea) ==========
 
-echo "Processing land polygons..."
+if [ -n "$GRID" ]; then
+  echo "Generating fine-grid nosea tiles (grid=${GRID}°)..."
+  python3 - "$LEFT" "$RIGHT" "$BOTTOM" "$TOP" "$GRID" "$WORK_PATH/land000.osm" << 'PYEOF'
+import sys
+left, right, bottom, top = float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4])
+grid = float(sys.argv[5])
+output = sys.argv[6]
 
-# Download land
+node_id = 1000000000
+way_id  = 2000000000
+nodes, ways = [], []
 
-# if [ -f "$DATA_PATH/land-polygons-split-4326/land_polygons.shp" ] && [ $(find "$DATA_PATH/land-polygons-split-4326/land_polygons.shp" -mtime -$DAYS) ]; then
-#   echo "Land polygons exist and are newer than $DAYS days."
-# else
-#   echo "Downloading land polygons..."
-#   rm -rf "$DATA_PATH/land-polygons-split-4326"
-#   rm -f "$DATA_PATH/land-polygons-split-4326.zip"
-#   wget -nv -N -P "$DATA_PATH" https://osmdata.openstreetmap.de/download/land-polygons-split-4326.zip || exit 1
-#   unzip -oq "$DATA_PATH/land-polygons-split-4326.zip" -d "$DATA_PATH"
-#   rm -f "$DATA_PATH/land-polygons-split-4326.zip"
-# fi
+lon = left
+while lon < right - 1e-9:
+    lon_end = min(lon + grid, right)
+    lat = bottom
+    while lat < top - 1e-9:
+        lat_end = min(lat + grid, top)
+        n = [node_id + i for i in range(4)]
+        node_id += 4
+        coords = [(lat, lon), (lat, lon_end), (lat_end, lon_end), (lat_end, lon)]
+        for i, (la, lo) in enumerate(coords):
+            nodes.append(f'  <node id="{n[i]}" lat="{la}" lon="{lo}" version="1" timestamp="1970-01-01T00:00:00Z"/>')
+        ways.append(f'  <way id="{way_id}" version="1" timestamp="1970-01-01T00:00:00Z">')
+        for ref in n + [n[0]]:
+            ways.append(f'    <nd ref="{ref}"/>')
+        ways.append('    <tag k="area" v="yes"/><tag k="layer" v="-5"/><tag k="natural" v="nosea"/>')
+        ways.append('  </way>')
+        way_id += 1
+        lat = round(lat + grid, 10)
+    lon = round(lon + grid, 10)
 
-# Land (nosea) - clip land polygons to bounding box and convert to OSM
+with open(output, 'w') as f:
+    f.write('<?xml version="1.0" encoding="UTF-8"?>\n<osm version="0.6">\n')
+    for line in nodes + ways:
+        f.write(line + '\n')
+    f.write('</osm>\n')
+print(f"Generated {way_id - 2000000000} nosea tiles")
+PYEOF
 
-ogr2ogr -overwrite -progress -skipfailures -clipsrc $LEFT $BOTTOM $RIGHT $TOP "$WORK_PATH/land.shp" "$DATA_PATH/land-polygons-split-4326/land_polygons.shp"
-python3 shape2osm.py -l "$WORK_PATH/land" "$WORK_PATH/land.shp"
+else
+  echo "Processing land polygons..."
 
-# Merge all land OSM files into one nosea file
-if ls $WORK_PATH/land*.osm 1> /dev/null 2>&1; then
-  # If there's only one land file, copy it directly
-  LAND_COUNT=$(ls -1 $WORK_PATH/land*.osm 2>/dev/null | wc -l)
-  if [ "$LAND_COUNT" -eq 1 ]; then
-    cp $WORK_PATH/land*.osm "$OUTPUT_PATH/$NAME-nosea.osm"
+  # Land (nosea) - clip land polygons to bounding box and convert to OSM
+
+  ogr2ogr -overwrite -progress -skipfailures -clipsrc $LEFT $BOTTOM $RIGHT $TOP "$WORK_PATH/land.shp" "$DATA_PATH/land-polygons-split-4326/land_polygons.shp"
+  python3 shape2osm.py -l "$WORK_PATH/land" "$WORK_PATH/land.shp"
+
+  # Merge all land OSM files into one nosea file
+  if ls $WORK_PATH/land*.osm 1> /dev/null 2>&1; then
+    LAND_COUNT=$(ls -1 $WORK_PATH/land*.osm 2>/dev/null | wc -l)
+    if [ "$LAND_COUNT" -eq 1 ]; then
+      cp $WORK_PATH/land*.osm "$OUTPUT_PATH/$NAME-nosea.osm"
+    else
+      echo '<?xml version="1.0" encoding="UTF-8"?>' > "$OUTPUT_PATH/$NAME-nosea.osm"
+      echo '<osm version="0.6">' >> "$OUTPUT_PATH/$NAME-nosea.osm"
+      for f in $WORK_PATH/land*.osm; do
+        grep -v '<?xml' "$f" | grep -v '<osm' | grep -v '</osm>' >> "$OUTPUT_PATH/$NAME-nosea.osm"
+      done
+      echo '</osm>' >> "$OUTPUT_PATH/$NAME-nosea.osm"
+    fi
+    echo "Created: $OUTPUT_PATH/$NAME-nosea.osm"
   else
-    # Multiple land files - combine them
-    # Create a header
+    echo "Warning: No land polygons found in the specified bounding box."
     echo '<?xml version="1.0" encoding="UTF-8"?>' > "$OUTPUT_PATH/$NAME-nosea.osm"
     echo '<osm version="0.6">' >> "$OUTPUT_PATH/$NAME-nosea.osm"
-    
-    # Extract content from each land file (excluding headers and closing tags)
-    for f in $WORK_PATH/land*.osm; do
-      # Skip the XML header and osm opening/closing tags
-      grep -v '<?xml' "$f" | grep -v '<osm' | grep -v '</osm>' >> "$OUTPUT_PATH/$NAME-nosea.osm"
-    done
-    
     echo '</osm>' >> "$OUTPUT_PATH/$NAME-nosea.osm"
+    echo "Created empty: $OUTPUT_PATH/$NAME-nosea.osm"
   fi
-  echo "Created: $OUTPUT_PATH/$NAME-nosea.osm"
-else
-  echo "Warning: No land polygons found in the specified bounding box."
-  # Create an empty OSM file
-  echo '<?xml version="1.0" encoding="UTF-8"?>' > "$OUTPUT_PATH/$NAME-nosea.osm"
-  echo '<osm version="0.6">' >> "$OUTPUT_PATH/$NAME-nosea.osm"
-  echo '</osm>' >> "$OUTPUT_PATH/$NAME-nosea.osm"
-  echo "Created empty: $OUTPUT_PATH/$NAME-nosea.osm"
 fi
 
 # ========== Sea ==========

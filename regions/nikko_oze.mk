@@ -48,4 +48,5 @@ NIKKO_OZE_BBOX_TOP    := 37.47
 $(eval $(call define-foreign-region-all,$(NIKKO_OZE_REGION)))
 $(eval $(call define-foreign-region-hgt,$(NIKKO_OZE_REGION),$(NIKKO_OZE_DISPLAY_NAME),$(NIKKO_OZE_TILES)))
 $(eval $(call define-foreign-region-nodata,$(NIKKO_OZE_REGION),$(NIKKO_OZE_ALPSMLC_TILES)))
+$(eval $(call define-inland-region-sealand,$(NIKKO_OZE_REGION),$(NIKKO_OZE_BBOX_LEFT),$(NIKKO_OZE_BBOX_RIGHT),$(NIKKO_OZE_BBOX_BOTTOM),$(NIKKO_OZE_BBOX_TOP)))
 $(eval $(call define-inland-region-outputs,$(NIKKO_OZE_REGION),$(NIKKO_OZE_BBOX_LEFT),$(NIKKO_OZE_BBOX_RIGHT),$(NIKKO_OZE_BBOX_BOTTOM),$(NIKKO_OZE_BBOX_TOP)))

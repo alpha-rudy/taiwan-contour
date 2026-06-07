@@ -42,4 +42,5 @@ ELBRUS_BBOX_TOP    := 43.76
 $(eval $(call define-foreign-region-all,$(ELBRUS_REGION)))
 $(eval $(call define-foreign-region-hgt,$(ELBRUS_REGION),$(ELBRUS_DISPLAY_NAME),$(ELBRUS_TILES)))
 $(eval $(call define-foreign-region-nodata,$(ELBRUS_REGION),$(ELBRUS_ALPSMLC_TILES)))
+$(eval $(call define-inland-region-sealand,$(ELBRUS_REGION),$(ELBRUS_BBOX_LEFT),$(ELBRUS_BBOX_RIGHT),$(ELBRUS_BBOX_BOTTOM),$(ELBRUS_BBOX_TOP)))
 $(eval $(call define-inland-region-outputs,$(ELBRUS_REGION),$(ELBRUS_BBOX_LEFT),$(ELBRUS_BBOX_RIGHT),$(ELBRUS_BBOX_BOTTOM),$(ELBRUS_BBOX_TOP)))

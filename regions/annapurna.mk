@@ -40,4 +40,5 @@ ANNAPURNA_BBOX_TOP    := 29.0
 $(eval $(call define-foreign-region-all,$(ANNAPURNA_REGION)))
 $(eval $(call define-foreign-region-hgt,$(ANNAPURNA_REGION),$(ANNAPURNA_DISPLAY_NAME),$(ANNAPURNA_TILES)))
 $(eval $(call define-foreign-region-nodata,$(ANNAPURNA_REGION),$(ANNAPURNA_ALPSMLC_TILES)))
+$(eval $(call define-inland-region-sealand,$(ANNAPURNA_REGION),$(ANNAPURNA_BBOX_LEFT),$(ANNAPURNA_BBOX_RIGHT),$(ANNAPURNA_BBOX_BOTTOM),$(ANNAPURNA_BBOX_TOP)))
 $(eval $(call define-inland-region-outputs,$(ANNAPURNA_REGION),$(ANNAPURNA_BBOX_LEFT),$(ANNAPURNA_BBOX_RIGHT),$(ANNAPURNA_BBOX_BOTTOM),$(ANNAPURNA_BBOX_TOP)))
