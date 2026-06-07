@@ -6,6 +6,8 @@
 # Usage in region file:
 #   include regions/common.mk
 
+LAND_POLYGONS_DIR ?= downloads/land-polygons
+
 
 ##############################################################################
 # Macro: make-hgt-rule
@@ -95,7 +97,7 @@ endef
 #   $(5) - top_lat: Top boundary latitude
 ##############################################################################
 define define-foreign-region-sealand
-land-polygons/$(1)-sealand.pbf: land-polygons/.unzip
+$(LAND_POLYGONS_DIR)/$(1)-sealand.pbf: $(LAND_POLYGONS_DIR)/.unzip
 	./tools/sealand-creator.sh -l $(2) -r $(3) -b $(4) -t $(5) -n $(1)
 endef
 
@@ -129,7 +131,7 @@ ele_$(1)_10_100_500.pbf: \
 	rm tmp-$$@
 
 ele_$(1)_10_100_500_mix.pbf: \
-  land-polygons/$(1)-sealand.pbf \
+  $(LAND_POLYGONS_DIR)/$(1)-sealand.pbf \
   aw3d30-4.1/$(1)-pygm_10_50_100_500.pbf \
   aw3d30-4.1/$(1)-marker-pygms.pbf
 	rm -f tmp-$$@

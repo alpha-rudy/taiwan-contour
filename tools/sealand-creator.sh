@@ -8,8 +8,8 @@
 # Configuration
 
 [ $OSMOSIS_HOME ] || OSMOSIS_HOME="$PWD/tools/osmosis"
-[ $DATA_PATH ] || DATA_PATH="$PWD/land-polygons"
-[ $OUTPUT_PATH ] || OUTPUT_PATH="$PWD/land-polygons"
+[ $DATA_PATH ] || DATA_PATH="$PWD/downloads/land-polygons"
+[ $OUTPUT_PATH ] || OUTPUT_PATH="$PWD/downloads/land-polygons"
 
 [ $DAYS ] || DAYS="30"
 
