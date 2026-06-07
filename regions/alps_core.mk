@@ -52,5 +52,4 @@ ALPS_CORE_BBOX_TOP    := 47.0
 $(eval $(call define-foreign-region-all,$(ALPS_CORE_REGION)))
 $(eval $(call define-foreign-region-hgt,$(ALPS_CORE_REGION),$(ALPS_CORE_DISPLAY_NAME),$(ALPS_CORE_TILES)))
 $(eval $(call define-foreign-region-nodata,$(ALPS_CORE_REGION),$(ALPS_CORE_ALPSMLC_TILES)))
-$(eval $(call define-foreign-region-sealand,$(ALPS_CORE_REGION),$(ALPS_CORE_BBOX_LEFT),$(ALPS_CORE_BBOX_RIGHT),$(ALPS_CORE_BBOX_BOTTOM),$(ALPS_CORE_BBOX_TOP)))
-$(eval $(call define-foreign-region-outputs,$(ALPS_CORE_REGION),$(ALPS_CORE_BBOX_LEFT),$(ALPS_CORE_BBOX_RIGHT),$(ALPS_CORE_BBOX_BOTTOM),$(ALPS_CORE_BBOX_TOP)))
+$(eval $(call define-inland-region-outputs,$(ALPS_CORE_REGION),$(ALPS_CORE_BBOX_LEFT),$(ALPS_CORE_BBOX_RIGHT),$(ALPS_CORE_BBOX_BOTTOM),$(ALPS_CORE_BBOX_TOP)))

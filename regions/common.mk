@@ -101,22 +101,25 @@ endef
 
 
 ##############################################################################
-# Macro: define-foreign-region-outputs
-# Define final PBF output targets for a foreign region
+# Macro: define-coastal-region-outputs
+# Define final PBF output targets for a COASTAL foreign region
+# (has actual sea within bounding box, e.g. Japan coast, Mediterranean)
+# - Standard pbf: no sealand (mkgmap adds its own sea/bound)
+# - Mix pbf:      with sealand (mapsforge needs it for ocean rendering)
 #
 # Parameters:
 #   $(1) - region_name: The identifier for the region
+#   $(2) - left_lon, $(3) - right_lon, $(4) - bottom_lat, $(5) - top_lat
 ##############################################################################
-define define-foreign-region-outputs
+define define-coastal-region-outputs
 .PHONY: $(1)-contour $(1)-contour-mix
 
 $(1)-contour: ele_$(1)_10_100_500.pbf
 $(1)-contour-mix: ele_$(1)_10_100_500_mix.pbf
 
 ele_$(1)_10_100_500.pbf: \
-  land-polygons/$(1)-sealand.pbf \
   aw3d30-4.1/$(1)-pygm_10_100_500.pbf
-	rm -f tmp-$$@ 
+	rm -f tmp-$$@
 	./tools/combine.sh \
 		tmp-$$@ \
 		1 \
@@ -129,7 +132,49 @@ ele_$(1)_10_100_500_mix.pbf: \
   land-polygons/$(1)-sealand.pbf \
   aw3d30-4.1/$(1)-pygm_10_50_100_500.pbf \
   aw3d30-4.1/$(1)-marker-pygms.pbf
-	rm -f tmp-$$@ 
+	rm -f tmp-$$@
+	./tools/combine.sh \
+		tmp-$$@ \
+		1 \
+		1 \
+		$$^
+	osmconvert tmp-$$@ -b=$(2),$(4),$(3),$(5) --complete-ways --complete-multipolygons --complete-boundaries --drop-broken-refs -o=$$@
+	rm tmp-$$@
+endef
+
+
+##############################################################################
+# Macro: define-inland-region-outputs
+# Define final PBF output targets for an INLAND foreign region
+# (no sea within bounding box, e.g. Elbrus, Annapurna, Alps core)
+# - Standard pbf: no sealand (mkgmap adds its own sea/bound)
+# - Mix pbf:      no sealand (rectangular nosea tiles break mapsforge rendering)
+#
+# Parameters:
+#   $(1) - region_name: The identifier for the region
+#   $(2) - left_lon, $(3) - right_lon, $(4) - bottom_lat, $(5) - top_lat
+##############################################################################
+define define-inland-region-outputs
+.PHONY: $(1)-contour $(1)-contour-mix
+
+$(1)-contour: ele_$(1)_10_100_500.pbf
+$(1)-contour-mix: ele_$(1)_10_100_500_mix.pbf
+
+ele_$(1)_10_100_500.pbf: \
+  aw3d30-4.1/$(1)-pygm_10_100_500.pbf
+	rm -f tmp-$$@
+	./tools/combine.sh \
+		tmp-$$@ \
+		1 \
+		1 \
+		$$^
+	osmconvert tmp-$$@ -b=$(2),$(4),$(3),$(5) --complete-ways --complete-multipolygons --complete-boundaries --drop-broken-refs -o=$$@
+	rm tmp-$$@
+
+ele_$(1)_10_100_500_mix.pbf: \
+  aw3d30-4.1/$(1)-pygm_10_50_100_500.pbf \
+  aw3d30-4.1/$(1)-marker-pygms.pbf
+	rm -f tmp-$$@
 	./tools/combine.sh \
 		tmp-$$@ \
 		1 \

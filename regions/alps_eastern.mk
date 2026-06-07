@@ -66,5 +66,4 @@ ALPS_EASTERN_BBOX_TOP    := 48.0
 $(eval $(call define-foreign-region-all,$(ALPS_EASTERN_REGION)))
 $(eval $(call define-foreign-region-hgt,$(ALPS_EASTERN_REGION),$(ALPS_EASTERN_DISPLAY_NAME),$(ALPS_EASTERN_TILES)))
 $(eval $(call define-foreign-region-nodata,$(ALPS_EASTERN_REGION),$(ALPS_EASTERN_ALPSMLC_TILES)))
-$(eval $(call define-foreign-region-sealand,$(ALPS_EASTERN_REGION),$(ALPS_EASTERN_BBOX_LEFT),$(ALPS_EASTERN_BBOX_RIGHT),$(ALPS_EASTERN_BBOX_BOTTOM),$(ALPS_EASTERN_BBOX_TOP)))
-$(eval $(call define-foreign-region-outputs,$(ALPS_EASTERN_REGION),$(ALPS_EASTERN_BBOX_LEFT),$(ALPS_EASTERN_BBOX_RIGHT),$(ALPS_EASTERN_BBOX_BOTTOM),$(ALPS_EASTERN_BBOX_TOP)))
+$(eval $(call define-inland-region-outputs,$(ALPS_EASTERN_REGION),$(ALPS_EASTERN_BBOX_LEFT),$(ALPS_EASTERN_BBOX_RIGHT),$(ALPS_EASTERN_BBOX_BOTTOM),$(ALPS_EASTERN_BBOX_TOP)))
