@@ -3,7 +3,7 @@
 # =============================================================================
 #
 # Geographic Coverage:
-#   Latitude:  45.5°N - 48°N
+#   Latitude:  46.8°N - 48°N
 #   Longitude: 9.5°E - 13.5°E
 #
 # Data Source: ALOS AW3D30 v4.1
@@ -22,11 +22,6 @@ ALPS_EASTERN_DISPLAY_NAME := Alps Eastern
 
 # HGT tile definitions (for SRTM output)
 ALPS_EASTERN_TILES := \
-    N045E009_AVE_DSM.tif \
-    N045E010_AVE_DSM.tif \
-    N045E011_AVE_DSM.tif \
-    N045E012_AVE_DSM.tif \
-    N045E013_AVE_DSM.tif \
     N046E009_AVE_DSM.tif \
     N046E010_AVE_DSM.tif \
     N046E011_AVE_DSM.tif \
@@ -40,11 +35,6 @@ ALPS_EASTERN_TILES := \
 
 # ALOS source tiles
 ALPS_EASTERN_ALPSMLC_TILES := \
-    ALPSMLC30_N045E009_DSM.tif \
-    ALPSMLC30_N045E010_DSM.tif \
-    ALPSMLC30_N045E011_DSM.tif \
-    ALPSMLC30_N045E012_DSM.tif \
-    ALPSMLC30_N045E013_DSM.tif \
     ALPSMLC30_N046E009_DSM.tif \
     ALPSMLC30_N046E010_DSM.tif \
     ALPSMLC30_N046E011_DSM.tif \
@@ -59,7 +49,7 @@ ALPS_EASTERN_ALPSMLC_TILES := \
 # Bounding box for sea/land generation
 ALPS_EASTERN_BBOX_LEFT   := 9.5
 ALPS_EASTERN_BBOX_RIGHT  := 13.5
-ALPS_EASTERN_BBOX_BOTTOM := 45.5
+ALPS_EASTERN_BBOX_BOTTOM := 46.8
 ALPS_EASTERN_BBOX_TOP    := 48.0
 
 # Generate all rules using separate macros
