@@ -28,14 +28,13 @@ include regions/kashmir.mk
 include regions/elbrus.mk
 include regions/alps_core.mk
 include regions/alps_eastern.mk
-include regions/alps_pyrenees.mk
-include regions/alps_julian.mk
-include regions/alps_dolomites.mk
+include regions/alps_western.mk
+include regions/alps_fareast.mk
 
 ##############################################################################
 # Main Targets
 ##############################################################################
-.PHONY: all taiwan-all clean
+.PHONY: all taiwan-all clean distclean
 all: taiwan-all kumano_kodo-all annapurna-all kashmir-all
 taiwan-all: taiwan-hgts taiwan-contour taiwan-contour-mix taiwan-lite-contour-mix
 
@@ -45,8 +44,27 @@ taiwan-contour: taiwan-contour-2025
 taiwan-contour-mix: taiwan-contour-mix-2025
 taiwan-lite-contour-mix: taiwan-lite-contour-mix-2025
 
+# Precious untracked paths that clean/distclean must NEVER delete:
+#   /.*  = every top-level hidden file/dir (.claude, .idea, .vscode, .venv, ...)
+#          Build-state markers (.unzip, .*-hgt, moi-2025/.hgt) live in subdirs,
+#          so they are NOT matched here and still get cleaned.
+KEEP_TOOLS := -e '/.*'
+
+# Downloaded source data PRESERVED by `make clean` (re-fetch is expensive):
+#   - /downloads/**/*.zip : OSM land-polygons archive (only true network
+#                           download; its unzipped folder and *-sealand.pbf are
+#                           regenerated, so they are treated as build files)
+#   - *.7z / *.7z.NNN     : source archives (ALOS DSM tiles, MOI DTM data),
+#                           including newly fetched tiles not yet committed to git
+KEEP_DOWNLOADS := -e '/downloads/**/*.zip' -e '*.7z' -e '*.7z.[0-9][0-9][0-9]'
+
+# Remove generated build files; keep tool/config dirs and downloaded source data
 clean:
-	git clean -fdx
+	git clean -fdx $(KEEP_TOOLS) $(KEEP_DOWNLOADS)
+
+# Remove build files AND downloads; still keep tool/config dirs
+distclean:
+	git clean -fdx $(KEEP_TOOLS)
 
 DESTDIR ?= drops
 
