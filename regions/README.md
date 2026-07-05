@@ -104,7 +104,10 @@ taiwan-contour/
 │   ├── kashmir.mk        # Kashmir region
 │   └── elbrus.mk         # Elbrus region
 ├── aw3d30-4.1/           # ALOS source tiles and outputs
-├── land-polygons/        # Sea/land boundary data
+├── downloads/
+│   └── land-polygons/    # Sea/land boundary data; land-polygons-split-4326.zip
+│                         # is wget'd here automatically by `make` (coastal
+│                         # regions only - see define-foreign-region-sealand)
 └── tools/                # Processing scripts
 ```
 
@@ -155,19 +158,10 @@ Create a new file `regions/{your_region}.mk` using this template:
 # Tiles: {list of tile IDs}
 # =============================================================================
 
-# Region identifier (lowercase, underscores allowed)
-{REGION_VAR}_REGION := {region_id}
-{REGION_VAR}_DISPLAY_NAME := {Human Readable Name}
-
-# HGT tile definitions (for SRTM output)
-{REGION_VAR}_TILES := \
-    N{lat1}E{lon1}_AVE_DSM.tif \
-    N{lat2}E{lon2}_AVE_DSM.tif
-
-# ALOS source tiles
-{REGION_VAR}_ALPSMLC_TILES := \
-    ALPSMLC30_N{lat1}E{lon1}_DSM.tif \
-    ALPSMLC30_N{lat2}E{lon2}_DSM.tif
+# Bare tile IDs (NxxxEyyy); the *_AVE_DSM.tif and ALPSMLC30_*_DSM.tif
+# filename lists are derived automatically in regions/common.mk
+{REGION_VAR}_TILE_IDS := \
+    N{lat1}E{lon1} N{lat2}E{lon2}
 
 # Bounding box for sea/land generation
 {REGION_VAR}_BBOX_LEFT   := {left}
@@ -175,13 +169,30 @@ Create a new file `regions/{your_region}.mk` using this template:
 {REGION_VAR}_BBOX_BOTTOM := {bottom}
 {REGION_VAR}_BBOX_TOP    := {top}
 
-# Generate all rules using separate macros
-$(eval $(call define-foreign-region-all,$({REGION_VAR}_REGION)))
-$(eval $(call define-foreign-region-hgt,$({REGION_VAR}_REGION),$({REGION_VAR}_DISPLAY_NAME),$({REGION_VAR}_TILES)))
-$(eval $(call define-foreign-region-nodata,$({REGION_VAR}_REGION),$({REGION_VAR}_ALPSMLC_TILES)))
-$(eval $(call define-foreign-region-sealand,$({REGION_VAR}_REGION),$({REGION_VAR}_BBOX_LEFT),$({REGION_VAR}_BBOX_RIGHT),$({REGION_VAR}_BBOX_BOTTOM),$({REGION_VAR}_BBOX_TOP)))
-$(eval $(call define-foreign-region-outputs,$({REGION_VAR}_REGION)))
+# Generate all rules with a single entry macro. define-region reads
+# {REGION_VAR}_TILE_IDS and {REGION_VAR}_BBOX_* by naming convention.
+# Arguments: (region_id, PREFIX, Display Name, coastal|inland)
+#
+# The 4th argument selects the sealand/outputs behaviour - choose ONE
+# depending on whether your bounding box touches the sea:
+#
+#   coastal - bbox includes real coastline (e.g. Fujisan, Japan coast):
+#             clips the real OSM land-polygon shapefile to your bbox (needs
+#             downloads/land-polygons/, wget'd automatically by `make` - see
+#             Directory Structure above) and builds a mix pbf with those
+#             clipped sealand polygons for ocean rendering.
+#   inland  - bbox is entirely land (e.g. Alps Core, Elbrus, Annapurna):
+#             covers the whole bbox with a fine grid (-g 0.1) of "nosea"
+#             tiles instead of real coastline - no land-polygon download
+#             needed - and builds a mix pbf with those tiles for correct
+#             land rendering.
+$(eval $(call define-region,{region_id},{REGION_VAR},{Human Readable Name},coastal))
 ```
+
+The Display Name may contain spaces (e.g. `Alps Far-Eastern`); do not quote it.
+`define-region` invokes the five lower-level macros for you - you can still call
+them individually (see [Available Macros](#available-macros)) if you need finer
+control.
 
 ### Step 4: Register Your Region
 
@@ -214,14 +225,16 @@ make {region_id}-contour-mix # Contour with markers
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `*_REGION` | Unique region identifier | `fujisan` |
-| `*_DISPLAY_NAME` | Human-readable name for VERSION file | `Fujisan` |
-| `*_TILES` | HGT output tile names | `N034E138_AVE_DSM.tif` |
-| `*_ALPSMLC_TILES` | ALOS input tile names | `ALPSMLC30_N034E138_DSM.tif` |
+| `*_TILE_IDS` | Bare tile IDs covering the region; the `*_AVE_DSM.tif` (HGT) and `ALPSMLC30_*_DSM.tif` (ALOS input) filename lists are derived automatically in `common.mk` | `N034E138 N034E139` |
 | `*_BBOX_LEFT` | West boundary longitude | `138.15` |
 | `*_BBOX_RIGHT` | East boundary longitude | `139.55` |
 | `*_BBOX_BOTTOM` | South boundary latitude | `34.30` |
 | `*_BBOX_TOP` | North boundary latitude | `35.95` |
+
+The region identifier, display name, and coastal/inland type are no longer
+variables - they are passed directly as arguments to `define-region`:
+`$(eval $(call define-region,{region_id},{PREFIX},{Display Name},{coastal|inland}))`.
+The `*` prefix above is the uppercase `{PREFIX}` (e.g. `FUJISAN`, `ALPS_FAREAST`).
 
 ### Generated Targets
 
@@ -240,11 +253,14 @@ The following macros are defined in `common.mk`:
 
 | Macro | Purpose |
 |-------|---------|
+| `define-region` | **Primary entry point.** Derives the tile filename lists from `*_TILE_IDS` and invokes all five macros below. Signature: `(region_id, PREFIX, Display Name, coastal\|inland)`. `coastal` selects `define-foreign-region-sealand` + `define-coastal-region-outputs`; `inland` selects `define-inland-region-sealand` + `define-inland-region-outputs` |
 | `define-foreign-region-all` | Defines the `{region}-all` target |
 | `define-foreign-region-hgt` | Defines HGT generation rules |
 | `define-foreign-region-nodata` | Defines the nodata0.tif merge rule |
-| `define-foreign-region-sealand` | Defines sea/land boundary generation |
-| `define-foreign-region-outputs` | Defines final PBF output targets |
+| `define-foreign-region-sealand` | COASTAL: clips the real OSM land-polygon shapefile to the bbox |
+| `define-inland-region-sealand` | INLAND: covers the bbox with a fine grid (`-g 0.1`) of nosea tiles, no land-polygon download needed |
+| `define-coastal-region-outputs` | COASTAL: defines final PBF output targets (contour + sealand-clipped mix) |
+| `define-inland-region-outputs` | INLAND: defines final PBF output targets (contour + fine-grid-sealand mix) |
 | `make-hgt-rule` | Internal macro for HGT generation (used by `define-foreign-region-hgt`) |
 
 ---
@@ -276,16 +292,8 @@ Create `regions/rainier.mk`:
 # Tiles: N046W122, N046W121
 # =============================================================================
 
-RAINIER_REGION := rainier
-RAINIER_DISPLAY_NAME := Mount Rainier
-
-RAINIER_TILES := \
-    N046W122_AVE_DSM.tif \
-    N046W121_AVE_DSM.tif
-
-RAINIER_ALPSMLC_TILES := \
-    ALPSMLC30_N046W122_DSM.tif \
-    ALPSMLC30_N046W121_DSM.tif
+RAINIER_TILE_IDS := \
+    N046W122 N046W121
 
 # Note: Western longitudes are negative
 RAINIER_BBOX_LEFT   := -122.0
@@ -293,12 +301,10 @@ RAINIER_BBOX_RIGHT  := -121.4
 RAINIER_BBOX_BOTTOM := 46.7
 RAINIER_BBOX_TOP    := 47.0
 
-# Generate all rules using separate macros
-$(eval $(call define-foreign-region-all,$(RAINIER_REGION)))
-$(eval $(call define-foreign-region-hgt,$(RAINIER_REGION),$(RAINIER_DISPLAY_NAME),$(RAINIER_TILES)))
-$(eval $(call define-foreign-region-nodata,$(RAINIER_REGION),$(RAINIER_ALPSMLC_TILES)))
-$(eval $(call define-foreign-region-sealand,$(RAINIER_REGION),$(RAINIER_BBOX_LEFT),$(RAINIER_BBOX_RIGHT),$(RAINIER_BBOX_BOTTOM),$(RAINIER_BBOX_TOP)))
-$(eval $(call define-foreign-region-outputs,$(RAINIER_REGION)))
+# Mount Rainier is entirely inland (no coastline in the bbox), so pass "inland"
+# as the type: a fine grid of nosea tiles covers the whole bbox and no
+# land-polygon download is required.
+$(eval $(call define-region,rainier,RAINIER,Mount Rainier,inland))
 ```
 
 ### Step 3: Update Makefile
@@ -330,14 +336,22 @@ Error: aw3d30-4.1/ALPSMLC30_N034E138_DSM.tif not found
 #### Land Polygon Data Missing
 
 ```
-Error: land-polygons/.unzip not found
+Error: downloads/land-polygons/.unzip not found
 ```
 
-**Solution**: Extract the land polygon archive:
+**Solution**: This only applies to COASTAL regions (`define-foreign-region-sealand`).
+`make` downloads and unzips the archive automatically the first time it's needed:
+
 ```bash
-cd land-polygons
-7z x land-polygons-split-4326.7z.001
+make downloads/land-polygons/.unzip
 ```
+
+which `wget`s `land-polygons-split-4326.zip` from
+`https://osmdata.openstreetmap.de/download/land-polygons-split-4326.zip` into
+`downloads/land-polygons/` and unzips it there. If the download fails (e.g. no
+network access), fetch the zip manually and place it in `downloads/land-polygons/`
+before re-running `make`. INLAND regions (`define-inland-region-sealand`) don't
+need this at all.
 
 #### Bounding Box Issues
 

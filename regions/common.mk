@@ -8,6 +8,11 @@
 
 LAND_POLYGONS_DIR ?= downloads/land-polygons
 
+# Directory holding ALOS AW3D30 source tiles and derived outputs.
+# Used by all region macros below (the root Makefile keeps its own literal
+# aw3d30-4.1 references for the Taiwan rules).
+ALOS_DIR ?= aw3d30-4.1
+
 
 ##############################################################################
 # Macro: make-hgt-rule
@@ -19,31 +24,31 @@ LAND_POLYGONS_DIR ?= downloads/land-polygons
 #   $(3) - tiles: List of HGT tiles in format NxxxEyyy_AVE_DSM.tif
 #
 # Creates:
-#   aw3d30-4.1/$(region_name)_hgtmix.zip - 30m resolution HGT files
-#   aw3d30-4.1/$(region_name)_hgt90.zip  - 90m resolution HGT files
+#   $(ALOS_DIR)/$(region_name)_hgtmix.zip - 30m resolution HGT files
+#   $(ALOS_DIR)/$(region_name)_hgt90.zip  - 90m resolution HGT files
 #
 # Example:
 #   FUJISAN_TILES = N034E138_AVE_DSM.tif N034E139_AVE_DSM.tif
-#   aw3d30-4.1/.fujisan-hgt: aw3d30-4.1/fujisan-zero.tif
+#   $(ALOS_DIR)/.fujisan-hgt: $(ALOS_DIR)/fujisan-zero.tif
 #       $(call make-hgt-rule,fujisan,Fujisan,$(FUJISAN_TILES))
 ##############################################################################
 define make-hgt-rule
-    rm -rf aw3d30-4.1/$(1)/input aw3d30-4.1/$(1)/output
-    mkdir -p aw3d30-4.1/$(1)/input aw3d30-4.1/$(1)/output
-    cd aw3d30-4.1/$(1)/input && $(foreach tile,$(3),ln -sf ../../$(1)-zero.tif $(tile) && ) true
-    cd aw3d30-4.1/$(1) && \
+    rm -rf $(ALOS_DIR)/$(1)/input $(ALOS_DIR)/$(1)/output
+    mkdir -p $(ALOS_DIR)/$(1)/input $(ALOS_DIR)/$(1)/output
+    cd $(ALOS_DIR)/$(1)/input && $(foreach tile,$(3),ln -sf ../../$(1)-zero.tif $(tile) && ) true
+    cd $(ALOS_DIR)/$(1) && \
         ../../tools/aw3d2srtm30.sh && \
         echo '# $(2) HGT 30m' > output/VERSION
-    cd aw3d30-4.1/$(1)/output && \
+    cd $(ALOS_DIR)/$(1)/output && \
         7z a -tzip ../../$(1)_hgtmix.zip *.hgt VERSION && \
         rm *
-    cd aw3d30-4.1/$(1) && \
+    cd $(ALOS_DIR)/$(1) && \
         ../../tools/aw3d2srtm90.sh && \
         echo '# $(2) HGT 90m' > output/VERSION
-    cd aw3d30-4.1/$(1)/output && \
+    cd $(ALOS_DIR)/$(1)/output && \
         7z a -tzip ../../$(1)_hgt90.zip *.hgt VERSION && \
         rm *
-    rm -rf aw3d30-4.1/$(1)/input aw3d30-4.1/$(1)/output
+    rm -rf $(ALOS_DIR)/$(1)/input $(ALOS_DIR)/$(1)/output
     touch $@
 endef
 
@@ -59,9 +64,9 @@ endef
 ##############################################################################
 define define-foreign-region-hgt
 .PHONY: $(1)-hgts
-$(1)-hgts: aw3d30-4.1/.$(1)-hgt
+$(1)-hgts: $(ALOS_DIR)/.$(1)-hgt
 
-aw3d30-4.1/.$(1)-hgt: aw3d30-4.1/$(1)-zero.tif
+$(ALOS_DIR)/.$(1)-hgt: $(ALOS_DIR)/$(1)-zero.tif
 	$$(call make-hgt-rule,$(1),$(2),$(3))
 endef
 
@@ -75,7 +80,7 @@ endef
 #   $(2) - alpsmlc_tiles: List of ALOS source tiles
 ##############################################################################
 define define-foreign-region-nodata
-aw3d30-4.1/$(1)-nodata0.tif: $(foreach tile,$(2),aw3d30-4.1/$(tile))
+$(ALOS_DIR)/$(1)-nodata0.tif: $(foreach tile,$(2),$(ALOS_DIR)/$(tile))
 	rm -f $$@
 	gdalwarp \
 		$$(OUTPUTS) \
@@ -141,7 +146,7 @@ $(1)-contour: ele_$(1)_10_100_500.pbf
 $(1)-contour-mix: ele_$(1)_10_100_500_mix.pbf
 
 ele_$(1)_10_100_500.pbf: \
-  aw3d30-4.1/$(1)-pygm_10_100_500.pbf
+  $(ALOS_DIR)/$(1)-pygm_10_100_500.pbf
 	rm -f tmp-$$@
 	./tools/combine.sh \
 		tmp-$$@ \
@@ -153,8 +158,8 @@ ele_$(1)_10_100_500.pbf: \
 
 ele_$(1)_10_100_500_mix.pbf: \
   $(LAND_POLYGONS_DIR)/$(1)-sealand.pbf \
-  aw3d30-4.1/$(1)-pygm_10_50_100_500.pbf \
-  aw3d30-4.1/$(1)-marker-pygms.pbf
+  $(ALOS_DIR)/$(1)-pygm_10_50_100_500.pbf \
+  $(ALOS_DIR)/$(1)-marker-pygms.pbf
 	rm -f tmp-$$@
 	./tools/combine.sh \
 		tmp-$$@ \
@@ -186,7 +191,7 @@ $(1)-contour: ele_$(1)_10_100_500.pbf
 $(1)-contour-mix: ele_$(1)_10_100_500_mix.pbf
 
 ele_$(1)_10_100_500.pbf: \
-  aw3d30-4.1/$(1)-pygm_10_100_500.pbf
+  $(ALOS_DIR)/$(1)-pygm_10_100_500.pbf
 	rm -f tmp-$$@
 	./tools/combine.sh \
 		tmp-$$@ \
@@ -198,8 +203,8 @@ ele_$(1)_10_100_500.pbf: \
 
 ele_$(1)_10_100_500_mix.pbf: \
   $(LAND_POLYGONS_DIR)/$(1)-sealand.pbf \
-  aw3d30-4.1/$(1)-pygm_10_50_100_500.pbf \
-  aw3d30-4.1/$(1)-marker-pygms.pbf
+  $(ALOS_DIR)/$(1)-pygm_10_50_100_500.pbf \
+  $(ALOS_DIR)/$(1)-marker-pygms.pbf
 	rm -f tmp-$$@
 	./tools/combine.sh \
 		tmp-$$@ \
@@ -221,4 +226,43 @@ endef
 define define-foreign-region-all
 .PHONY: $(1)-all
 $(1)-all: $(1)-hgts $(1)-contour $(1)-contour-mix
+endef
+
+
+##############################################################################
+# Macro: define-region
+# One-line entry point that defines ALL rules for a region from a single bare
+# tile-ID list plus a bounding box, following naming conventions. This removes
+# the per-region duplication of the *_TILES / *_ALPSMLC_TILES lists and the
+# five repeated $(eval $(call ...)) lines.
+#
+# Parameters:
+#   $(1) - region_name:  lowercase identifier (e.g. fujisan, alps_fareast)
+#   $(2) - PREFIX:        uppercase variable prefix (e.g. FUJISAN, ALPS_FAREAST)
+#   $(3) - display_name:  human-readable name for VERSION files; may contain
+#                         spaces, e.g. Alps Far-Eastern
+#   $(4) - type:          coastal (real coastline in bbox -> clip land polygons)
+#                         or inland (fine-grid nosea tiles, no download)
+#
+# Read by naming convention from $(2):
+#   $(PREFIX)_TILE_IDS                       bare tile IDs, e.g. N034E137 ...
+#   $(PREFIX)_BBOX_{LEFT,RIGHT,BOTTOM,TOP}   bounding box in decimal degrees
+#
+# Filename lists are derived here:
+#   HGT tiles   : NxxxEyyy_AVE_DSM.tif        (addsuffix)
+#   ALOS tiles  : ALPSMLC30_NxxxEyyy_DSM.tif  (addprefix + addsuffix)
+#
+# The individual define-*-region-* macros remain usable directly.
+#
+# Example:
+#   FUJISAN_TILE_IDS := N034E137 N034E138 N034E139 N035E137 N035E138 N035E139
+#   FUJISAN_BBOX_LEFT := 137.69   # ... RIGHT/BOTTOM/TOP ...
+#   $(eval $(call define-region,fujisan,FUJISAN,Fujisan,coastal))
+##############################################################################
+define define-region
+$(call define-foreign-region-all,$(1))
+$(call define-foreign-region-hgt,$(1),$(3),$(addsuffix _AVE_DSM.tif,$($(2)_TILE_IDS)))
+$(call define-foreign-region-nodata,$(1),$(addprefix ALPSMLC30_,$(addsuffix _DSM.tif,$($(2)_TILE_IDS))))
+$(call define-$(if $(filter coastal,$(4)),foreign,inland)-region-sealand,$(1),$($(2)_BBOX_LEFT),$($(2)_BBOX_RIGHT),$($(2)_BBOX_BOTTOM),$($(2)_BBOX_TOP))
+$(call define-$(4)-region-outputs,$(1),$($(2)_BBOX_LEFT),$($(2)_BBOX_RIGHT),$($(2)_BBOX_BOTTOM),$($(2)_BBOX_TOP))
 endef

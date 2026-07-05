@@ -20,39 +20,11 @@
 #   - aw3d30-4.1/alps_eastern_hgt90.zip     : HGT 90m for Garmin devices
 # =============================================================================
 
-# Region identifier
-ALPS_EASTERN_REGION := alps_eastern
-ALPS_EASTERN_DISPLAY_NAME := Alps Eastern
-
-# HGT tile definitions (for SRTM output)
-ALPS_EASTERN_TILES := \
-    N045E010_AVE_DSM.tif \
-    N045E011_AVE_DSM.tif \
-    N045E012_AVE_DSM.tif \
-    N045E013_AVE_DSM.tif \
-    N046E010_AVE_DSM.tif \
-    N046E011_AVE_DSM.tif \
-    N046E012_AVE_DSM.tif \
-    N046E013_AVE_DSM.tif \
-    N047E010_AVE_DSM.tif \
-    N047E011_AVE_DSM.tif \
-    N047E012_AVE_DSM.tif \
-    N047E013_AVE_DSM.tif
-
-# ALOS source tiles
-ALPS_EASTERN_ALPSMLC_TILES := \
-    ALPSMLC30_N045E010_DSM.tif \
-    ALPSMLC30_N045E011_DSM.tif \
-    ALPSMLC30_N045E012_DSM.tif \
-    ALPSMLC30_N045E013_DSM.tif \
-    ALPSMLC30_N046E010_DSM.tif \
-    ALPSMLC30_N046E011_DSM.tif \
-    ALPSMLC30_N046E012_DSM.tif \
-    ALPSMLC30_N046E013_DSM.tif \
-    ALPSMLC30_N047E010_DSM.tif \
-    ALPSMLC30_N047E011_DSM.tif \
-    ALPSMLC30_N047E012_DSM.tif \
-    ALPSMLC30_N047E013_DSM.tif
+# Bare tile IDs (NxxxEyyy); filename lists are derived in regions/common.mk
+ALPS_EASTERN_TILE_IDS := \
+    N045E010 N045E011 N045E012 N045E013 \
+    N046E010 N046E011 N046E012 N046E013 \
+    N047E010 N047E011 N047E012 N047E013
 
 # Bounding box for sea/land generation and output crop
 ALPS_EASTERN_BBOX_LEFT   := 10.5
@@ -60,9 +32,5 @@ ALPS_EASTERN_BBOX_RIGHT  := 14.0
 ALPS_EASTERN_BBOX_BOTTOM := 45.8
 ALPS_EASTERN_BBOX_TOP    := 47.55
 
-# Generate all rules using separate macros
-$(eval $(call define-foreign-region-all,$(ALPS_EASTERN_REGION)))
-$(eval $(call define-foreign-region-hgt,$(ALPS_EASTERN_REGION),$(ALPS_EASTERN_DISPLAY_NAME),$(ALPS_EASTERN_TILES)))
-$(eval $(call define-foreign-region-nodata,$(ALPS_EASTERN_REGION),$(ALPS_EASTERN_ALPSMLC_TILES)))
-$(eval $(call define-inland-region-sealand,$(ALPS_EASTERN_REGION),$(ALPS_EASTERN_BBOX_LEFT),$(ALPS_EASTERN_BBOX_RIGHT),$(ALPS_EASTERN_BBOX_BOTTOM),$(ALPS_EASTERN_BBOX_TOP)))
-$(eval $(call define-inland-region-outputs,$(ALPS_EASTERN_REGION),$(ALPS_EASTERN_BBOX_LEFT),$(ALPS_EASTERN_BBOX_RIGHT),$(ALPS_EASTERN_BBOX_BOTTOM),$(ALPS_EASTERN_BBOX_TOP)))
+# Generate all rules (inland: no coastline in bbox)
+$(eval $(call define-region,alps_eastern,ALPS_EASTERN,Alps Eastern,inland))

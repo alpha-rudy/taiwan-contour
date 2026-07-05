@@ -16,19 +16,9 @@
 #   - aw3d30-4.1/annapurna_hgt90.zip     : HGT 90m for Garmin devices
 # =============================================================================
 
-# Region identifier
-ANNAPURNA_REGION := annapurna
-ANNAPURNA_DISPLAY_NAME := Annapurna
-
-# HGT tile definitions (for SRTM output)
-ANNAPURNA_TILES := \
-    N028E083_AVE_DSM.tif \
-    N028E084_AVE_DSM.tif
-
-# ALOS source tiles
-ANNAPURNA_ALPSMLC_TILES := \
-    ALPSMLC30_N028E083_DSM.tif \
-    ALPSMLC30_N028E084_DSM.tif
+# Bare tile IDs (NxxxEyyy); filename lists are derived in regions/common.mk
+ANNAPURNA_TILE_IDS := \
+    N028E083 N028E084
 
 # Bounding box for sea/land generation
 ANNAPURNA_BBOX_LEFT   := 83.0
@@ -36,9 +26,5 @@ ANNAPURNA_BBOX_RIGHT  := 85.0
 ANNAPURNA_BBOX_BOTTOM := 28.0
 ANNAPURNA_BBOX_TOP    := 29.0
 
-# Generate all rules using separate macros
-$(eval $(call define-foreign-region-all,$(ANNAPURNA_REGION)))
-$(eval $(call define-foreign-region-hgt,$(ANNAPURNA_REGION),$(ANNAPURNA_DISPLAY_NAME),$(ANNAPURNA_TILES)))
-$(eval $(call define-foreign-region-nodata,$(ANNAPURNA_REGION),$(ANNAPURNA_ALPSMLC_TILES)))
-$(eval $(call define-inland-region-sealand,$(ANNAPURNA_REGION),$(ANNAPURNA_BBOX_LEFT),$(ANNAPURNA_BBOX_RIGHT),$(ANNAPURNA_BBOX_BOTTOM),$(ANNAPURNA_BBOX_TOP)))
-$(eval $(call define-inland-region-outputs,$(ANNAPURNA_REGION),$(ANNAPURNA_BBOX_LEFT),$(ANNAPURNA_BBOX_RIGHT),$(ANNAPURNA_BBOX_BOTTOM),$(ANNAPURNA_BBOX_TOP)))
+# Generate all rules (inland: no coastline in bbox)
+$(eval $(call define-region,annapurna,ANNAPURNA,Annapurna,inland))
