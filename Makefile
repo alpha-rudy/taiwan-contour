@@ -1260,6 +1260,12 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 #  640m: -tr 0.005891491844480 0.005891491844480
 # 1280m: -tr 0.011782983688960 0.011782983688960
 
+# taiwan16 has no native "bare" zero.tif of its own -- the source DTM is always
+# named taiwan16_20m. The %_15m-zero.tif / %_60m-zero.tif resolution-variant
+# rules below resample from a bare %-zero.tif, so alias it to the 20m original.
+moi-%/taiwan16-zero.tif: moi-%/taiwan16_20m-zero.tif
+	ln -sf taiwan16_20m-zero.tif $@
+
 # Resolution variant pattern rules (work for all base files: taiwan16_20m, kumano_kodo, annapurna, etc.)
 %_10m-zero.tif: %-zero.tif
 	rm -f $@
