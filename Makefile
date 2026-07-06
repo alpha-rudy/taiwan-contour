@@ -1041,7 +1041,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		--step=10 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.00001 \
+		--simplifyContoursEpsilon=0.00003 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^
@@ -1053,7 +1053,7 @@ moi-%/kinmen-pygm_20_100_500.pbf: moi-%/kinmen-zero.tif
 		--step=20 \
 		--output-prefix=$(basename $(notdir $@)) \
 		--line-cat=500,100 \
-		--simplifyContoursEpsilon=0.000125 \
+		--simplifyContoursEpsilon=0.00005 \
 		$(PHYGHT_OPTIONS) \
 		--pbf \
 		$^

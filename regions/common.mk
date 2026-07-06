@@ -78,6 +78,21 @@ endef
 # Parameters:
 #   $(1) - region_name: The identifier for the region
 #   $(2) - alpsmlc_tiles: List of ALOS source tiles
+#
+# NOTE on voids: ALOS AW3D30 tiles declare NoData=-9999 (true voids such as
+# unresolved cloud/water gaps); 0 is used for sea. `-dstnodata 0` below maps
+# any -9999 void pixel to 0, and the downstream `%-zero.tif` rule strips the
+# nodata flag entirely (-a_nodata none), so a void would surface as a fake
+# 0 m elevation and could produce dense spurious contour rings inland (the
+# pyhgtmap --void-range-max=-50 mask can then never trigger). This is
+# currently safe: all v4.1 tiles used by every existing region (checked
+# 2026-07: elbrus, annapurna, kashmir, alps_core/eastern/western/fareast,
+# nikko_oze, fujisan, kumano_kodo inland set) contain ZERO -9999 pixels —
+# v4.1 ships void-filled. If a future region's tiles DO contain -9999
+# pixels (check: gdal_calc counting A==-9999), give inland regions a
+# separate merge that keeps `-dstnodata -9999` and skips the `-a_nodata
+# none` step so voids reach pyhgtmap below --void-range-max; keep the
+# coastal path (sea must read 0) unchanged.
 ##############################################################################
 define define-foreign-region-nodata
 $(ALOS_DIR)/$(1)-nodata0.tif: $(foreach tile,$(2),$(ALOS_DIR)/$(tile))
