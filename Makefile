@@ -23,6 +23,7 @@ include regions/common.mk
 include regions/fujisan.mk
 include regions/nikko_oze.mk
 include regions/kumano_kodo.mk
+include regions/yakushima.mk
 include regions/annapurna.mk
 include regions/kashmir.mk
 include regions/elbrus.mk
