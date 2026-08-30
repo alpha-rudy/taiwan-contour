@@ -32,6 +32,8 @@ include regions/alps_core.mk
 include regions/alps_eastern.mk
 include regions/alps_western.mk
 include regions/alps_fareast.mk
+include regions/chuo_alps.mk
+include regions/kita_alps.mk
 
 ##############################################################################
 # Main Targets
