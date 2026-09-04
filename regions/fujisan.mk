@@ -4,10 +4,10 @@
 #
 # Geographic Coverage:
 #   Latitude:  34.30°N - 35.95°N
-#   Longitude: 137.69°E - 139.55°E
+#   Longitude: 138.35°E - 139.55°E
 #
 # Data Source: ALOS AW3D30 v4.1
-# Tiles: N034E137, N034E138, N034E139, N035E137, N035E138, N035E139
+# Tiles: N034E138, N034E139, N035E138, N035E139
 #
 # Outputs:
 #   - ele_fujisan_10_100_500.pbf       : Standard contour (10m interval)
@@ -18,11 +18,11 @@
 
 # Bare tile IDs (NxxxEyyy); filename lists are derived in regions/common.mk
 FUJISAN_TILE_IDS := \
-    N034E137 N034E138 N034E139 \
-    N035E137 N035E138 N035E139
+    N034E138 N034E139 \
+    N035E138 N035E139
 
 # Bounding box for sea/land generation
-FUJISAN_BBOX_LEFT   := 137.69
+FUJISAN_BBOX_LEFT   := 138.35
 FUJISAN_BBOX_RIGHT  := 139.55
 FUJISAN_BBOX_BOTTOM := 34.30
 FUJISAN_BBOX_TOP    := 35.95
