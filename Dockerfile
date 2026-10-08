@@ -50,7 +50,7 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     osmium \
     ogr2osm \
     "pyhgtmap[geotiff]==4.1" \
-    numpy
+    "numpy<2"
 
 # Create builder user with sudo permissions
 # Use ARG to allow customization of UID/GID at build time
