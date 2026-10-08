@@ -20,6 +20,8 @@
 input.vrt
 /moi-2025/.hgt
 /moi-2025/hgt*.zip
+/moi-2026/.hgt
+/moi-2026/hgt*.zip
 /*.zip
 aw3d30-4.1/*.zip
 .*_hgt
